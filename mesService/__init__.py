@@ -3,6 +3,7 @@
 # @author  : Huanglg
 # @fileName: __init__.py.py
 # @email: luguang.huang@mabotech.com
+# test
 import logging
 from logging.handlers import RotatingFileHandler
 
