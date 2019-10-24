@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<root>
+  <item name="TransactionID" value="POF"/>
+  <item name="Level1No" value="5271866"/>
+  <item name="ParentNo" value="5271867"/>
+  <item name="ChildNo" value="5568155"/>
+  <item name="Qty" value="1"/>
+  <item name="WorkStation" value="47500"/>
+  <item name="EffectiveDate" value="09/11/2019 00:00:00"/>
+  <item name="DiscontinueDate" value="10/11/2019 00:00:00"/>
+  <item name="KittingStation" value="0"/>
+  <item name="BulkWorkStation" value="0"/>
+  <item name="ProductionLineNo" value="38"/>
+</root>
