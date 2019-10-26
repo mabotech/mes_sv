@@ -7,12 +7,13 @@
 import logging
 from logging.handlers import RotatingFileHandler
 
+from flask import Flask
 from flask_apscheduler import APScheduler
 from flask_jwt_extended import JWTManager
 
 from mesService.lib.pgwrap.db import connection
-from flask import Flask
 from .config import Config, config_dict
+from .modules.ERPInterface.erp_to_mes import receive_data
 
 
 def setup_log(config_name):
@@ -58,8 +59,11 @@ def create_app(config_name):
     from .modules.systemConfig import system_config_blue
     app.register_blueprint(system_config_blue)
 
-    return app
+    app.register_blueprint(receive_data.bom)
+    app.register_blueprint(receive_data.dev)
+    app.register_blueprint(receive_data.ite)
 
+    return app
 
 
 def create_conn(config_name):

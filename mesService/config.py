@@ -42,6 +42,15 @@ class Config(object):
         'port': 5432,
     }
 
+    # 测试
+    # DB_INFO = {
+    #     'database': 'postgres',
+    #     'user': 'postgres',
+    #     'password': 'postgres',
+    #     'host': '146.91.76.191',
+    #     'port': 5432,
+    # }
+
     # 定时任务
     JOBS = [
         # {  # 第一个任务

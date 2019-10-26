@@ -5,8 +5,8 @@
 # @email: luguang.huang@mabotech.com
 from mesService import create_app
 
-
 app = create_app('development')
+
 
 @app.after_request
 def after_request(response):
