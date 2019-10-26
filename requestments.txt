@@ -12,6 +12,7 @@ Flask-WTF==0.14.2
 idna==2.8
 itsdangerous==1.1.0
 Jinja2==2.10.3
+lxml==4.4.1
 MarkupSafe==1.1.1
 psycopg2==2.8.4
 PyJWT==1.7.1
@@ -24,3 +25,4 @@ tzlocal==2.0.0
 urllib3==1.25.6
 Werkzeug==0.16.0
 WTForms==2.2.1
+xmltodict==0.12.0
