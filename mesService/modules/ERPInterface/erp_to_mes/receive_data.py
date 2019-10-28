@@ -11,13 +11,15 @@ from flask import views
 from flask import Blueprint
 from flask import current_app
 from flask.json import jsonify
+
+from mesService import constants
 from .item.reveive_item import IacOrder
 from .wip.reveive_wiporder import WipOrderInterface
 
-bom = Blueprint("bom", __name__)
-dev = Blueprint("dev", __name__)
-ite = Blueprint("ite", __name__)
-wip = Blueprint("wip", __name__)
+bom = Blueprint("bom", __name__, url_prefix = constants.URL_PREFIX)
+dev = Blueprint("dev", __name__, url_prefix = constants.URL_PREFIX)
+ite = Blueprint("ite", __name__, url_prefix = constants.URL_PREFIX)
+wip = Blueprint("wip", __name__, url_prefix = constants.URL_PREFIX)
 
 class BomView(views.MethodView):
     """

@@ -5,6 +5,8 @@
 # @email: luguang.huang@mabotech.com
 from flask import Blueprint
 
-system_config_blue = Blueprint('system_config',__name__)
+from mesService import constants
+
+system_config_blue = Blueprint('system_config',__name__, url_prefix=constants.URL_PREFIX)
 
 from . import views
