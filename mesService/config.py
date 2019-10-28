@@ -25,7 +25,7 @@ class Config(object):
     # 对象session信息进行签名
     SESSION_USE_SIGNER = True
     # 存储session的redis实例
-    SESSION_REDIS = StrictRedis(host = REDIS_HOST,port= REDIS_PORT )
+    SESSION_REDIS = StrictRedis(host=REDIS_HOST, port=REDIS_PORT)
     # 指定session的过期时间1天
     PERMANENT_SESSION_LIFETIME = 86400
 
@@ -80,7 +80,8 @@ class ProductionConfig(Config):
     DEBUG = False
     LOG_LEVEL = logging.ERROR
 
+
 config_dict = {
-    'development':DevelopmentConfig,
-    'production':ProductionConfig,
+    'development': DevelopmentConfig,
+    'production': ProductionConfig,
 }

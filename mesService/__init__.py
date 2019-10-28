@@ -11,8 +11,10 @@ from flask import Flask
 from flask_apscheduler import APScheduler
 from flask_jwt_extended import JWTManager
 
-from mesService.lib.pgwrap.db import connection
+from .modules.auth import auth_blue
 from .config import Config, config_dict
+from mesService.lib.pgwrap.db import connection
+from .modules.systemConfig import system_config_blue
 from .modules.ERPInterface.erp_to_mes import receive_data
 
 
@@ -54,9 +56,7 @@ def create_app(config_name):
     db = create_conn(config_name)
     app.db = db
 
-    from .modules.auth import auth_blue
     app.register_blueprint(auth_blue)
-    from .modules.systemConfig import system_config_blue
     app.register_blueprint(system_config_blue)
 
     app.register_blueprint(receive_data.bom)
