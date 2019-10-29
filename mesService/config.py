@@ -25,7 +25,7 @@ class Config(object):
     # 对象session信息进行签名
     SESSION_USE_SIGNER = True
     # 存储session的redis实例
-    SESSION_REDIS = StrictRedis(host = REDIS_HOST,port= REDIS_PORT )
+    SESSION_REDIS = StrictRedis(host=REDIS_HOST, port=REDIS_PORT)
     # 指定session的过期时间1天
     PERMANENT_SESSION_LIFETIME = 86400
 
@@ -34,22 +34,22 @@ class Config(object):
     JWT_ACCESS_TOKEN_EXPIRES = 30
     JWT_REFRESH_TOKEN_EXPIRES = 600
 
-    DB_INFO = {
-        'database': 'flxuser',
-        'user': 'postgres',
-        'password': 'postgres',
-        'host': 'huanglg.top',
-        'port': 5432,
-    }
-
-    # 测试
     # DB_INFO = {
-    #     'database': 'postgres',
+    #     'database': 'flxuser',
     #     'user': 'postgres',
     #     'password': 'postgres',
-    #     'host': '146.91.76.191',
+    #     'host': 'huanglg.top',
     #     'port': 5432,
     # }
+
+    # 测试
+    DB_INFO = {
+        'database': 'BFCEC',
+        'user': 'postgres',
+        'password': 'postgres',
+        'host': '192.168.97.188',
+        'port': 5432,
+    }
 
     # 定时任务
     JOBS = [
@@ -80,7 +80,8 @@ class ProductionConfig(Config):
     DEBUG = False
     LOG_LEVEL = logging.ERROR
 
+
 config_dict = {
-    'development':DevelopmentConfig,
-    'production':ProductionConfig,
+    'development': DevelopmentConfig,
+    'production': ProductionConfig,
 }

@@ -9,6 +9,7 @@ import traceback
 from flask import current_app, request
 from flask.json import jsonify
 
+from mesService.lib.components.text_manage import tt_manage
 from . import system_config_blue
 
 
@@ -212,3 +213,10 @@ def link_menu():
         current_app.logger.error(traceback.format_exc())
 
     return jsonify({"result": result})
+
+
+@system_config_blue.route('/text', methods=['GET'])
+def test_text():
+    result = tt_manage('BFCEC_3', 1167656061502919802)
+    result = {"textid" :result}
+    return jsonify(result)
