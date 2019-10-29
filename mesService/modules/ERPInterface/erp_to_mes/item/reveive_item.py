@@ -8,6 +8,7 @@ import json
 import xmltodict
 import traceback
 from lxml import etree
+from flask import request
 from flask import current_app
 
 from mesService import config_dict
@@ -29,8 +30,10 @@ class IacOrder(object):
         function:xml数据解析
         :return: 返回列表数据
         """
-        print(self.xml_path)
-        tree = etree.parse(self.xml_path)
+        # print(self.xml_path)
+        xml_str = request.data
+        # tree = etree.parse(self.xml_path)
+        tree = etree.HTML(xml_str)
         xml_str = etree.tostring(tree)
         dict_data = self.xml_to_dict(xml_str)
 
@@ -42,20 +45,21 @@ class IacOrder(object):
         :param xml_str:字符串数据
         :return: 返回数据列表，列表中存放字典型数据
         """
-        list_data = xmltodict.parse(xml_str)['input']['ITEMLOAD']['ITEMLoad']
-        need_keys = ['TransactionID', 'Item_ID', 'PlantCode', 'PartNum', 'Description', 'Item_Type', 'Status', 'UOM']
+        # list_data = xmltodict.parse(xml_str)['input']['ITEMLOAD']['ITEMLoad']
+        list_data = xmltodict.parse(xml_str)['html']['body']['itemload']['itemload']
+        need_keys = ['transactionid', 'item_id', 'plantcode', 'partnum', 'description', 'item_type', 'status', 'uom']
 
         result = []
         for p, n in dict(list_data).items():
             new_dict = {}
             if p in need_keys:
                 new_dict[p] = n
-                if p == "Item_Type":
+                if p == "item_type":
                     r_type = self.get_stuff_type(n)
-                    new_dict["Item_Type_val"] = r_type
-                if p == "Status":
+                    new_dict["item_type_val"] = r_type
+                if p == "status":
                     r_type = self.get_status_type(n)
-                    new_dict["Status"] = r_type
+                    new_dict["status"] = r_type
 
             result.append(new_dict)
 
@@ -86,7 +90,7 @@ class IacOrder(object):
 
         """调用存储过程"""
         json_data = json.dumps(dict_data)
-        # print(json_data)
+        print(json_data)
         sql = "select item_insert('{}');".format(json_data)
         # print(sql)
         try:
