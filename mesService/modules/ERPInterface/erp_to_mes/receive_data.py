@@ -84,11 +84,11 @@ class WipView(views.MethodView):
     """
     method = ["GET", "POST"]
 
-    def get(self):
+    def post(self):
         # wiporder类
         wiporderInterface = WipOrderInterface()
         # 解析订单XML数据
-        insertData = wiporderInterface.parse_xml()
+        insertData = wiporderInterface.analysisFromXML()
 
         json_data = json.dumps(insertData)
         print(json_data)
@@ -99,7 +99,11 @@ class WipView(views.MethodView):
         # 调用数据库函数
         result = current_app.db.execute(sql)
 
-        return jsonify(insertData)
+        ret = {
+            'status': '200',
+            'msg': 'success'
+        }
+        return jsonify(ret)
 
 class SequenceView(views.MethodView):
      """
@@ -123,7 +127,12 @@ class SequenceView(views.MethodView):
          print(sql)
          # 调用数据库函数
          result = current_app.db.execute(sql)
-         return jsonify(insertData)
+
+         ret = {
+             'status': '200',
+             'msg': 'success'
+         }
+         return jsonify(ret)
 
 bom.add_url_rule("/bom", view_func=BomView.as_view(name="bom"))
 dev.add_url_rule("/deviation", view_func=DevView.as_view(name="deviation"))
