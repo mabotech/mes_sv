@@ -55,14 +55,20 @@ class IteView(views.MethodView):
     method = ["GET", "POST"]
 
     def get(self):
-        iac_obj = IacOrder(status="development")
-        ret = iac_obj.parse_xml()
-        print(ret)
-
-        return "200 ok "
+        pass
 
     def post(self):
-        pass
+        iac_obj = IacOrder(status="development")
+        data = iac_obj.parse_xml()
+        print(data)
+        iac_obj.insertDatabase(data)
+
+        ret = {
+            'status': '200',
+            'msg': 'success'
+        }
+
+        return ret
     
     
 class WipView(views.MethodView):

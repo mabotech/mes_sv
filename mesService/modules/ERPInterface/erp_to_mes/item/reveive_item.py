@@ -6,8 +6,9 @@
 
 import json
 import xmltodict
+import traceback
 from lxml import etree
-
+from flask import current_app
 
 from mesService import config_dict
 from mesService.lib.pgwrap.db import connection
@@ -15,10 +16,12 @@ from mesService.constants import PRODUCTINVENTORYTYPE_ENUM
 
 
 class IacOrder(object):
-    def __init__(self, path=r'C:\Users\Administrator\Desktop\BFCEC\foton\mesService\mesService\modules\ERPInterface\erp_to_mes\item\text.xml', status=None):
+    def __init__(self,
+                 path=r'C:\Users\Administrator\Desktop\BFCEC\foton\mesService\mesService\modules\ERPInterface\erp_to_mes\item\text.xml',
+                 status=None):
         self.xml_path = path
         self.status = status
-        # self.db = self.insertDatabase(status)
+        # self.db = self.create_conn(status)
 
     def parse_xml(self):
         """
@@ -71,27 +74,19 @@ class IacOrder(object):
 
         """调用存储过程"""
         json_data = json.dumps(dict_data)
-        sql = "select insert_deviate_orders('{}');".format(json_data)
-        print(sql)
+        sql = "select item_serachs('{}');".format(json_data)
+        # print(sql)
         try:
-            self.db.execute(sql)
-        except Exception as e:
-            pass
+            current_app.db.execute(sql)
+        except Exception:
+            current_app.logger.error(traceback.format_exc())
 
-    def create_conn(self, config_name):
-        db_info = config_dict[config_name].DB_INFO
-        db = connection(db_info)
-        return db
-
-
-
-
-# if __name__ == '__main__':
-#     obj = IacOrder()
-#     ret = obj.parse_xml()
-#     print(ret)
-
-
-
-
-
+    # def create_conn(self, config_name):
+    #     """
+    #     function:数据库测试链接
+    #     :param config_name:
+    #     :return:
+    #     """
+    #     db_info = config_dict[config_name].DB_INFO
+    #     db = connection(db_info)
+    #     return db
