@@ -13,7 +13,7 @@ from flask import current_app
 from flask.json import jsonify
 
 from mesService import constants
-from .item.reveive_item import IacOrder
+from .item.reveive_item import ItemOrder
 from .wip_order.reveive_wiporder import WipOrderInterface
 from.sequence.reveive_sequence import SequenceInterface
 
@@ -22,6 +22,7 @@ dev = Blueprint("dev", __name__, url_prefix=constants.URL_PREFIX)
 ite = Blueprint("ite", __name__, url_prefix=constants.URL_PREFIX)
 wip = Blueprint("wip", __name__, url_prefix=constants.URL_PREFIX)
 sequence = Blueprint("sequence", __name__, url_prefix=constants.URL_PREFIX)
+
 
 
 class BomView(views.MethodView):
@@ -60,16 +61,22 @@ class IteView(views.MethodView):
     method = ["GET", "POST"]
 
     def get(self):
-        iac_obj = IacOrder(status="development")
-        ret = iac_obj.parse_xml()
-        print(ret)
-
-        return "200 ok "
+        pass
 
     def post(self):
-        pass
-    
-    
+        iac_obj = ItemOrder(status="development")
+        data = iac_obj.parse_xml()
+        # print(data)
+        iac_obj.insertDatabase(data)
+
+        ret = {
+            'status': '200',
+            'msg': 'success'
+        }
+
+        return jsonify(ret)
+
+
 class WipView(views.MethodView):
     """
     工单(ITEM)接口
@@ -83,13 +90,13 @@ class WipView(views.MethodView):
         # 解析订单XML数据
         insertData = wiporderInterface.parse_xml()
 
-        json_data=json.dumps(insertData)
+        json_data = json.dumps(insertData)
         print(json_data)
-        #创建sql语句
+        # 创建sql语句
         base_sql = """select plv8_insert_wiporder('{}');"""
         sql = base_sql.format(json_data)
         print(sql)
-        #调用数据库函数
+        # 调用数据库函数
         result = current_app.db.execute(sql)
 
         return jsonify(insertData)

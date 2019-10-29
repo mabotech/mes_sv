@@ -13,3 +13,9 @@ PRODUCTINVENTORYTYPE_ENUM = {
     'BFCEC_虚拟件': 130,
     'BFCEC_通用类型': 100
 }
+
+# 物料状态
+STATUS_ENUM = {
+    "Active": 1,
+    "inActive": 0
+}

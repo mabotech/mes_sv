@@ -11,7 +11,7 @@ from mesService import config_dict
 from mesService.lib.pgwrap.db import connection
 
 
-class IacOrder(object):
+class BomOrder(object):
     def __init__(self, path=r'C:\Users\Administrator\Desktop\BFCEC\FotonEnv\interface_func\xml_to_dict\bom\text.xml', status=None):
         self.xml_path = path
         self.db = self.insertDatabase(status)
@@ -65,6 +65,6 @@ class IacOrder(object):
 
 
 if __name__ == '__main__':
-    obj = IacOrder()
+    obj = BomOrder()
     ret = obj.parse_xml()
     print(ret)
