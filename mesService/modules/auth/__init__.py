@@ -5,6 +5,8 @@
 # @email: luguang.huang@mabotech.com
 from flask import Blueprint
 
-auth_blue = Blueprint('auth',__name__)
+from mesService import constants
+
+auth_blue = Blueprint('auth',__name__, url_prefix=constants.URL_PREFIX)
 
 from . import views
