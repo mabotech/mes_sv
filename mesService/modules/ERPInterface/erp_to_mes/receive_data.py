@@ -13,7 +13,7 @@ from flask import current_app
 from flask.json import jsonify
 
 from mesService import constants
-from .item.reveive_item import IacOrder
+from .item.reveive_item import ItemOrder
 from .wip_order.reveive_wiporder import WipOrderInterface
 
 bom = Blueprint("bom", __name__, url_prefix=constants.URL_PREFIX)
@@ -61,7 +61,7 @@ class IteView(views.MethodView):
         pass
 
     def post(self):
-        iac_obj = IacOrder(status="development")
+        iac_obj = ItemOrder(status="development")
         data = iac_obj.parse_xml()
         # print(data)
         iac_obj.insertDatabase(data)

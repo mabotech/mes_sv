@@ -17,7 +17,7 @@ from mesService.constants import STATUS_ENUM
 from mesService.constants import PRODUCTINVENTORYTYPE_ENUM
 
 
-class IacOrder(object):
+class ItemOrder(object):
     def __init__(self,
                  path=r'C:\Users\Administrator\Desktop\BFCEC\foton\mesService\mesService\modules\ERPInterface\erp_to_mes\item\text.xml',
                  status=None):
