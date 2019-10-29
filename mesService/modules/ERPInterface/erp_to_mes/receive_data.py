@@ -21,6 +21,7 @@ dev = Blueprint("dev", __name__, url_prefix=constants.URL_PREFIX)
 ite = Blueprint("ite", __name__, url_prefix=constants.URL_PREFIX)
 wip = Blueprint("wip", __name__, url_prefix=constants.URL_PREFIX)
 
+
 class BomView(views.MethodView):
     """
     物料(Bom)接口
@@ -62,7 +63,7 @@ class IteView(views.MethodView):
     def post(self):
         iac_obj = IacOrder(status="development")
         data = iac_obj.parse_xml()
-        print(data)
+        # print(data)
         iac_obj.insertDatabase(data)
 
         ret = {
@@ -70,9 +71,9 @@ class IteView(views.MethodView):
             'msg': 'success'
         }
 
-        return ret
-    
-    
+        return jsonify(ret)
+
+
 class WipView(views.MethodView):
     """
     工单(ITEM)接口
@@ -87,13 +88,13 @@ class WipView(views.MethodView):
         # 解析订单XML数据
         insertData = wiporderInterface.analysisFromXML(xmlfile)
 
-        json_data=json.dumps(insertData)
+        json_data = json.dumps(insertData)
         print(json_data)
-        #创建sql语句
+        # 创建sql语句
         base_sql = """select plv8_insert_wiporder('{}');"""
         sql = base_sql.format(json_data)
         print(sql)
-        #调用数据库函数
+        # 调用数据库函数
         result = current_app.db.execute(sql)
 
         return jsonify(insertData)

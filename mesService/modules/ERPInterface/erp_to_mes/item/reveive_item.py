@@ -12,6 +12,7 @@ from flask import current_app
 
 from mesService import config_dict
 from mesService.lib.pgwrap.db import connection
+from mesService.constants import STATUS_ENUM
 from mesService.constants import PRODUCTINVENTORYTYPE_ENUM
 
 
@@ -50,8 +51,12 @@ class IacOrder(object):
             if p in need_keys:
                 new_dict[p] = n
                 if p == "Item_Type":
-                    r_type = self.stuff_type(n)
+                    r_type = self.get_stuff_type(n)
                     new_dict["Item_Type_val"] = r_type
+                if p == "Status":
+                    r_type = self.get_status_type(n)
+                    new_dict["Status"] = r_type
+
             result.append(new_dict)
 
         language_dict = {'language': 2052}
@@ -59,7 +64,7 @@ class IacOrder(object):
 
         return result
 
-    def stuff_type(self, data):
+    def get_stuff_type(self, data):
         """
         function:判断材料类型，例如‘{'Item_Type': 'BFCEC_采购件'}’
         :param data:
@@ -70,11 +75,19 @@ class IacOrder(object):
         except Exception:
             return PRODUCTINVENTORYTYPE_ENUM['BFCEC_通用类型']
 
+    def get_status_type(self, data):
+        """
+        function:获取物料状态
+        :return:
+        """
+        return STATUS_ENUM[data]
+
     def insertDatabase(self, dict_data):
 
         """调用存储过程"""
         json_data = json.dumps(dict_data)
-        sql = "select item_serachs('{}');".format(json_data)
+        # print(json_data)
+        sql = "select item_insert('{}');".format(json_data)
         # print(sql)
         try:
             current_app.db.execute(sql)
