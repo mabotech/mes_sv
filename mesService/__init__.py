@@ -63,7 +63,7 @@ def create_app(config_name):
     app.register_blueprint(receive_data.dev)
     app.register_blueprint(receive_data.ite)
     app.register_blueprint(receive_data.wip)
-    app.register_blueprint(receive_data.sequence)
+    # app.register_blueprint(receive_data.sequence)
 
     return app
 
