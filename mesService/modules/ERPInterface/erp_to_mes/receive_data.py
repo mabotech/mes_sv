@@ -15,11 +15,14 @@ from flask.json import jsonify
 from mesService import constants
 from .item.reveive_item import IacOrder
 from .wip_order.reveive_wiporder import WipOrderInterface
+from.sequence.reveive_sequence import SequenceInterface
 
 bom = Blueprint("bom", __name__, url_prefix=constants.URL_PREFIX)
 dev = Blueprint("dev", __name__, url_prefix=constants.URL_PREFIX)
 ite = Blueprint("ite", __name__, url_prefix=constants.URL_PREFIX)
 wip = Blueprint("wip", __name__, url_prefix=constants.URL_PREFIX)
+sequence = Blueprint("sequence", __name__, url_prefix=constants.URL_PREFIX)
+
 
 class BomView(views.MethodView):
     """
@@ -76,10 +79,9 @@ class WipView(views.MethodView):
 
     def get(self):
         # wiporder类
-        xmlfile = r'E:\mesService\mesService\modules\ERPInterface\erp_to_mes\wip\test.xml'
         wiporderInterface = WipOrderInterface()
         # 解析订单XML数据
-        insertData = wiporderInterface.analysisFromXML(xmlfile)
+        insertData = wiporderInterface.parse_xml()
 
         json_data=json.dumps(insertData)
         print(json_data)
@@ -92,8 +94,32 @@ class WipView(views.MethodView):
 
         return jsonify(insertData)
 
+class SequenceView(views.MethodView):
+     """
+     排序(ITEM)接口
+     数据库：postgres
+     """
+     method = ["GET", "POST"]
+
+     def get(self):
+         # Sequence类
+         xmlfile = r'E:\mesService\mesService\modules\ERPInterface\erp_to_mes\sequence\test_sequence.xml'
+         sequenceInterface = SequenceInterface()
+         # 解析订单XML数据
+         insertData = sequenceInterface.analysisFromXML(xmlfile)
+
+         json_data = json.dumps(insertData)
+         print(json_data)
+         # 创建sql语句
+         base_sql = """select plv8_insert_sequence('{}');"""
+         sql = base_sql.format(json_data)
+         print(sql)
+         # 调用数据库函数
+         result = current_app.db.execute(sql)
+         return jsonify(insertData)
 
 bom.add_url_rule("/bom", view_func=BomView.as_view(name="bom"))
 dev.add_url_rule("/deviation", view_func=DevView.as_view(name="deviation"))
 ite.add_url_rule("/item", view_func=IteView.as_view(name="item"))
 wip.add_url_rule("/wip", view_func=WipView.as_view(name="wip"))
+sequence.add_url_rule("/sequence", view_func=SequenceView.as_view(name="sequence"))

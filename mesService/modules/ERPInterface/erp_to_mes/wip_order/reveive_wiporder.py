@@ -8,6 +8,21 @@ import time
 from lxml import etree
 
 class WipOrderInterface:
+    def __init__(self, path=r'E:\mesService\mesService\modules\ERPInterface\erp_to_mes\wip_order\test_wiporder.xml'):
+        self.xml_path = path
+
+    def parse_xml(self):
+        """
+        function:xml数据解析
+        :return: 返回列表数据
+        """
+        print(self.xml_path)
+        tree = etree.parse(self.xml_path)
+        xml_str = etree.tostring(tree)
+        dict_data = self.analysisFromXML(xml_str)
+
+        return dict_data
+
     # XML中的订单对象
     wipoderXmlObj = {
         'TransactionID': '',             #固定值，区分发送哪个系统
@@ -28,11 +43,11 @@ class WipOrderInterface:
 
     #数据库中的订单对象--WIP_ORDER
     wipoderDatabaseObj = {
-        'TransactionID': '',            #固定值，区分发送哪个系统
-        'active':'',                    #A插入/O取消（工单状态）
+        'TransactionID': '',             #固定值，区分发送哪个系统
+        'active':'',                     #A插入/O取消（工单状态）
         'scheduledstartdate': '',       #工单上线日期
         'releasedate': '',              #传输请求日期
-        'orderquantity':'',         #工单建造数量
+        'orderquantity':'',             #工单建造数量
         'productno': '',                #物料号
         'structuredate': '',           #BOM版本日期
         'UnitNumber': '',              #工单号后6位
