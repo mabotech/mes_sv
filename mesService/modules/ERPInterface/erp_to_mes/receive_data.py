@@ -13,7 +13,9 @@ from flask import current_app
 from flask.json import jsonify
 
 from mesService import constants
+from mesService.constants import RET
 from .item.reveive_item import ItemOrder
+from .deviartion.receive_deviating import DeviationOrder
 from .wip_order.reveive_wiporder import WipOrderInterface
 
 bom = Blueprint("bom", __name__, url_prefix=constants.URL_PREFIX)
@@ -47,7 +49,16 @@ class DevView(views.MethodView):
         pass
 
     def post(self):
-        pass
+        obj = DeviationOrder("development")
+        data = obj.parse_xml()
+        ret = obj.insertDatabase(data)
+        print(ret)
+
+        if not ret:
+            RET['status'] = 300
+            RET['msg'] = 'fail'
+
+        return jsonify(RET)
 
 
 class IteView(views.MethodView):
@@ -64,14 +75,13 @@ class IteView(views.MethodView):
         iac_obj = ItemOrder(status="development")
         data = iac_obj.parse_xml()
         # print(data)
-        iac_obj.insertDatabase(data)
+        ret = iac_obj.insertDatabase(data)
 
-        ret = {
-            'status': '200',
-            'msg': 'success'
-        }
+        if not ret:
+            RET['status'] = 300
+            RET['msg'] = 'fail'
 
-        return jsonify(ret)
+        return jsonify(RET)
 
 
 class WipView(views.MethodView):

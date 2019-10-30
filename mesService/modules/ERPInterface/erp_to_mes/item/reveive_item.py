@@ -94,7 +94,8 @@ class ItemOrder(object):
         sql = "select item_insert('{}');".format(json_data)
         # print(sql)
         try:
-            current_app.db.execute(sql)
+            ret = current_app.db.execute(sql)
+            return ret
         except Exception:
             current_app.logger.error(traceback.format_exc())
 

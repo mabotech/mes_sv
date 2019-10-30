@@ -4,7 +4,14 @@
 # @fileName: constants.py
 # @email: luguang.huang@mabotech.com
 
+# 版本控制
 URL_PREFIX = '/api/v1/'
+
+# api返回值
+RET = {
+    'status': 200,
+    'msg': 'success'
+}
 
 # 物料类型
 PRODUCTINVENTORYTYPE_ENUM = {
@@ -18,4 +25,11 @@ PRODUCTINVENTORYTYPE_ENUM = {
 STATUS_ENUM = {
     "Active": 1,
     "inActive": 0
+}
+
+
+# 偏离类型(A:增加或者D:删除)
+ACTIONS_ENUM = {
+    "A": 1,
+    "D": 0
 }
