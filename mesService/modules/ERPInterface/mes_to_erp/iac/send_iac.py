@@ -3,40 +3,61 @@
 # @author  : 王江桥
 # @fileName: send_bom.py
 # @email: jiangqiao.wang@mabotech.com
-
-
+import requests
 from lxml import etree
+
+from mesService import config_dict
+from mesService.lib.pgwrap.db import connection
 
 
 class IacToXml(object):
     def __init__(self):
         self.root = etree.Element('root')
+        self.db = self.create_conn('development')
+        self.url = ''
 
     def dict_to_xml(self, dict_data):
-        for d in dict_data:
-            item = etree.SubElement(self.root, 'item')
-            for k, v in d.items():
-                # print(k, v)
-                try:
-                    item.set('name', k)
-                    item.set('value', v)
-                except Exception as e:
-                    pass
+
+        for k, v in dict_data.items():
+            node = etree.SubElement(self.root, k)
+            if v:
+                node.text = str(v)
 
         tree = etree.ElementTree(self.root)
         tree.write('text.xml', pretty_print=True, xml_declaration=True, encoding='utf-8')
+        xml_str = etree.tostring(tree, encoding='utf-8', pretty_print=True)
+        return xml_str
+
+    def get_iac_data(self):
+
+        sql_str = "select get_iac();"
+        result = self.db.query(sql_str)
+        return result[0]['get_iac']
+
+    def create_conn(self, config_name):
+        db_info = config_dict[config_name].DB_INFO
+        db = connection(db_info)
+        return db
+
+    def set_to_erp(self, xml):
+        try:
+            requests.post(
+                url = self.url,
+                data = xml,
+                headers = {
+                          'Content-Type': 'text/xml;charset=UTF-8',
+              },
+            )
+        except Exception:
+            pass
 
 
 if __name__ == '__main__':
-    data = [{'TransactionID': 'POF'}, {'PCID': '1000010010'},
-            {'PCOID': '1000020010'}, {'PCCID': '1000030010'},
-            {'Level1No': '5271866'}, {'ParentNo': '5271867'},
-            {'ChildNo': '5568155'}, {'Qty': '1'},
-            {'WorkStation': '47500'}, {'EffectiveDate': '2019-9-11 00:00'},
-            {'DiscontinueDate': '2019-9-22 00:00'},
-            {'ProductionLineNo': '15'}, {'KittingStation': '0'},
-            {'BulkWorkStation': '0'}, {'BuildVar': '0'},
-            {'PlantCode': 'ISF'}, {'Dummy1': None},
-            {'Dummy2': None}, {'Dummy3': None}]
+    data = [{'pcid': 100000065, 'effectivedate': '2019-10-30T10:09:21.000Z', 'discontinuedate': '2019-10-30T10:09:21.000Z', 'productionlineno': '15', 'level1': '5271866', 'ownerfacility': 'ISF', 'pcoid': 100000204, 'workcenter': '47500', 'pccid': None, 'quantity': None, 'childno': None, 'parentno': None}]
+
     obj = IacToXml()
-    obj.dict_to_xml(data)
+    res = obj.dict_to_xml(data[0])
+    print(res.decode('utf-8'))
+
+    # res = obj.get_iac_data()
+    # print(res)

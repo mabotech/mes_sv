@@ -34,22 +34,22 @@ class Config(object):
     JWT_ACCESS_TOKEN_EXPIRES = 30
     JWT_REFRESH_TOKEN_EXPIRES = 600
 
-    DB_INFO = {
-        'database': 'flxuser',
-        'user': 'postgres',
-        'password': 'postgres',
-        'host': 'huanglg.top',
-        'port': 5432,
-    }
-
-    # 测试
     # DB_INFO = {
-    #     'database': 'BFCEC',
+    #     'database': 'flxuser',
     #     'user': 'postgres',
     #     'password': 'postgres',
-    #     'host': '192.168.97.188',
+    #     'host': 'huanglg.top',
     #     'port': 5432,
     # }
+
+    # 测试
+    DB_INFO = {
+        'database': 'BFCEC',
+        'user': 'postgres',
+        'password': 'postgres',
+        'host': '192.168.97.188',
+        'port': 5432,
+    }
 
     # 定时任务
     JOBS = [
