@@ -34,6 +34,18 @@ class Config(object):
     JWT_ACCESS_TOKEN_EXPIRES = 30
     JWT_REFRESH_TOKEN_EXPIRES = 600
 
+<<<<<<< HEAD
+=======
+    DB_INFO = {
+        'database': 'BFCEC',
+        'user': 'postgres',
+        'password': 'postgres',
+        'host': '192.168.97.188',
+        'port': 5432,
+    }
+
+    # 测试
+>>>>>>> 增加前端排序页面接口
     # DB_INFO = {
     #     'database': 'flxuser',
     #     'user': 'postgres',

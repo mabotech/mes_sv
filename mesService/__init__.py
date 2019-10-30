@@ -16,6 +16,7 @@ from .config import Config, config_dict
 from mesService.lib.pgwrap.db import connection
 from .modules.systemConfig import system_config_blue
 from .modules.ERPInterface.erp_to_mes import receive_data
+from .modules.AngularInterface import angular_send_data 
 
 
 def setup_log(config_name):
@@ -64,6 +65,11 @@ def create_app(config_name):
     app.register_blueprint(receive_data.ite)
     app.register_blueprint(receive_data.wip)
     app.register_blueprint(receive_data.sequence)
+
+    #前端Anguluar
+    app.register_blueprint(angular_send_data.wipsortlist)
+
+    
 
     return app
 

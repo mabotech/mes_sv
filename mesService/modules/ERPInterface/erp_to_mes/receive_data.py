@@ -17,7 +17,7 @@ from mesService.constants import RET
 from .item.reveive_item import ItemOrder
 from .deviartion.receive_deviating import DeviationOrder
 from .wip_order.reveive_wiporder import WipOrderInterface
-from.wip_sequence.reveive_sequence import SequenceInterface
+from .wip_sequence.reveive_sequence import SequenceInterface
 
 bom = Blueprint("bom", __name__, url_prefix=constants.URL_PREFIX)
 dev = Blueprint("dev", __name__, url_prefix=constants.URL_PREFIX)
