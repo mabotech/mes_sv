@@ -69,8 +69,10 @@ class DeviationOrder(object):
         sql = "select wip_deviation_insert('{}');".format(json_data)
         # print(sql)
         try:
-            ret = current_app.db.execute(sql)
-            return ret
+            # 使用execute返回存储过程返回结果，存储过程不报错则返回1
+            # 使用query返回查询结果，通过结果做判断
+            ret = current_app.db.query(sql)
+            return ret[0]["wip_deviation_insert"]
         except Exception:
             current_app.logger.error(traceback.format_exc())
 
