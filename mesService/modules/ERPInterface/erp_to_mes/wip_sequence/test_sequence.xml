@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<input xmlns="http://cummins.com/ApplicationObjectLibrary/ReceiveTransactionSLP/V1">
+    <SEQDWNLOAD>
+        <TransactionID>SEQDWNLOAD</TransactionID>
+        <Status>I</Status>
+        <WIPJobNo>SO12555000104</WIPJobNo>
+        <SequenceNumber>100367422</SequenceNumber>
+        <PlantCode>ISF</PlantCode>
+        <BatchID>32133</BatchID>
+    </SEQDWNLOAD>
+</input>
