@@ -3,6 +3,7 @@
 # @author  : 王江桥
 # @fileName: send_data.py
 # @email: jiangqiao.wang@mabotech.com
+<<<<<<< HEAD
 
 import re
 import time
@@ -57,3 +58,5 @@ class WiptrxView(views.MethodView):
         return wiptrxXml
 
 wiptrx.add_url_rule("/wiptrx", view_func=WiptrxView.as_view(name="wiptrx"))
+=======
+>>>>>>> fcdb3b309fd730deb9a54fb736fe9bd60e995b0c

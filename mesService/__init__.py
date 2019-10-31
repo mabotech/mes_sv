@@ -16,6 +16,7 @@ from .config import Config, config_dict
 from mesService.lib.pgwrap.db import connection
 from .modules.systemConfig import system_config_blue
 from .modules.ERPInterface.erp_to_mes import receive_data
+<<<<<<< HEAD
 
 from .modules.ERPInterface.mes_to_erp import send_data
 
@@ -23,6 +24,10 @@ from .modules.AngularInterface import angular_send_data
 
 from .modules.ERPInterface.mes_to_erp import send_data
 from .modules.AngularInterface import angular_send_data
+=======
+from .modules.AngularInterface import angular_send_data 
+
+>>>>>>> fcdb3b309fd730deb9a54fb736fe9bd60e995b0c
 
 def setup_log(config_name):
     """配置日志"""
@@ -70,7 +75,10 @@ def create_app(config_name):
     app.register_blueprint(receive_data.ite)
     app.register_blueprint(receive_data.wip)
     app.register_blueprint(receive_data.sequence)
+<<<<<<< HEAD
     app.register_blueprint(send_data.wiptrx)
+=======
+>>>>>>> fcdb3b309fd730deb9a54fb736fe9bd60e995b0c
 
     #前端Anguluar
     app.register_blueprint(angular_send_data.wipsortlist)
@@ -79,6 +87,10 @@ def create_app(config_name):
 
     return app
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> fcdb3b309fd730deb9a54fb736fe9bd60e995b0c
 def create_conn(config_name):
     db_info = config_dict[config_name].DB_INFO
     db = connection(db_info)

@@ -11,6 +11,10 @@ from mesService.lib.pgwrap.db import connection
 class PlanSchedule(object):  
     def getsortlist(self):
         reqparam = request.data
+<<<<<<< HEAD
+=======
+        result = False
+>>>>>>> fcdb3b309fd730deb9a54fb736fe9bd60e995b0c
         try:
             reqparam = json.loads(reqparam)
             count = reqparam['count']
