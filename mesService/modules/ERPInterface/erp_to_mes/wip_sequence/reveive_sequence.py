@@ -53,8 +53,4 @@ class SequenceInterface:
         self.bindXmlSequenceDatabase()
         wiporderDatabaselist.append(self.sequenceDatabaseObj.copy())
         print(wiporderDatabaselist)
-<<<<<<< HEAD
-
-=======
->>>>>>> fcdb3b309fd730deb9a54fb736fe9bd60e995b0c
         return wiporderDatabaselist

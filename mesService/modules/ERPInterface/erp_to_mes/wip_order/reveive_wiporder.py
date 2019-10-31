@@ -11,11 +11,7 @@ from flask import request
 
 class WipOrderInterface:
 
-<<<<<<< HEAD
-    # XML中的订单对象啊
-=======
     # XML中的订单对象
->>>>>>> fcdb3b309fd730deb9a54fb736fe9bd60e995b0c
     wipoderXmlObj = {
         'transactionid': '',             #固定值，区分发送哪个系统
         'status': '',                    #A插入/O取消

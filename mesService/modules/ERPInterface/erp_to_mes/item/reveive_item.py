@@ -11,38 +11,18 @@ from lxml import etree
 from flask import request
 from flask import current_app
 
-<<<<<<< HEAD
-=======
-from mesService import config_dict
-from mesService.lib.pgwrap.db import connection
->>>>>>> fcdb3b309fd730deb9a54fb736fe9bd60e995b0c
 from mesService.constants import STATUS_ENUM
 from mesService.constants import PRODUCTINVENTORYTYPE_ENUM
 
 
 class ItemOrder(object):
-<<<<<<< HEAD
-=======
-    def __init__(self,
-                 path=r'C:\Users\Administrator\Desktop\BFCEC\foton\mesService\mesService\modules\ERPInterface\erp_to_mes\item\text.xml',
-                 status=None):
-        self.xml_path = path
-        self.status = status
-        # self.db = self.create_conn(status)
->>>>>>> fcdb3b309fd730deb9a54fb736fe9bd60e995b0c
 
     def parse_xml(self):
         """
         function:xml数据解析
         :return: 返回列表数据
         """
-<<<<<<< HEAD
         xml_str = request.data
-=======
-        # print(self.xml_path)
-        xml_str = request.data
-        # tree = etree.parse(self.xml_path)
->>>>>>> fcdb3b309fd730deb9a54fb736fe9bd60e995b0c
         tree = etree.HTML(xml_str)
         xml_str = etree.tostring(tree)
         dict_data = self.xml_to_dict(xml_str)
@@ -100,30 +80,11 @@ class ItemOrder(object):
 
         """调用存储过程"""
         json_data = json.dumps(dict_data)
-<<<<<<< HEAD
         # print(json_data)
         sql = "select item_insert('{}');".format(json_data)
         print(sql)
-=======
-        print(json_data)
-        sql = "select item_insert('{}');".format(json_data)
-        # print(sql)
->>>>>>> fcdb3b309fd730deb9a54fb736fe9bd60e995b0c
         try:
             ret = current_app.db.query(sql)
             return ret[0]["item_insert"]
         except Exception:
             current_app.logger.error(traceback.format_exc())
-<<<<<<< HEAD
-=======
-
-    # def create_conn(self, config_name):
-    #     """
-    #     function:数据库测试链接
-    #     :param config_name:
-    #     :return:
-    #     """
-    #     db_info = config_dict[config_name].DB_INFO
-    #     db = connection(db_info)
-    #     return db
->>>>>>> fcdb3b309fd730deb9a54fb736fe9bd60e995b0c

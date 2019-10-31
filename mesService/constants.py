@@ -17,37 +17,24 @@ RET = {
 PRODUCTINVENTORYTYPE_ENUM = {
     'BFCEC_半成品': 110,
     'BFCEC_采购件': 120,
-    'BFCEC_虚拟件': 130,
+    'BFCEC_零件虚拟件': 130,
     'BFCEC_通用类型': 100
 }
 
-<<<<<<< HEAD
 # BOM物料类型
 BOM_ENUM = {
     'BFCEC_采购件': 1,
     'BFCEC_虚拟件': 2,
 }
 
-=======
->>>>>>> fcdb3b309fd730deb9a54fb736fe9bd60e995b0c
 # 物料状态
 STATUS_ENUM = {
     "Active": 1,
-    "inActive": 0
+    "Inactive": 0
 }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> fcdb3b309fd730deb9a54fb736fe9bd60e995b0c
 # 偏离类型(A:增加或者D:删除)
 ACTIONS_ENUM = {
     "A": 1,
     "D": 0
-<<<<<<< HEAD
 }
-
-
-=======
-}
->>>>>>> fcdb3b309fd730deb9a54fb736fe9bd60e995b0c

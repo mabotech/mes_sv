@@ -14,24 +14,9 @@ from flask import current_app
 
 from mesService.constants import ACTIONS_ENUM
 
-<<<<<<< HEAD
 
 class DeviationOrder(object):
 
-=======
-from mesService import config_dict
-from mesService.lib.pgwrap.db import connection
-
-
-class DeviationOrder(object):
-
-    def __init__(self,
-                 path=r'C:\Users\Administrator\Desktop\BFCEC\FotonEnv\interface_func\xml_to_dict\deviartion(工单偏离)\text.xml',
-                 status=None):
-        self.xml_path = path
-        # self.db = self.create_conn(status)
-
->>>>>>> fcdb3b309fd730deb9a54fb736fe9bd60e995b0c
     def parse_xml(self):
         """
         function:解析本地xml文件,返回字典型数据

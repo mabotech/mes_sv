@@ -3,7 +3,6 @@
 # @author  : 王江桥
 # @fileName: send_data.py
 # @email: jiangqiao.wang@mabotech.com
-<<<<<<< HEAD
 
 import re
 import time
@@ -14,37 +13,35 @@ from mesService import constants
 from flask import Blueprint
 from flask import current_app
 from flask.json import jsonify
-from .wiptrx.send_wiptrx import WiptrxInterface
+from .offline.send_offline import OfflineInterface
 
 
-wiptrx = Blueprint("wiptrx", __name__, url_prefix=constants.URL_PREFIX)
+offline = Blueprint("offline", __name__, url_prefix=constants.URL_PREFIX)
 
 
-class WiptrxView(views.MethodView):
+class OfflineView(views.MethodView):
     """
-    完工(wiptrx)接口
+    完工(offline)接口
     数据库：postgres
     """
     method = ["GET", "POST"]
     def get(self):
-        pass
-
-    def post(self):
         # 实例化offline类
-        wiptrxInterface = WiptrxInterface()
+        offlineInterface = OfflineInterface()
 
         # 创建sql语句
-        base_sql = """select plv8_get_wiptrx('{}','{}','{}');"""
+        base_sql = """select plv8_get_offline('{}');"""
 
         #执行sql语句
-        sql = base_sql.format('SO12555000104','ISF','ENGSTATUS')
+        sql = base_sql.format('SO12555000104')
         print(sql)
         result = current_app.db.query(sql)
 
         dalist = []
-        sql_result=result[0].get('plv8_get_wiptrx')
+        sql_result=result[0].get('plv8_get_offline')
         for item in sql_result:
-            offlineobj = wiptrxInterface.wiptrxDatabaseObj
+            offlineobj = offlineInterface.offlineDatabaseObj
+            offlineobj['wiporderno'] = item['wiporderno']
             offlineobj['wiporderno'] = item['wiporderno']  # 工单编号
             offlineobj['releasedfacility'] = item['releasedfacility']   # 工厂代码
             offlineobj['productionlineno'] = item['productionlineno'] # 产线
@@ -53,10 +50,9 @@ class WiptrxView(views.MethodView):
         print(dalist)
 
         #生成XML
-        wiptrxXml = wiptrxInterface.genOnlineXML(dalist)
+        OffXml = offlineInterface.genOnlineXML(dalist)
 
-        return wiptrxXml
+        return OffXml
 
-wiptrx.add_url_rule("/wiptrx", view_func=WiptrxView.as_view(name="wiptrx"))
-=======
->>>>>>> fcdb3b309fd730deb9a54fb736fe9bd60e995b0c
+
+offline.add_url_rule("/offline", view_func=OfflineView.as_view(name="offline"))
