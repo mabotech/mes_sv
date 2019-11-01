@@ -42,16 +42,28 @@ class BomView(views.MethodView):
         ret = obj.insertDatabase(data)
         # print(ret)
 
-        c_flag = ret[0]["product_component_insert"]["component"]
-        pc_flag = ret[0]["product_component_insert"]["product_component"]
+        c_flag = ret[0]["product_component_insert"].get("component_result", None)
+        p_err = ret[0]["product_component_insert"].get("component_result_e", None)
+        pc_flag = ret[0]["product_component_insert"].get("product_component_result", None)
+        pc_err = ret[0]["product_component_insert"].get("product_component_result_e", None)
+        lii_inv = ret[0]["product_component_insert"].get("component_line_item_id_invalid", None)
+        hii_inv = ret[0]["product_component_insert"].get("product_component_header_item_id_invalid", None)
 
         if c_flag and pc_flag:
-            return jsonify(RET)
-        else:
+            RET['status'] = 200
+            RET['msg'] = 'insert success'
+        elif p_err or pc_err:
             RET['status'] = 300
-            RET['msg'] = 'fail'
+            RET['msg'] = "{0}或者{1}错误！".format(p_err, pc_err)
+        elif lii_inv:
+            RET['status'] = 300
+            RET['msg'] = lii_inv
+        elif hii_inv:
+            RET['status'] = 300
+            RET['msg'] = hii_inv
 
-            return jsonify(RET)
+        return jsonify(RET)
+
 
 class DevView(views.MethodView):
     """
@@ -69,11 +81,22 @@ class DevView(views.MethodView):
         ret = obj.insertDatabase(data)
         print(ret, ">>>")
 
-        if not ret:
+        iwd_flag = ret[0]["wip_deviation_insert"].get("insert_wipdeviation", None)
+        iwd_err = ret[0]["wip_deviation_insert"].get("insert_wipdeviation_e", None)
+        iwd_inv = ret[0]["wip_deviation_insert"].get("insert_wipdeviation_invalid", None)
+
+        if iwd_flag:
+            RET['status'] = 200
+            RET['msg'] = 'insert success'
+        elif iwd_err:
             RET['status'] = 300
-            RET['msg'] = 'fail'
+            RET['msg'] = iwd_err
+        else:
+            RET['status'] = 300
+            RET['msg'] = iwd_inv
 
         return jsonify(RET)
+
 
 class IteView(views.MethodView):
     """
@@ -90,12 +113,27 @@ class IteView(views.MethodView):
         data = iac_obj.parse_xml()
         # print(data)
         ret = iac_obj.insertDatabase(data)
+        print(ret, "<<<")
+        ip_flag = ret[0]["item_insert"].get("insert_product", None)
+        up_flag = ret[0]["item_insert"].get("update_product", None)
+        ip_err = ret[0]["item_insert"].get("insert_product_e", None)
+        up_err = ret[0]["item_insert"].get("update_product_e", None)
 
-        if not ret:
+        if ip_flag:
+            RET['status'] = 200
+            RET['msg'] = 'insert success'
+        elif up_flag:
+            RET['status'] = 200
+            RET['msg'] = 'update success'
+        elif ip_err:
             RET['status'] = 300
-            RET['msg'] = 'fail'
+            RET['msg'] = ip_err
+        elif up_err:
+            RET['status'] = 300
+            RET['msg'] = up_err
 
         return jsonify(RET)
+
 
 class IteView1(views.MethodView):
     """
@@ -108,9 +146,11 @@ class IteView1(views.MethodView):
         pass
 
     def post(self):
-        iac_obj = ItemOrder(status="development")
-        data = [{'transactionid': 'ITEMLOAD'}, {'item_id': '4314314'}, {'plantcode': 'ISG'}, {'partnum': '3940123'}, {'description': '气阀锁块11'}, {'item_type': 'BFCEC_采购件', 'item_type_val': 100}, {'status': 1}, {'uom': 'EA'}, {'language': 2052}]
-        data[3]['partnum'] = str(hash(time.time())) + str(random.randint(1,100))
+        iac_obj = ItemOrder()
+        data = [{'transactionid': 'ITEMLOAD'}, {'item_id': '4314314'}, {'plantcode': 'ISG'}, {'partnum': '3940123'},
+                {'description': '气阀锁块11'}, {'item_type': 'BFCEC_采购件', 'item_type_val': 100}, {'status': 1},
+                {'uom': 'EA'}, {'language': 2052}]
+        data[3]['partnum'] = str(hash(time.time())) + str(random.randint(1, 100))
         print(data)
         # print(data)
         ret = iac_obj.insertDatabase(data)
@@ -120,6 +160,7 @@ class IteView1(views.MethodView):
             RET['msg'] = 'fail'
 
         return jsonify(RET)
+
 
 class WipView(views.MethodView):
     """
@@ -152,6 +193,7 @@ class WipView(views.MethodView):
 
         return jsonify(RET)
 
+
 class SequenceView(views.MethodView):
     """
     排序(Wip_Sequence)接口
@@ -182,6 +224,7 @@ class SequenceView(views.MethodView):
             RET['msg'] = 'fail'
 
         return jsonify(RET)
+
 
 bom.add_url_rule("/bom", view_func=BomView.as_view(name="bom"))
 dev.add_url_rule("/deviation", view_func=DevView.as_view(name="deviation"))

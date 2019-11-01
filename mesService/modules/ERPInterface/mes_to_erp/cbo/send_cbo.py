@@ -45,7 +45,7 @@ class CboToXml(object):
         try:
             # ret = self.db.query(sql)
             ret = current_app.db.query(sql)
-            return ret[0]['get_cbo']
+            return ret[0]['get_cbo'].get("rec_data", None)
         except Exception as e:
             current_app.logger.error(traceback.format_exc())
 
@@ -58,6 +58,8 @@ class CboToXml(object):
         if re_data:
             for data in re_data:
                 self.dict_to_xml(data)
+        else:
+            current_app.logger.info("当前记录不存在")
 
     def create_conn(self, config_name):
         """

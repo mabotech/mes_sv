@@ -85,6 +85,6 @@ class ItemOrder(object):
         print(sql)
         try:
             ret = current_app.db.query(sql)
-            return ret[0]["item_insert"]
+            return ret
         except Exception:
             current_app.logger.error(traceback.format_exc())
