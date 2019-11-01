@@ -7,8 +7,8 @@
 import traceback
 from lxml import etree
 from flask import current_app
-# from mesService.config import config_dict
-# from mesService.lib.pgwrap.db import connection
+from mesService.config import config_dict
+from mesService.lib.pgwrap.db import connection
 
 
 class CboToXml(object):
@@ -28,7 +28,7 @@ class CboToXml(object):
                 item.set('name', k)
                 item.set('value', v)
             except Exception as e:
-                pass
+                current_app.logger.error(traceback.format_exc())
 
         print(etree.tostring(self.root, pretty_print=True))
 

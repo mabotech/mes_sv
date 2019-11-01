@@ -4,10 +4,8 @@
 # @fileName: receive_data.py
 # @email: jiangqiao.wang@mabotech.com
 import random
-import re
 import time
 import json
-from lxml import etree
 from flask import views
 from flask import Blueprint
 from flask import current_app
