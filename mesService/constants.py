@@ -7,6 +7,9 @@
 # 版本控制
 URL_PREFIX = '/api/v1/'
 
+# 定时循环时间 秒
+LOOP_TIME = 30
+
 # api返回值
 RET = {
     'status': 200,

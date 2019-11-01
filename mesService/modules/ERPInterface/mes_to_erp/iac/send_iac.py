@@ -6,7 +6,7 @@
 import requests
 from lxml import etree
 
-from mesService import config_dict
+from mesService.config import config_dict
 from mesService.lib.pgwrap.db import connection
 
 

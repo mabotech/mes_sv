@@ -215,8 +215,27 @@ def link_menu():
     return jsonify({"result": result})
 
 
-@system_config_blue.route('/text', methods=['GET'])
-def test_text():
-    result = tt_manage('BFCEC_3', 1167656061502919802)
-    result = {"textid" :result}
+@system_config_blue.route('/receive_data', methods=['POST'])
+def receive_data():
+    req_data = request.get_data(as_text=True)
+    print(req_data)
+    message = {
+		'application': 'oracle',
+		'transactionid': '',
+		'transactiontype': '',
+		'message':req_data,
+		'actionstatus': '接收成功',
+		'wiporderno':'',
+		'productno': '',
+		'result': 1,
+		'context': '接收成功',
+		'createdby':''
+	}
+    message = json.dumps(message)
+    sql = "select insert_interface_log('{}')".format(message)
+    try:
+        current_app.db.query(sql)
+    except Exception:
+        current_app.logger.error(traceback.format_exc())
+    result = {"res" :1}
     return jsonify(result)
