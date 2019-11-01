@@ -25,7 +25,7 @@ bom = Blueprint("bom", __name__, url_prefix=constants.URL_PREFIX)
 dev = Blueprint("dev", __name__, url_prefix=constants.URL_PREFIX)
 ite = Blueprint("ite", __name__, url_prefix=constants.URL_PREFIX)
 wip = Blueprint("wip", __name__, url_prefix=constants.URL_PREFIX)
-sequence = Blueprint("wip_sequence", __name__, url_prefix=constants.URL_PREFIX)
+sequence = Blueprint("sequence", __name__, url_prefix=constants.URL_PREFIX)
 
 
 class BomView(views.MethodView):
@@ -55,7 +55,6 @@ class BomView(views.MethodView):
 
             return jsonify(RET)
 
-
 class DevView(views.MethodView):
     """
     工单偏离(Deviation)接口
@@ -78,7 +77,6 @@ class DevView(views.MethodView):
 
         return jsonify(RET)
 
-
 class IteView(views.MethodView):
     """
     物料(ITEM)接口
@@ -94,14 +92,12 @@ class IteView(views.MethodView):
         data = iac_obj.parse_xml()
         # print(data)
         ret = iac_obj.insertDatabase(data)
-        print(ret, ">>")
 
         if not ret:
             RET['status'] = 300
             RET['msg'] = 'fail'
 
         return jsonify(RET)
-
 
 class IteView1(views.MethodView):
     """
@@ -127,10 +123,9 @@ class IteView1(views.MethodView):
 
         return jsonify(RET)
 
-
 class WipView(views.MethodView):
     """
-    工单(Wip_Order)接口
+    工单(WipOrder)接口
     数据库：postgres
     """
     method = ["GET", "POST"]
@@ -153,12 +148,11 @@ class WipView(views.MethodView):
         # 调用数据库函数
         result = current_app.db.execute(sql)
 
-        ret = {
-            'status': '200',
-            'msg': 'success'
-        }
-        return jsonify(ret)
+        if not result:
+            RET['status'] = 300
+            RET['msg'] = 'fail'
 
+        return jsonify(RET)
 
 class SequenceView(views.MethodView):
     """
@@ -185,16 +179,14 @@ class SequenceView(views.MethodView):
         # 调用数据库函数
         result = current_app.db.execute(sql)
 
-        ret = {
-            'status': '200',
-            'msg': 'success'
-        }
-        return jsonify(json_data)
+        if not result:
+            RET['status'] = 300
+            RET['msg'] = 'fail'
 
+        return jsonify(RET)
 
 bom.add_url_rule("/bom", view_func=BomView.as_view(name="bom"))
 dev.add_url_rule("/deviation", view_func=DevView.as_view(name="deviation"))
 ite.add_url_rule("/item", view_func=IteView.as_view(name="item"))
-ite.add_url_rule("/item1", view_func=IteView1.as_view(name="item1"))
-wip.add_url_rule("/wip", view_func=WipView.as_view(name="wip"))
-sequence.add_url_rule("/wip_sequence", view_func=SequenceView.as_view(name="wip_sequence"))
+wip.add_url_rule("/wiporder", view_func=WipView.as_view(name="wip_order"))
+sequence.add_url_rule("/wipsequence", view_func=SequenceView.as_view(name="wip_sequence"))

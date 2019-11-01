@@ -11,15 +11,18 @@ from flask import Flask
 from flask_apscheduler import APScheduler
 from flask_jwt_extended import JWTManager
 
-from .config import Config
-from .config import config_dict
 from .modules.auth import auth_blue
+from .config import Config, config_dict
 from mesService.lib.pgwrap.db import connection
 from .modules.systemConfig import system_config_blue
 from .modules.ERPInterface.erp_to_mes import receive_data
+
 from .modules.ERPInterface.mes_to_erp import send_data
+
 from .modules.AngularInterface import angular_send_data
 
+from .modules.ERPInterface.mes_to_erp import send_data
+from .modules.AngularInterface import angular_send_data
 
 def setup_log(config_name):
     """配置日志"""
@@ -67,13 +70,14 @@ def create_app(config_name):
     app.register_blueprint(receive_data.ite)
     app.register_blueprint(receive_data.wip)
     app.register_blueprint(receive_data.sequence)
-    app.register_blueprint(send_data.offline)
+    app.register_blueprint(send_data.wiptrx)
 
-    # 前端Anguluar
+    #前端Anguluar
     app.register_blueprint(angular_send_data.wipsortlist)
 
-    return app
+    
 
+    return app
 
 def create_conn(config_name):
     db_info = config_dict[config_name].DB_INFO

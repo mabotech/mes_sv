@@ -13,35 +13,37 @@ from mesService import constants
 from flask import Blueprint
 from flask import current_app
 from flask.json import jsonify
-from .offline.send_offline import OfflineInterface
+from .wiptrx.send_wiptrx import WiptrxInterface
 
 
-offline = Blueprint("offline", __name__, url_prefix=constants.URL_PREFIX)
+wiptrx = Blueprint("wiptrx", __name__, url_prefix=constants.URL_PREFIX)
 
 
-class OfflineView(views.MethodView):
+class WiptrxView(views.MethodView):
     """
-    完工(offline)接口
+    完工(wiptrx)接口
     数据库：postgres
     """
     method = ["GET", "POST"]
     def get(self):
+        pass
+
+    def post(self):
         # 实例化offline类
-        offlineInterface = OfflineInterface()
+        wiptrxInterface = WiptrxInterface()
 
         # 创建sql语句
-        base_sql = """select plv8_get_offline('{}');"""
+        base_sql = """select plv8_get_wiptrx('{}','{}','{}');"""
 
         #执行sql语句
-        sql = base_sql.format('SO12555000104')
+        sql = base_sql.format('SO12555000104','ISF','ENGSTATUS')
         print(sql)
         result = current_app.db.query(sql)
 
         dalist = []
-        sql_result=result[0].get('plv8_get_offline')
+        sql_result=result[0].get('plv8_get_wiptrx')
         for item in sql_result:
-            offlineobj = offlineInterface.offlineDatabaseObj
-            offlineobj['wiporderno'] = item['wiporderno']
+            offlineobj = wiptrxInterface.wiptrxDatabaseObj
             offlineobj['wiporderno'] = item['wiporderno']  # 工单编号
             offlineobj['releasedfacility'] = item['releasedfacility']   # 工厂代码
             offlineobj['productionlineno'] = item['productionlineno'] # 产线
@@ -50,9 +52,8 @@ class OfflineView(views.MethodView):
         print(dalist)
 
         #生成XML
-        OffXml = offlineInterface.genOnlineXML(dalist)
+        wiptrxXml = wiptrxInterface.genOnlineXML(dalist)
 
-        return OffXml
+        return wiptrxXml
 
-
-offline.add_url_rule("/offline", view_func=OfflineView.as_view(name="offline"))
+wiptrx.add_url_rule("/wiptrx", view_func=WiptrxView.as_view(name="wiptrx"))
