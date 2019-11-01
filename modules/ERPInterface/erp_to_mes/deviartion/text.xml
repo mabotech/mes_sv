@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<input xmlns="http://cummins.com/ApplicationObjectLibrary/ReceiveTransactionSLP/V1">
+    <ERPDEV>
+        <TransactionID>ERPDEV</TransactionID>
+        <PlantCode>ISF</PlantCode>
+        <Work_Order_Number>SO12838000768</Work_Order_Number>
+        <Action>A</Action>
+        <Workstation>35700</Workstation>
+        <Child_Part_Number>5563148</Child_Part_Number>
+        <Parent_Part_Number>BB 9676</Parent_Part_Number>
+        <Level_1_Part>BB 9676</Level_1_Part>
+        <Quantity>1</Quantity>
+        <Manufacturing_Variation_Code>1309</Manufacturing_Variation_Code>
+    </ERPDEV>
+</input>

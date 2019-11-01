@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<input xmlns="http://cummins.com/ApplicationObjectLibrary/ReceiveTransactionSLP/V1">
+    <WIPJOBLOAD>
+        <WODownload>
+            <TransactionID>WIPJOBLOAD</TransactionID>
+            <Status>A</Status>
+            <BuildScheduleDate>190912</BuildScheduleDate>
+            <CustomerRequestDate>190911</CustomerRequestDate>
+            <BuildQuantity>1</BuildQuantity>
+            <SONumber>SO30234</SONumber>
+            <StructureDate>190912</StructureDate>
+            <UnitNumber>000916</UnitNumber>
+            <WIPJobNo>SO30234000916</WIPJobNo>
+            <ProductionLineNo>38</ProductionLineNo>
+            <CustomerCode>00000</CustomerCode>
+            <PlantCode>ISF</PlantCode>
+            <WOType>NORMAL</WOType>
+        </WODownload>
+    </WIPJOBLOAD>
+</input>

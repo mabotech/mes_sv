@@ -7,8 +7,8 @@
 import traceback
 from lxml import etree
 from flask import current_app
-# from mesService.config import config_dict
-# from mesService.lib.pgwrap.db import connection
+from mesService.config import config_dict
+from mesService.lib.pgwrap.db import connection
 
 
 class CboToXml(object):

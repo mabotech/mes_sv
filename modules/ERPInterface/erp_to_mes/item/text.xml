@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<input xmlns="http://cummins.com/ApplicationObjectLibrary/ReceiveTransactionSLP/V1">
+    <ITEMLOAD>
+        <ITEMLoad>
+            <TransactionID>ITEMLOAD</TransactionID>
+            <Item_ID>4224</Item_ID>
+            <PlantCode>ISF</PlantCode>
+            <PartNum>394353</PartNum>
+            <Description>气阀锁块</Description>
+            <Item_Type>BFrhrth采购件</Item_Type>
+            <Status>Active</Status>
+            <UOM>EA</UOM>
+        </ITEMLoad>
+    </ITEMLOAD>
+</input>
