@@ -30,7 +30,7 @@ BOM_ENUM = {
 # 物料状态
 STATUS_ENUM = {
     "Active": 1,
-    "inActive": 0
+    "Inactive": 0
 }
 
 # 偏离类型(A:增加或者D:删除)
