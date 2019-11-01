@@ -11,8 +11,6 @@ from flask import Flask
 from flask_apscheduler import APScheduler
 from flask_jwt_extended import JWTManager
 
-from mesService import constants
-from mesService.modules.JobTask import start_job_task
 from .modules.auth import auth_blue
 from .config import Config, config_dict
 from mesService.lib.pgwrap.db import connection
@@ -59,8 +57,6 @@ def create_app(config_name):
     scheduler = APScheduler()
     scheduler.init_app(app)
     scheduler.start()
-
-    scheduler.add_job(id = 'job1', func=start_job_task,  trigger='interval', seconds=constants.LOOP_TIME)
 
     JWTManager(app)
     db = create_conn(config_name)

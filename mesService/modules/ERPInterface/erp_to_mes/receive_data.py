@@ -4,8 +4,10 @@
 # @fileName: receive_data.py
 # @email: jiangqiao.wang@mabotech.com
 import random
+import re
 import time
 import json
+from lxml import etree
 from flask import views
 from flask import Blueprint
 from flask import current_app
@@ -129,7 +131,12 @@ class WipView(views.MethodView):
     method = ["GET", "POST"]
 
     def get(self):
-        pass
+        result = {
+            "status": "error",
+            "message": "illegal request"
+        }
+        res = json.dumps(result)
+        return res
 
     def post(self):
         # wiporder类
@@ -144,13 +151,11 @@ class WipView(views.MethodView):
         sql = base_sql.format(json_data)
         print(sql)
         # 调用数据库函数
-        result = current_app.db.execute(sql)
+        result = current_app.db.query(sql)
+        sql_result = result[0].get('plv8_insert_wiporder')
+        print(sql_result)
 
-        if not result:
-            RET['status'] = 300
-            RET['msg'] = 'fail'
-
-        return jsonify(RET)
+        return jsonify(sql_result)
 
 class SequenceView(views.MethodView):
     """
@@ -160,7 +165,12 @@ class SequenceView(views.MethodView):
     method = ["GET", "POST"]
 
     def get(self):
-        pass
+        result = {
+            "status": "error",
+            "message": "illegal request"
+        }
+        res = json.dumps(result)
+        return res
 
     def post(self):
         # Sequence类
@@ -175,13 +185,11 @@ class SequenceView(views.MethodView):
         sql = base_sql.format(json_data)
         print(sql)
         # 调用数据库函数
-        result = current_app.db.execute(sql)
+        result = current_app.db.query(sql)
+        sql_result = result[0].get('plv8_insert_sequence')
+        print('result',sql_result)
 
-        if not result:
-            RET['status'] = 300
-            RET['msg'] = 'fail'
-
-        return jsonify(RET)
+        return jsonify(sql_result)
 
 bom.add_url_rule("/bom", view_func=BomView.as_view(name="bom"))
 dev.add_url_rule("/deviation", view_func=DevView.as_view(name="deviation"))
