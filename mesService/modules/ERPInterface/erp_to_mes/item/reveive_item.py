@@ -74,7 +74,10 @@ class ItemOrder(object):
         function:获取物料状态
         :return:
         """
-        return STATUS_ENUM[data]
+        try:
+            return STATUS_ENUM[data]
+        except Exception:
+            current_app.logger.error(traceback.format_exc())
 
     def insertDatabase(self, dict_data):
 

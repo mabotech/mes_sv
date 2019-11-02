@@ -17,7 +17,7 @@ RET = {
 PRODUCTINVENTORYTYPE_ENUM = {
     'BFCEC_半成品': 110,
     'BFCEC_采购件': 120,
-    'BFCEC_虚拟件': 130,
+    'BFCEC_零件虚拟件': 130,
     'BFCEC_通用类型': 100
 }
 
@@ -27,9 +27,10 @@ BOM_ENUM = {
     'BFCEC_虚拟件': 2,
 }
 
-# 物料状态
+# 物料状态(New：预留默认为1)
 STATUS_ENUM = {
     "Active": 1,
+    "New": 1,
     "Inactive": 0
 }
 

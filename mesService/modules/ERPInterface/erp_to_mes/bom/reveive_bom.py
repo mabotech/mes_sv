@@ -75,7 +75,10 @@ class BomOrder(object):
         :param data:启用(1)或禁用(0)
         :return: 1或者0
         """
-        return STATUS_ENUM[data]
+        try:
+            return STATUS_ENUM[data]
+        except Exception:
+            current_app.logger.error(traceback.format_exc())
 
     def get_stuff_type(self, data):
         """
