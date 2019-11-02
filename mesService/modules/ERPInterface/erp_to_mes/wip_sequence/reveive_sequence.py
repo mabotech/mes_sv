@@ -25,7 +25,8 @@ class SequenceInterface:
         'wiporderno': '',                    #工单编号
         'externalIndex': '',                   #原始序号
         'batchid': '',                       #批次
-        'facility':''                        #工厂代码
+        'facility':'',                        #工厂代码
+        'RequestData':''                    # 后端传输原数据
     }
 
     # 将XML数据与Database字段对应绑定  数据流向 XML--->数据库
@@ -41,16 +42,18 @@ class SequenceInterface:
     def analysisFromXML(self):
         # 解析XML
         xml_str = request.data
+        print(xml_str)
         tree = etree.HTML(xml_str)
-        xml_str = etree.tostring(tree)
+        xml_str1 = etree.tostring(tree)
 
-        list_data = xmltodict.parse(xml_str)['html']['body']['seqdwnload']
+        list_data = xmltodict.parse(xml_str1)['html']['body']['seqdwnload']
         print(list_data)
         wiporderDatabaselist = []
         for key, val in list_data.items():
             print(key, val)
             self.sequenceXmlObj[key] = val
         self.bindXmlSequenceDatabase()
+        self.sequenceDatabaseObj['RequestData'] = str(xml_str, 'utf-8')
         wiporderDatabaselist.append(self.sequenceDatabaseObj.copy())
         print(wiporderDatabaselist)
 

@@ -42,7 +42,7 @@ class WipOrderInterface:
         'productionlineno': '',       #生产线
         'releasedfacility': '',       #工厂代码
         'wipordertype': '',           #固定值
-
+        'RequestData':'',             #后端传输原数据
     }
 
     #将XML数据与Database字段对应绑定
@@ -59,6 +59,7 @@ class WipOrderInterface:
         self.wipoderDatabaseObj['releasedfacility'] = self.wipoderXmlObj['plantcode']                                   #发布工厂
         self.wipoderDatabaseObj['wipordertype'] =self.xmltype2Inttype( self.wipoderXmlObj['wotype'])                    #固定值
         self.wipoderDatabaseObj['progressstatus'] = 110                                                                 #工单状态默认待排产
+
     #将XML日期类型转为时间戳
     def xmldate2Timestamp(self,xmldate):
         print(xmldate)
@@ -83,15 +84,19 @@ class WipOrderInterface:
     def analysisFromXML(self):
         #解析XML
         xml_str = request.data
+
         tree = etree.HTML(xml_str)
-        xml_str = etree.tostring(tree)
-        list_data = xmltodict.parse(xml_str)['html']['body']['wipjobload']['wodownload']
-        print(list_data)
+        xml_str1 = etree.tostring(tree)
+        list_data = xmltodict.parse(xml_str1)['html']['body']['wipjobload']['wodownload']
+
         wiporderDatabaselist=[]
         for key,val in list_data.items():
             print(key,val)
             self.wipoderXmlObj[key] = val
+
         self.bindXml2Database()
+
+        self.wipoderDatabaseObj['RequestData'] = str(xml_str, 'utf-8')
         wiporderDatabaselist.append(self.wipoderDatabaseObj.copy())
-        print(wiporderDatabaselist)
+
         return wiporderDatabaselist

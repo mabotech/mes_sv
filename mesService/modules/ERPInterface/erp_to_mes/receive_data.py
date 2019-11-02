@@ -222,6 +222,7 @@ class SequenceView(views.MethodView):
 
         json_data = json.dumps(insertData)
         print('json_data:', json_data)
+
         # 创建sql语句
         base_sql = """select plv8_insert_sequence('{}');"""
         sql = base_sql.format(json_data)

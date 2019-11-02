@@ -9,10 +9,11 @@ import time
 import json
 from lxml import etree
 from flask import views
-from mesService import constants
+from flask import request
 from flask import Blueprint
 from flask import current_app
 from flask.json import jsonify
+from mesService import constants
 from .wiptrx.send_wiptrx import WiptrxInterface
 
 
@@ -32,11 +33,14 @@ class WiptrxView(views.MethodView):
         # 实例化offline类
         wiptrxInterface = WiptrxInterface()
 
+        json_data = str(request.data, 'utf-8')
+
+        print(json_data)
         # 创建sql语句
-        base_sql = """select plv8_get_wiptrx('{}','{}','{}');"""
+        base_sql = """select plv8_get_wiptrx('{}');"""
 
         #执行sql语句
-        sql = base_sql.format('SO12555000104','ISF','ENGSTATUS')
+        sql = base_sql.format(json_data)
         print(sql)
         result = current_app.db.query(sql)
 
