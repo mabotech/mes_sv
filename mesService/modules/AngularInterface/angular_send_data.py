@@ -31,6 +31,6 @@ class WipSortlist(views.MethodView):
     def post(self):
         planschedule = plan_schedule.PlanSchedule()
         res = planschedule.getsortlist()
-        return str(res)
+        return json.dumps(res)
 
 wipsortlist.add_url_rule("/wipsortlist", view_func=WipSortlist.as_view(name="wipsortlist"))
