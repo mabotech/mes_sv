@@ -73,8 +73,8 @@ class WipOrderInterface:
         wipordertype = 1
         if orderxmltype == 'NORMAL':
             wipordertype = 1
-        else:
-            wipordertype = 1
+        elif orderxmltype == 'O':
+            wipordertype = 2
 
         return wipordertype
 
