@@ -24,7 +24,7 @@ PRODUCTINVENTORYTYPE_ENUM = {
 # BOM物料类型
 BOM_ENUM = {
     'BFCEC_采购件': 1,
-    'BFCEC_虚拟件': 2,
+    'BFCEC_零件虚拟件': 2,
 }
 
 # 物料状态(New：预留默认为1)

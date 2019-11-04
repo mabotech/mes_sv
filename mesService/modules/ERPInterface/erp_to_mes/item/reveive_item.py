@@ -25,11 +25,14 @@ class ItemOrder(object):
         xml_str = request.data
         tree = etree.HTML(xml_str)
         xml_str = etree.tostring(tree)
-        dict_data = self.xml_to_dict(xml_str)
+
+        xml_body = request.get_data(as_text=True)
+        # print(xml_body, ">>>")
+        dict_data = self.xml_to_dict(xml_str, xml_body)
 
         return dict_data
 
-    def xml_to_dict(self, xml_str):
+    def xml_to_dict(self, xml_str, xml_body):
         """
         function:传入xml字符串类型数据，返回数据列表
         :param xml_str:字符串数据
@@ -54,6 +57,8 @@ class ItemOrder(object):
             result.append(new_dict)
 
         language_dict = {'language': 2052}
+        body_dict = {"request_body": xml_body}
+        result.append(body_dict)
         result.append(language_dict)
 
         return result

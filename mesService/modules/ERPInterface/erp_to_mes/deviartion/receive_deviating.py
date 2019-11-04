@@ -26,10 +26,14 @@ class DeviationOrder(object):
         xml_data = request.data
         xmlObj = etree.HTML(xml_data)  # 解析本地xml文件
         xml_str = etree.tostring(xmlObj)  # 将文件内容转换成字符串数据
-        dict_data = self.xml_to_dict(xml_str)
+
+        xml_body = request.get_data(as_text=True)
+        # print(xml_body, ">>>")
+        dict_data = self.xml_to_dict(xml_str, xml_body)
+
         return dict_data
 
-    def xml_to_dict(self, xml_str):
+    def xml_to_dict(self, xml_str, xml_body):
         """
         function:将xml字符串转换成json字符串，获取json字符串返回字典型数据
         :param xml_str:
@@ -49,6 +53,9 @@ class DeviationOrder(object):
                 new_dict["action"] = r_type
 
             result.append(new_dict)
+
+        body_dict = {"request_body": xml_body}
+        result.append(body_dict)
 
         return result
 
