@@ -26,11 +26,10 @@ class WipSortlist(views.MethodView):
             "status":"error",
             "message":"illegal request"
         }
-        res = json.dumps(result)
+        res = jsonify(result)
         return res
     def post(self):
         planschedule = plan_schedule.PlanSchedule()
         res = planschedule.getsortlist()
-        return json.dumps(res)
-
+        return jsonify(res)
 wipsortlist.add_url_rule("/wipsortlist", view_func=WipSortlist.as_view(name="wipsortlist"))

@@ -18,7 +18,12 @@ class PlanSchedule(object):
             base_sql = "select get_wipsortlist(%d,%d);"%(count,wipordertype)
             result = current_app.db.query_one(base_sql)
         except:
-            pass
+            result = {
+                "status":"server error",
+                "message":"search error"
+            }
+            res = json.dumps(result)
+            return res 
         if result:
             return result[0]
         else:
