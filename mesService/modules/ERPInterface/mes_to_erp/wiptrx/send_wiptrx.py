@@ -12,13 +12,13 @@ class WiptrxInterface:
     wiptrxXmlObj = {
         'TransactionID': '',                    # 固定值，接口
         'TransactionType':'',                   #区分具体返回
-        'CSN':'',                                #半成品序列号
+        'CSN':' ',                                #半成品序列号
         'WIPJobNo': '',                         # 工单号
         'WorkOrderStatus':'',                   #订单状态
         'PlantCode': '',                        # 工厂代码
         'ProductionLineNo':'',                  #产线
         'ActualMSBM':'',
-        'LastCompletedStation':'',              #上一个完工工位
+        'LastCompletedStation':' ',              #上一个完工工位
         'Dummy1':'',
         'Dummy2':'',
         'Dummy3':'',
@@ -37,13 +37,17 @@ class WiptrxInterface:
         for obj in datalist:
             self.wiptrxXmlObj['TransactionID'] = obj['transactionid']                    # 固定值
             self.wiptrxXmlObj['TransactionType'] = obj['transactiontype']
-            self.wiptrxXmlObj['CSN'] = ' '
+            self.wiptrxXmlObj['CSN'] = obj['serialno']                                    #二维码
             self.wiptrxXmlObj['WIPJobNo'] = obj['wiporderno']                            # 工单编号
             self.wiptrxXmlObj['WorkOrderStatus'] = ' '
             self.wiptrxXmlObj['PlantCode'] = obj['releasedfacility']                    # 工厂代码
             self.wiptrxXmlObj['ProductionLineNo'] = obj['productionlineno']            #产线
             self.wiptrxXmlObj['ActualMSBM'] = ' '
-            self.wiptrxXmlObj['LastCompletedStation'] = ' '
+            self.wiptrxXmlObj['LastCompletedStation'] = obj['currentworkcenter']        #最后完成工位
+            if not obj['currentworkcenter']:
+                self.wiptrxXmlObj['LastCompletedStation'] = ' '
+            if not obj['serialno']:
+                self.wiptrxXmlObj['CSN'] = ' '
             self.wiptrxXmlObj['Dummy1'] = ' '
             self.wiptrxXmlObj['Dummy2'] = ' '
             self.wiptrxXmlObj['Dummy3'] = ' '

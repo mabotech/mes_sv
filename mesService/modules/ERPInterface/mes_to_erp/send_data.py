@@ -53,6 +53,9 @@ class WiptrxView(views.MethodView):
             offlineobj['productionlineno'] = item['productionlineno']               # 产线
             offlineobj['transactiontype'] = item['transactiontype']
             offlineobj['transactionid'] = item['transactionid']
+            offlineobj['serialno'] = item['serialno']
+            offlineobj['currentworkcenter'] = item['currentworkcenter']
+
             dalist.append(offlineobj.copy())
 
         print(dalist)
