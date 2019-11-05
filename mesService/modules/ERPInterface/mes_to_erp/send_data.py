@@ -22,7 +22,7 @@ wiptrx = Blueprint("wiptrx", __name__, url_prefix=constants.URL_PREFIX)
 
 class WiptrxView(views.MethodView):
     """
-    完工(wiptrx)接口
+    wiptrx接口
     数据库：postgres
     """
     method = ["GET", "POST"]
@@ -35,7 +35,6 @@ class WiptrxView(views.MethodView):
 
         json_data = str(request.data, 'utf-8')
 
-        print(json_data)
         # 创建sql语句
         base_sql = """select plv8_get_wiptrx('{}');"""
 
@@ -46,11 +45,14 @@ class WiptrxView(views.MethodView):
 
         dalist = []
         sql_result=result[0].get('plv8_get_wiptrx')
+        print(sql_result)
         for item in sql_result:
             offlineobj = wiptrxInterface.wiptrxDatabaseObj
-            offlineobj['wiporderno'] = item['wiporderno']  # 工单编号
-            offlineobj['releasedfacility'] = item['releasedfacility']   # 工厂代码
-            offlineobj['productionlineno'] = item['productionlineno'] # 产线
+            offlineobj['wiporderno'] = item['wiporderno']                             # 工单编号
+            offlineobj['releasedfacility'] = item['releasedfacility']               # 工厂代码
+            offlineobj['productionlineno'] = item['productionlineno']               # 产线
+            offlineobj['transactiontype'] = item['transactiontype']
+            offlineobj['transactionid'] = item['transactionid']
             dalist.append(offlineobj.copy())
 
         print(dalist)
