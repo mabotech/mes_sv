@@ -26,7 +26,7 @@ class WiptrxInterface:
 
     # 定义数据库中的完工字段，由WIP_ORDER查询
     wiptrxDatabaseObj = {
-        'TransactionID':'',             #固定值
+        'TransactionID':'',                    #固定值
         'wiporderno': '',                     #工单编号
         'productionlineno':'',               #产线
         'releasedfacility': '',              #工厂代码
@@ -36,10 +36,18 @@ class WiptrxInterface:
     def bindDatabase2Xml(self, datalist):
         for obj in datalist:
             self.wiptrxXmlObj['TransactionID'] = obj['transactionid']                    # 固定值
-            self.wiptrxXmlObj['WIPJobNo'] = obj['wiporderno']                            # 工单编号
-            self.wiptrxXmlObj['productionlineno'] = obj['productionlineno']            # 工单编号
-            self.wiptrxXmlObj['PlantCode'] = obj['releasedfacility']                   # 工厂代码
             self.wiptrxXmlObj['TransactionType'] = obj['transactiontype']
+            self.wiptrxXmlObj['CSN'] = ' '
+            self.wiptrxXmlObj['WIPJobNo'] = obj['wiporderno']                            # 工单编号
+            self.wiptrxXmlObj['WorkOrderStatus'] = ' '
+            self.wiptrxXmlObj['PlantCode'] = obj['releasedfacility']                    # 工厂代码
+            self.wiptrxXmlObj['ProductionLineNo'] = obj['productionlineno']            #产线
+            self.wiptrxXmlObj['ActualMSBM'] = ' '
+            self.wiptrxXmlObj['LastCompletedStation'] = ' '
+            self.wiptrxXmlObj['Dummy1'] = ' '
+            self.wiptrxXmlObj['Dummy2'] = ' '
+            self.wiptrxXmlObj['Dummy3'] = ' '
+
         return self.wiptrxXmlObj
 
     # 生成上线的XML文件(实时回传)

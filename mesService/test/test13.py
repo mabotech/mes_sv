@@ -12,5 +12,3 @@ for i in range (0,10):
     randomNum=str(0)+str(randomNum)
   uniqueNum=str(nowTime)+str(randomNum)
   print(uniqueNum)
-
-
