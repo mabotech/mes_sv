@@ -75,8 +75,6 @@ def create_app(config_name):
     #前端Anguluar
     app.register_blueprint(angular_send_data.wipsortlist)
 
-    
-
     return app
 
 def create_conn(config_name):

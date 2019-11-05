@@ -5,11 +5,11 @@
   <discontinuedate>2019-10-30T10:09:21.000Z</discontinuedate>
   <productionlineno>15</productionlineno>
   <level1>5271866</level1>
-  <ownerfacility>ISF</ownerfacility>
+  <plantcode>ISF</plantcode>
   <pcoid>100000204</pcoid>
-  <workcenter>47500</workcenter>
+  <workstation>47500</workstation>
   <pccid/>
-  <quantity/>
+  <qty/>
   <childno/>
   <parentno/>
 </root>

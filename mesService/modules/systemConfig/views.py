@@ -16,7 +16,7 @@ from . import system_config_blue
 @system_config_blue.route('/menu_tree')
 def menu_tree():
     """
-    生产菜单树节点
+    菜单树配置
     :return:
     """
     result = []
@@ -49,6 +49,53 @@ def menu_tree():
 
     return jsonify(result)
 
+@system_config_blue.route('/nav_tree', methods=['POST'])
+def nav_tree():
+    """
+    通过权限导航栏节点树
+    :return:
+    """
+    result = []
+    menu_list = []
+    roleid = 0
+
+    try:
+        req_data = request.get_data(as_text=True)
+        json_req_data = json.loads(req_data)
+        roleid = json_req_data.get('roleid')
+    except Exception:
+        current_app.logger.error(traceback.format_exc())
+
+
+    try:
+        sql_str = "select get_menu_by_role({})".format(roleid)
+        menu_list = current_app.db.query(sql_str)[0]['get_menu_by_role']
+    except Exception:
+        current_app.logger.error(traceback.format_exc())
+
+    # 拿到所有的id和menu的映射
+    id_map_menu = {}
+
+    for menu in menu_list:
+        id = menu['id']
+        id_map_menu[id] = menu
+
+    try:
+        for menu in menu_list:
+            # 找到父节点加入到父节点的children
+            parentid = menu['parentid']
+            if parentid:
+                parent = id_map_menu[parentid]
+                parent_children = parent.get('children', [])
+                if parent_children == []:
+                    parent['children'] = []
+                parent['children'].append(menu)
+            else:
+                result.append(menu)
+    except Exception:
+        current_app.logger.error(traceback.format_exc())
+
+    return jsonify(result)
 
 @system_config_blue.route('/delete_menu', methods=['POST', 'DELETE'])
 def delete_menu():

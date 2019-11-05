@@ -53,9 +53,9 @@ class IacToXml(object):
 
 
 if __name__ == '__main__':
-    data = [{'pcid': 100000065, 'effectivedate': '2019-10-30T10:09:21.000Z', 'discontinuedate': '2019-10-30T10:09:21.000Z', 'productionlineno': '15', 'level1': '5271866', 'ownerfacility': 'ISF', 'pcoid': 100000204, 'workcenter': '47500', 'pccid': None, 'quantity': None, 'childno': None, 'parentno': None}]
 
     obj = IacToXml()
+    data = obj.get_iac_data()
     res = obj.dict_to_xml(data[0])
     print(res.decode('utf-8'))
 
