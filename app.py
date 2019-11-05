@@ -4,8 +4,14 @@
 # @fileName: manage.py
 # @email: luguang.huang@mabotech.com
 from mesService import create_app
+from flask_jsonrpc import JSONRPC
 
 app = create_app('development')
+
+#jsonrpc
+jsonrpc = JSONRPC(app, '/api')
+# 实现rpc接口
+import mesService.modules.AngularInterface.callrpc
 
 
 @app.after_request
