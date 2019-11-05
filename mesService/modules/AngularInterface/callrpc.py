@@ -6,6 +6,7 @@ from app import jsonrpc
 from flask import current_app
 from mesService.lib.pgwrap.db import connection
 import json
+import traceback
 
 
 mod = Blueprint('callrpc', __name__)
@@ -14,6 +15,13 @@ jsonrpc.register_blueprint(mod)
 @jsonrpc.method('callrpc(table=String, context=Object, method=String, columns=Object, pkey=String) -> Object')
 def callrpc(table, context, method, columns, pkey):
         #解析请求转为PG的select语句
-        sqlstr = "SELECT {0}('[{1}]') ".format(method, json.dumps(columns))
-        result = current_app.db.query_one(sqlstr)
+        try:
+                sqlstr = "SELECT {0}('{1}') ".format(method, json.dumps(columns))
+                result = current_app.db.query_one(sqlstr)
+        except Exception:
+                errstr = traceback.format_exc()
+                result = {
+                    "error":"internal error",
+                    "message":errstr
+                }
         return result
