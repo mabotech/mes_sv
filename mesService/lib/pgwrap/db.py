@@ -34,7 +34,7 @@ class AttrDictCursor(DictCursor):
 
 class connection(object):
 
-    def __init__(self, db_info=None, hstore=False, log=None, logf=None, min=1, max=5,
+    def __init__(self, db_info=None, hstore=False, log=None, logf=None, min=1, max=100,
                  default_cursor=DictCursor):
         if db_info is None:
             raise ValueError("Invalid connection Params")
