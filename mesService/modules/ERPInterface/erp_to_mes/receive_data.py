@@ -45,24 +45,31 @@ class BomView(views.MethodView):
         # print(ret)
 
         c_flag = ret[0]["product_component_insert"].get("component_result", None)
-        p_err = ret[0]["product_component_insert"].get("component_result_e", None)
+        c_err = ret[0]["product_component_insert"].get("component_result_e", None)
+        cup_flag = ret[0]["product_component_insert"].get("component_result_up", None)
+        cup_err = ret[0]["product_component_insert"].get("component_result_upe", None)
+        pcup_flag = ret[0]["product_component_insert"].get("product_component_result_up", None)
+        pcup_err = ret[0]["product_component_insert"].get("product_component_result_upe", None)
         pc_flag = ret[0]["product_component_insert"].get("product_component_result", None)
         pc_err = ret[0]["product_component_insert"].get("product_component_result_e", None)
         lii_inv = ret[0]["product_component_insert"].get("component_line_item_id_invalid", None)
         hii_inv = ret[0]["product_component_insert"].get("product_component_header_item_id_invalid", None)
 
-        if c_flag and pc_flag:
+        if c_flag or pc_flag or cup_flag or pcup_flag:
             RET['status'] = 200
-            RET['msg'] = 'insert success'
-        elif p_err or pc_err:
+            RET['msg'] = 'execute success'
+        elif c_err or cup_err or pc_err or pcup_err:
             RET['status'] = 300
-            RET['msg'] = "{0}或者{1}错误！".format(p_err, pc_err)
+            RET['msg'] = "{0}/{1}/{2}/{3}错误！".format(c_err, cup_err, pc_err, pcup_err)
         elif lii_inv:
             RET['status'] = 300
             RET['msg'] = lii_inv
         elif hii_inv:
             RET['status'] = 300
             RET['msg'] = hii_inv
+        else:
+            RET['status'] = 400
+            RET['msg'] = "未知错误！"
 
         return jsonify(RET)
 
@@ -133,6 +140,9 @@ class IteView(views.MethodView):
         elif up_err:
             RET['status'] = 300
             RET['msg'] = up_err
+        else:
+            RET['status'] = 400
+            RET['msg'] = "未知错误！"
 
         return jsonify(RET)
 
@@ -230,7 +240,7 @@ class SequenceView(views.MethodView):
         # 调用数据库函数
         result = current_app.db.query(sql)
         sql_result = result[0].get('plv8_insert_sequence')
-        print('result',sql_result)
+        print('result', sql_result)
 
         return jsonify(sql_result)
 
