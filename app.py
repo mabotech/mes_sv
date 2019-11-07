@@ -9,7 +9,7 @@ from flask_jsonrpc import JSONRPC
 app = create_app('development')
 
 #jsonrpc
-jsonrpc = JSONRPC(app, '/api')
+jsonrpc = JSONRPC(app, '/rpc/v1')
 # 实现rpc接口
 import mesService.modules.AngularInterface.callrpc
 
