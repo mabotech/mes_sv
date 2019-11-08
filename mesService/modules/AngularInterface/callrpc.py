@@ -21,13 +21,13 @@ def callrpc(table, context, method, columns, pkey):
                 if columns :
                         time.sleep(5)
                         sqlstr = "SELECT {0}('{1}') ".format(method, json.dumps(columns))
-                        result = current_app.db.execute(sqlstr)
+                        result = current_app.db.query_one(sqlstr)
                         res = {
                                 "message":result
                         }
                 else:
                         sqlstr = "SELECT {0}() ".format(method)
-                        result = current_app.db.execute(sqlstr)
+                        result = current_app.db.query_one(sqlstr)
                         res = {
                                 "message":result
                         }
