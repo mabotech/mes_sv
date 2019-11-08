@@ -7,6 +7,8 @@ from flask import current_app
 from mesService.lib.pgwrap.db import connection
 import json
 import traceback
+import time
+import random
 
 
 mod = Blueprint('callrpc', __name__)
@@ -16,12 +18,23 @@ jsonrpc.register_blueprint(mod)
 def callrpc(table, context, method, columns, pkey):
         #解析请求转为PG的select语句
         try:
-                sqlstr = "SELECT {0}('{1}') ".format(method, json.dumps(columns))
-                result = current_app.db.query_one(sqlstr)
+                if columns :
+                        time.sleep(5)
+                        sqlstr = "SELECT {0}('{1}') ".format(method, json.dumps(columns))
+                        result = current_app.db.query_one(sqlstr)
+                        res = {
+                                "message":result
+                        }
+                else:
+                        sqlstr = "SELECT {0}() ".format(method)
+                        result = current_app.db.query_one(sqlstr)
+                        res = {
+                                "message":result
+                        }
         except Exception:
                 errstr = traceback.format_exc()
-                result = {
+                res = {
                     "error":"internal error",
                     "message":errstr
                 }
-        return result
+        return res
