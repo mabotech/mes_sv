@@ -92,17 +92,25 @@ class DevView(views.MethodView):
 
         iwd_flag = ret[0]["wip_deviation_insert"].get("insert_wipdeviation", None)
         iwd_err = ret[0]["wip_deviation_insert"].get("insert_wipdeviation_e", None)
+        dwd_flag = ret[0]["wip_deviation_insert"].get("delete_wipdeviation", None)
+        dwd_err = ret[0]["wip_deviation_insert"].get("delete_wipdeviation_e", None)
         iwd_inv = ret[0]["wip_deviation_insert"].get("insert_wipdeviation_invalid", None)
 
         if iwd_flag:
             RET['status'] = 200
             RET['msg'] = 'insert success'
-        elif iwd_err:
+        elif dwd_flag:
+            RET['status'] = 200
+            RET['msg'] = 'delete success'
+        elif iwd_err or dwd_err:
             RET['status'] = 300
-            RET['msg'] = iwd_err
-        else:
+            RET['msg'] = "{0}或者{1}报错".format(iwd_err, dwd_err)
+        elif iwd_inv:
             RET['status'] = 300
             RET['msg'] = iwd_inv
+        else:
+            RET['status'] = 400
+            RET['msg'] = "未知错误！"
 
         return jsonify(RET)
 
