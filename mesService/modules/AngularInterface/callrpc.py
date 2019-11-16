@@ -20,6 +20,7 @@ def callrpc(table, context, method, columns, pkey):
         try:
                 if any(columns) :
                         time.sleep(5)
+                if columns :
                         sqlstr = "SELECT {0}('{1}') ".format(method, json.dumps(columns))
                         result = current_app.db.query_one(sqlstr)
                         res = {

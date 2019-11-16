@@ -5,6 +5,7 @@
 # @email: luguang.huang@mabotech.com
 from mesService import create_app
 from flask_jsonrpc import JSONRPC
+from flask import request
 
 app = create_app('development')
 
@@ -24,7 +25,7 @@ def after_request(response):
     # make requests to this server (otherwise, you will get 403s due to same-
     # origin poly)
     response.headers.add('Access-Control-Allow-Origin',
-                         '*')
+                         "*")
     response.headers.add('Access-Control-Allow-Credentials', 'true')
     response.headers.add('Access-Control-Allow-Headers',
                          'Content-Type,Authorization,Set-Cookie,Cookie,Cache-Control,Pragma,Expires')  # noqa

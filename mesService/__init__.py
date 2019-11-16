@@ -23,6 +23,7 @@ from .modules.AngularInterface import angular_send_data
 
 from .modules.ERPInterface.mes_to_erp import send_data
 from .modules.AngularInterface import angular_send_data
+from .modules.processManage import process_manage_blue
 
 def setup_log(config_name):
     """配置日志"""
@@ -64,6 +65,7 @@ def create_app(config_name):
 
     app.register_blueprint(auth_blue)
     app.register_blueprint(system_config_blue)
+    app.register_blueprint(process_manage_blue)
 
     app.register_blueprint(receive_data.bom)
     app.register_blueprint(receive_data.dev)
