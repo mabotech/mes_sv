@@ -18,8 +18,7 @@ jsonrpc.register_blueprint(mod)
 def callrpc(table, context, method, columns, pkey):
         #解析请求转为PG的select语句
         try:
-                if any(columns) :
-                        time.sleep(5)
+                if columns :
                         sqlstr = "SELECT {0}('{1}') ".format(method, json.dumps(columns))
                         result = current_app.db.query_one(sqlstr)
                         res = {
