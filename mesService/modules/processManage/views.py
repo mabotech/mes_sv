@@ -3,6 +3,7 @@
 # @author  : Huanglg
 # @fileName: views.py
 # @email: luguang.huang@mabotech.com
+import json
 import traceback
 import os
 import uuid
@@ -22,22 +23,46 @@ def upload():
         "url": '',
         "uid": uuid.uuid4().hex,
         "name": '',
-        "isSuccess": False
+        "isSuccess": True
     }
 
     try:
+        BASE_DIR = os.path.join(os.getcwd(), 'images')
+        if not os.path.exists(BASE_DIR):
+            os.makedirs(BASE_DIR)
+
         file = request.files.get('file')
-        path = os.path.join(os.getcwd(), 'images')
-        if not os.path.exists(path):
-            os.makedirs(path)
-        file.save(os.path.join(path, file.filename))
-        result['url'] = os.path.join('/get_image/', file.filename)
-        result['name'] = file.filename
+        username = request.form.get('username')
+        filename = file.filename
+        filetype = filename.split('.')[-1]
+
+        # 防止文件名重复，生成新的文件名
+        new_filename = uuid.uuid1().hex + '_' + filename
+        image_url = os.path.join('/get_image/', new_filename)
+
+        file.save(os.path.join(BASE_DIR, new_filename))
+
+        # 图片信息存入数据库
+        params = {
+            "name": filename.split('.')[0], # 去掉扩展名
+            "documenttypecode": filetype, # 扩展名
+            "schemaurlflag": image_url,
+            "username": username,
+        }
+
+        sql_str = "select insert_document('{}')".format(json.dumps(params))
+        db_result = current_app.db.query_one(sql_str)[0]
+
+        if db_result != 1:
+            result['isSuccess'] = False
+
+        result['url'] = image_url
+        result['name'] = filename
     except Exception:
         current_app.logger.error(traceback.format_exc())
+        result['isSuccess'] = False
         return jsonify(result)
 
-    result['isSuccess'] = True
     return jsonify(result)
 
 @process_manage_blue.route("/get_image/<filename>" , methods = ['GET'])
