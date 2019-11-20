@@ -4,6 +4,7 @@
 # @fileName: views.py
 # @email: luguang.huang@mabotech.com
 import json
+import socket
 import traceback
 
 from flask import current_app, request
@@ -262,8 +263,16 @@ def link_menu():
     return jsonify({"result": result})
 
 
-@system_config_blue.route('/text', methods=['GET'])
-def test_text():
-    result = tt_manage('BFCEC_3', 1167656061502919802)
-    result = {"textid" :result}
+@system_config_blue.route('/client_info', methods=['GET'])
+def get_ip():
+
+    user_agent = request.user_agent
+    result = {
+        "hostname": socket.gethostname(),
+        "ip": request.remote_addr,
+        "platform": user_agent.platform,
+        "browser": user_agent.browser,
+        "version": user_agent.version,
+        "language": user_agent.language,
+    }
     return jsonify(result)
