@@ -10,6 +10,7 @@ from logging.handlers import RotatingFileHandler
 from flask import Flask
 from flask_apscheduler import APScheduler
 from flask_jwt_extended import JWTManager
+from redis import StrictRedis
 
 from .modules.auth import auth_blue
 from .config import Config, config_dict
@@ -23,6 +24,7 @@ from .modules.AngularInterface import angular_send_data
 
 from .modules.ERPInterface.mes_to_erp import send_data
 from .modules.AngularInterface import angular_send_data
+from .modules.processManage import process_manage_blue
 
 def setup_log(config_name):
     """配置日志"""
@@ -40,6 +42,8 @@ def setup_log(config_name):
     # 为全局的日志工具对象（flask app使用的）添加日志记录器
     logging.getLogger().addHandler(file_log_handler)
 
+# 实例化redis对象 decode_response=True 默认直接编码
+redis_store = StrictRedis(host=Config.REDIS_HOST,port=Config.REDIS_PORT,decode_responses=True, db=0)
 
 def create_app(config_name):
     """
@@ -64,6 +68,7 @@ def create_app(config_name):
 
     app.register_blueprint(auth_blue)
     app.register_blueprint(system_config_blue)
+    app.register_blueprint(process_manage_blue)
 
     app.register_blueprint(receive_data.bom)
     app.register_blueprint(receive_data.dev)

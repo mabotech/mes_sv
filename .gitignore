@@ -107,3 +107,4 @@ venv.bak/
 *.log.*
 *.log
 logs/
+images/
