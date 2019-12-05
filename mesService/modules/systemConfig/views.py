@@ -49,6 +49,7 @@ def menu_tree():
 
     return jsonify(result)
 
+
 @system_config_blue.route('/nav_tree', methods=['POST'])
 def nav_tree():
     """
@@ -65,7 +66,6 @@ def nav_tree():
         roleid = json_req_data.get('roleid')
     except Exception:
         current_app.logger.error(traceback.format_exc())
-
 
     try:
         sql_str = "select get_menu_by_role({})".format(roleid)
@@ -96,6 +96,7 @@ def nav_tree():
         current_app.logger.error(traceback.format_exc())
 
     return jsonify(result)
+
 
 @system_config_blue.route('/delete_menu', methods=['POST', 'DELETE'])
 def delete_menu():
@@ -158,6 +159,7 @@ def insert_menu():
     except Exception as e:
         current_app.logger.errorresult = traceback.format_exc()
     return jsonify({'result': result})
+
 
 @system_config_blue.route('/update_menu', methods=['POST'])
 def update_menu():
@@ -227,6 +229,7 @@ def delete_menu_role():
 
     return jsonify({"result": result})
 
+
 @system_config_blue.route('/insert_menu_role', methods=['POST'])
 def insert_menu_role():
     """
@@ -243,6 +246,7 @@ def insert_menu_role():
         current_app.logger.error(traceback.format_exc())
 
     return jsonify({"result": result})
+
 
 @system_config_blue.route('/link_menu', methods=['POST'])
 def link_menu():
@@ -265,5 +269,5 @@ def link_menu():
 @system_config_blue.route('/text', methods=['GET'])
 def test_text():
     result = tt_manage('BFCEC_3', 1167656061502919802)
-    result = {"textid" :result}
+    result = {"textid": result}
     return jsonify(result)
