@@ -10,6 +10,7 @@ from logging.handlers import RotatingFileHandler
 from flask import Flask
 from flask_apscheduler import APScheduler
 from flask_jwt_extended import JWTManager
+from redis import StrictRedis
 
 from .modules.auth import auth_blue
 from .config import Config, config_dict
@@ -41,6 +42,8 @@ def setup_log(config_name):
     # 为全局的日志工具对象（flask app使用的）添加日志记录器
     logging.getLogger().addHandler(file_log_handler)
 
+# 实例化redis对象 decode_response=True 默认直接编码
+redis_store = StrictRedis(host=Config.REDIS_HOST,port=Config.REDIS_PORT,decode_responses=True, db=0)
 
 def create_app(config_name):
     """

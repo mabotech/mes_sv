@@ -268,7 +268,7 @@ def get_ip():
 
     user_agent = request.user_agent
     result = {
-        "hostname": socket.gethostname(),
+        "hostname": socket.gethostbyname_ex(request.remote_addr),
         "ip": request.remote_addr,
         "platform": user_agent.platform,
         "browser": user_agent.browser,
@@ -276,3 +276,4 @@ def get_ip():
         "language": user_agent.language,
     }
     return jsonify(result)
+
