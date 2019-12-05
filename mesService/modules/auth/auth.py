@@ -2,6 +2,7 @@
 Authentication Functions
 """
 
+import json
 from functools import wraps
 from flask import abort
 from flask_jwt_extended import (
@@ -29,6 +30,7 @@ USERS = [
 
 class AuthenticationError(Exception):
     """Base Authentication Exception"""
+
     def __init__(self, msg=None):
         self.msg = msg
 
@@ -56,13 +58,15 @@ def authenticate_user(username, password):
     """
     Authenticate a user
     """
-    sql_base = "select name, employeeno, loginname, password,active from employee where loginname='{}'"
-    sql_str = sql_base.format(username)
-    employee_info = current_app.db.query(sql_str)
+    print(username, password)
+    sql_base = "select get_employee_password('{0}')"
+    loginname = json.dumps({"loginname": username})
+    sql_str = sql_base.format(loginname)
+    employee_info = current_app.db.query_one(sql_str)
+
     if employee_info:
-        db_passwd = employee_info[0]['password']
-        db_active = employee_info[0]['active']
-        if check_password_hash(db_passwd, password) and int(db_active) == 1:
+        db_passwd = employee_info[0][0]['password']
+        if db_passwd == password:
             return (
                 create_access_token(identity=username),
                 create_refresh_token(identity=username)
@@ -78,14 +82,11 @@ def get_authenticated_user():
     Get authentication token user identity and verify account is active
     """
     identity = get_jwt_identity()
-    for user in USERS:
-        if identity == user['username']:
-            if user['enabled']:
-                return user
-            else:
-                raise AccountInactive()
+
+    if identity:
+        return identity
     else:
-        raise UserNotFound(identity)
+        raise AccountInactive()
 
 
 def deauthenticate_user():
@@ -110,15 +111,17 @@ def auth_required(func):
     """
     View decorator - require valid access token
     """
+
     @wraps(func)
     def wrapper(*args, **kwargs):
         verify_jwt_in_request()
         try:
-            get_authenticated_user()
+            # get_authenticated_user()
             return func(*args, **kwargs)
         except (UserNotFound, AccountInactive) as error:
             current_app.logger.error('authorization failed: %s', error)
             abort(403)
+
     return wrapper
 
 
@@ -126,6 +129,7 @@ def auth_refresh_required(func):
     """
     View decorator - require valid refresh token
     """
+
     @wraps(func)
     def wrapper(*args, **kwargs):
         verify_jwt_refresh_token_in_request()
@@ -135,6 +139,7 @@ def auth_refresh_required(func):
         except (UserNotFound, AccountInactive) as error:
             current_app.logger.error('authorization failed: %s', error)
             abort(403)
+
     return wrapper
 
 
@@ -142,6 +147,7 @@ def admin_required(func):
     """
     View decorator - required valid access token and admin access
     """
+
     @wraps(func)
     def wrapper(*args, **kwargs):
         verify_jwt_in_request()
@@ -154,4 +160,5 @@ def admin_required(func):
         except (UserNotFound, AccountInactive) as error:
             current_app.logger.error('authorization failed: %s', error)
             abort(403)
+
     return wrapper
