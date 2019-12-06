@@ -20,6 +20,7 @@ app = create_app('development')
 
 #jsonrpc
 jsonrpc = JSONRPC(app, '/rpc/v1')
+import mesService.modules.AngularInterface.callrpc
 # 实现rpc接口
 
 @app.after_request
