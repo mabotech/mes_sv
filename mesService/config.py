@@ -15,7 +15,7 @@ class Config(object):
     SECRET_KEY = 'heyKyqaUgg8jAJJvjwxy3bUCkBFBX5ao3kK0HLptbW8='
 
     # 配置redis的主机和端口
-    REDIS_HOST = '127.0.0.1'
+    REDIS_HOST = '192.168.97.188'
     REDIS_PORT = 6379
 
     LOG_LEVEL = logging.DEBUG
