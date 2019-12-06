@@ -63,10 +63,8 @@ def nav_tree():
 
     try:
         req_data = request.get_data(as_text=True)
-        print(req_data, "req_data?>>")
         json_req_data = json.loads(req_data)
         roles = json_req_data.get('roles')
-        print(roles, "roles>>")
     except Exception:
         current_app.logger.error(traceback.format_exc())
 
