@@ -58,17 +58,19 @@ def nav_tree():
     """
     result = []
     menu_list = []
-    roleid = 0
+    roles = 0
 
     try:
         req_data = request.get_data(as_text=True)
+        print(req_data, "req_data?>>")
         json_req_data = json.loads(req_data)
-        roleid = json_req_data.get('roleid')
+        roles = json_req_data.get('roles')
+        print(roles, "roles>>")
     except Exception:
         current_app.logger.error(traceback.format_exc())
 
     try:
-        sql_str = "select get_menu_by_role({})".format(roleid)
+        sql_str = "select get_menu_by_role('{0}')".format(json.dumps({"roles": roles}))
         menu_list = current_app.db.query(sql_str)[0]['get_menu_by_role']
     except Exception:
         current_app.logger.error(traceback.format_exc())
