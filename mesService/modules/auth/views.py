@@ -4,6 +4,7 @@
 # @fileName: views.py
 # @email: luguang.huang@mabotech.com
 import json
+import traceback
 
 from . import auth_blue
 from flask.json import jsonify
@@ -46,15 +47,20 @@ def login_info_api():
     try:
         user = get_authenticated_user()
 
+        data_list = None
         sql_base = "select get_employee_all('{0}')"
         loginname = json.dumps({"loginname": user})
         sql_str = sql_base.format(loginname)
-        employee_info = current_app.db.query(sql_str)
+        try:
+            employee_info = current_app.db.query(sql_str)
+            data_list = employee_info[0]["get_employee_all"]
+        except Exception:
+            current_app.logger.error(traceback.format_exc())
 
         # 获取所有员工信息
-        if employee_info:
-            data_list = employee_info[0]["get_employee_all"]
-            info_dict = employee_info[0]["get_employee_all"][0]
+        if data_list:
+            # print(data_list, "data_list>>")
+            info_dict = data_list[0]
             info_dict['roles'] = []
 
             for data in data_list:
