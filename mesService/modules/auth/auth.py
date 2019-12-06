@@ -58,7 +58,6 @@ def authenticate_user(username, password):
     """
     Authenticate a user
     """
-    print(username, password)
     sql_base = "select get_employee_password('{0}')"
     loginname = json.dumps({"loginname": username})
     sql_str = sql_base.format(loginname)

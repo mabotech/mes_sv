@@ -7,16 +7,16 @@ import json
 
 from mesService import create_app
 from flask_jsonrpc import JSONRPC
-from flask_uwsgi_websocket import GeventWebSocket
-from flask_uwsgi_websocket import WebSocket
+# from flask_uwsgi_websocket import GeventWebSocket
+# from flask_uwsgi_websocket import WebSocket
 from flask import request
 
 from mesService.lib.redisLib.RedisHelper import RedisHelper
 from mesService.modules.AngularInterface.websocket_service import ws_blue
 
 app = create_app('development')
-ws = WebSocket(app)
-ws.register_blueprint(ws_blue)
+# ws = WebSocket(app)
+# ws.register_blueprint(ws_blue)
 
 #jsonrpc
 jsonrpc = JSONRPC(app, '/rpc/v1')
@@ -48,4 +48,4 @@ def after_request(response):
 
 if __name__ == '__main__':
     print(app.url_map)
-    app.run(debug=True, threads=16, host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0')
