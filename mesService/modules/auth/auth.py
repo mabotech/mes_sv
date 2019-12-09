@@ -3,6 +3,7 @@ Authentication Functions
 """
 
 import json
+import traceback
 from functools import wraps
 from flask import abort
 from flask_jwt_extended import (
@@ -58,11 +59,14 @@ def authenticate_user(username, password):
     """
     Authenticate a user
     """
-    print(username, password)
+    employee_info = None
     sql_base = "select get_employee_password('{0}')"
     loginname = json.dumps({"loginname": username})
     sql_str = sql_base.format(loginname)
-    employee_info = current_app.db.query_one(sql_str)
+    try:
+        employee_info = current_app.db.query_one(sql_str)
+    except Exception:
+        current_app.logger.error(traceback.format_exc())
 
     if employee_info:
         db_passwd = employee_info[0][0]['password']
