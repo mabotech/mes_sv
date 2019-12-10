@@ -68,7 +68,8 @@ def authenticate_user(username, password):
     except Exception:
         current_app.logger.error(traceback.format_exc())
 
-    if employee_info:
+    if len(employee_info[0]):
+        # print(employee_info, "employee_info>>")
         db_passwd = employee_info[0][0]['password']
         if db_passwd == password:
             return (
