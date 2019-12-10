@@ -60,7 +60,16 @@ class BomOrder(object):
 
         # 报文原始数据
         body_dict = {"request_body": xml_body}
+        """
+        USAGE_TYPE:
+            BOM: 1
+            IAC工位BOM: 2
+            工单偏离: 3
+            实时偏离: 4
+        """
+        usagetype_dict = {"usagetype": 1}
         result.append(body_dict)
+        result.append(usagetype_dict)
 
         return result
 
