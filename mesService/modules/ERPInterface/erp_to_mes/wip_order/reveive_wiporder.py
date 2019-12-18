@@ -58,7 +58,7 @@ class WipOrderInterface:
         self.wipoderDatabaseObj['productionlineno'] = self.wipoderXmlObj['productionlineno']                            #产线
         self.wipoderDatabaseObj['releasedfacility'] = self.wipoderXmlObj['plantcode']                                   #发布工厂
         self.wipoderDatabaseObj['wipordertype'] =self.xmltype2Inttype( self.wipoderXmlObj['wotype'])                    #固定值
-        self.wipoderDatabaseObj['progressstatus'] = 110                                                                 #工单状态默认待排产
+        self.wipoderDatabaseObj['progressstatus'] = 100                                                                 #工单状态默认待排产
 
     #将XML日期类型转为时间戳
     def xmldate2Timestamp(self,xmldate):
