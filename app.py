@@ -18,9 +18,11 @@ app = create_app('development')
 # ws = WebSocket(app)
 # ws.register_blueprint(ws_blue)
 
-#jsonrpc
+# jsonrpc
 jsonrpc = JSONRPC(app, '/rpc/v1')
 import mesService.modules.AngularInterface.callrpc
+
+
 # 实现rpc接口
 
 @app.after_request
