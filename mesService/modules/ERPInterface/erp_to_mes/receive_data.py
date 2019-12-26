@@ -110,7 +110,7 @@ class DevView(views.MethodView):
             RET['msg'] = iwd_inv
         else:
             RET['status'] = 400
-            RET['msg'] = "未知错误！"
+            RET['msg'] = "当前工单号不满足偏离条件或者工单号不存在！"
 
         return jsonify(RET)
 

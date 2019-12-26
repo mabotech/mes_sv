@@ -4,6 +4,10 @@
 # @fileName: job_1_check_wiporder.py
 # @email: jiangqiao.wang@mabotech.com
 
+import sys
+sys.path.append(r'C:\Users\mabot\Desktop\BFCEC\foton\mesService')
+
+
 from mesService import config_dict
 from mesService.lib.pgwrap.db import connection
 

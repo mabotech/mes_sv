@@ -48,9 +48,9 @@ class DeviationOrder(object):
             new_dict = {}
             if p in need_keys:
                 new_dict[p] = n
-            if p == "action":
-                r_type = self.get_status_type(n)
-                new_dict["action"] = r_type
+            # if p == "action":
+            #     r_type = self.get_status_type(n)
+            #     new_dict["action"] = r_type
 
             result.append(new_dict)
 
