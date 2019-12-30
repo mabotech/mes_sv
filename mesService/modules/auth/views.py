@@ -4,6 +4,7 @@
 # @fileName: views.py
 # @email: luguang.huang@mabotech.com
 import json
+import socket
 import traceback
 
 from . import auth_blue
@@ -69,6 +70,11 @@ def login_info_api():
                     'role': data['role']
                 })
 
+            # 获取本机电脑名
+            myname = socket.getfqdn(socket.gethostname())
+            # 获取本机ip
+            myaddr = socket.gethostbyname(myname)
+            info_dict['sourceid'] = myaddr
             info_dict.pop('rid')
             info_dict.pop('role')
             # print(info_dict)
