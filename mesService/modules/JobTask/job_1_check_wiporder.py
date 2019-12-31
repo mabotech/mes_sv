@@ -5,7 +5,8 @@
 # @email: jiangqiao.wang@mabotech.com
 
 import sys
-sys.path.append(r'C:\Users\mabot\Desktop\BFCEC\foton\mesService')
+# sys.path.append(r'C:\Users\mabot\Desktop\BFCEC\foton\mesService')
+sys.path.append(r'/home/test01/mesService')
 
 
 from mesService import config_dict
