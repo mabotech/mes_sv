@@ -34,7 +34,8 @@ def upload():
         file = request.files.get('file')
         username = request.form.get('username')
         filename = file.filename
-        filetype = filename.split('.')[-1]
+        file_format = filename.split('.')[-1]
+        documenttype = request.form.get('documenttype')
 
         # 防止文件名重复，生成新的文件名
         new_filename = uuid.uuid1().hex + '_' + filename
@@ -45,9 +46,10 @@ def upload():
         # 图片信息存入数据库
         params = {
             "name": filename.split('.')[0], # 去掉扩展名
-            "documenttypecode": filetype, # 扩展名
+            "documenttypecode": documenttype, # 扩展名
             "schemaurlflag": image_url,
             "username": username,
+            "documentformat": file_format
         }
 
         sql_str = "select insert_document('{}')".format(json.dumps(params))

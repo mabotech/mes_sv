@@ -31,8 +31,8 @@ class Config(object):
 
     APPLICATION_TITLE = "Flask JWT Example"
     JWT_TOKEN_LOCATION = "headers"
-    JWT_ACCESS_TOKEN_EXPIRES = 30
-    JWT_REFRESH_TOKEN_EXPIRES = 600
+    JWT_ACCESS_TOKEN_EXPIRES = 6000
+    JWT_REFRESH_TOKEN_EXPIRES = 6000
 
     DB_INFO = {
         'database': 'BFCEC',
