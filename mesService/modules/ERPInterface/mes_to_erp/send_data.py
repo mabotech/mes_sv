@@ -7,6 +7,7 @@
 import re
 import time
 import json
+import requests
 from lxml import etree
 from flask import views
 from flask import request
@@ -62,7 +63,17 @@ class WiptrxView(views.MethodView):
 
         #生成XML
         wiptrxXml = wiptrxInterface.genOnlineXML(dalist)
-
-        return wiptrxXml
+        request_res = None
+        result = {"result": "success", "message": None}
+        try:
+            request_res = requests.post(constants.ERP_HOST+ '/erp', wiptrxXml)
+        except Exception as e:
+            result['result'] = 'fail'
+            result['message'] = e.args
+        request_status = request_res.status_code
+        print(request_status)
+        if (request_status != 200):
+            result['result'] = 'fail'
+        return jsonify(result)
 
 wiptrx.add_url_rule("/wiptrx", view_func=WiptrxView.as_view(name="wiptrx"))

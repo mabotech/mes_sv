@@ -21,6 +21,9 @@ PRODUCTINVENTORYTYPE_ENUM = {
     'BFCEC_通用类型': 100
 }
 
+# 传输给ERP的地址
+ERP_HOST = 'http://127.0.0.1:5001'
+
 # BOM物料类型
 BOM_ENUM = {
     'BFCEC_采购件': 1,
