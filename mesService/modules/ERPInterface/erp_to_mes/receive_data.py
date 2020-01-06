@@ -92,8 +92,8 @@ class DevView(views.MethodView):
 
         iwd_flag = ret[0]["wip_deviation_insert"].get("insert_wipdeviation", None)
         iwd_err = ret[0]["wip_deviation_insert"].get("insert_wipdeviation_e", None)
-        dwd_flag = ret[0]["wip_deviation_insert"].get("delete_wipdeviation", None)
-        dwd_err = ret[0]["wip_deviation_insert"].get("delete_wipdeviation_e", None)
+        dwd_flag = ret[0]["wip_deviation_insert"].get("update_wipdeviation", None)
+        dwd_err = ret[0]["wip_deviation_insert"].get("update_wipdeviation_e", None)
         iwd_inv = ret[0]["wip_deviation_insert"].get("insert_wipdeviation_invalid", None)
 
         if iwd_flag:
