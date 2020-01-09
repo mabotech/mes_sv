@@ -88,13 +88,13 @@ class DevView(views.MethodView):
         obj = DeviationOrder()
         data = obj.parse_xml()
         ret = obj.insertDatabase(data)
-        print(ret, ">>>")
 
         iwd_flag = ret[0]["wip_deviation_insert"].get("insert_wipdeviation", None)
         iwd_err = ret[0]["wip_deviation_insert"].get("insert_wipdeviation_e", None)
         dwd_flag = ret[0]["wip_deviation_insert"].get("update_wipdeviation", None)
         dwd_err = ret[0]["wip_deviation_insert"].get("update_wipdeviation_e", None)
         iwd_inv = ret[0]["wip_deviation_insert"].get("insert_wipdeviation_invalid", None)
+        plantcode = ret[0]["wip_deviation_insert"].get("plantcode", None)
 
         if iwd_flag:
             RET['status'] = 200
@@ -108,9 +108,12 @@ class DevView(views.MethodView):
         elif iwd_inv:
             RET['status'] = 300
             RET['msg'] = iwd_inv
+        elif plantcode:
+            RET['status'] = 300
+            RET['msg'] = plantcode
         else:
             RET['status'] = 400
-            RET['msg'] = "当前工单号不满足偏离条件或者工单号不存在！"
+            RET['msg'] = "其他错误信息！"
 
         return jsonify(RET)
 
