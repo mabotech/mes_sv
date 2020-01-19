@@ -279,4 +279,4 @@ def get_ip():
         "version": user_agent.version,
         "language": user_agent.language,
     }
-
+    return jsonify(result)
