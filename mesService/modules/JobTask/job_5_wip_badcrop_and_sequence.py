@@ -20,8 +20,8 @@ class WipBadcrop(object):
 
     def execteDatabase(self):
         """调用存储过程"""
-        sql1 = "select wip_badcrop();"     # 欠产
-        sql2 = "select wip_sequence();"    # 工单排序
+        sql1 = "select job_wip_badcrop();"     # 欠产
+        sql2 = "select job_wip_sequence();"    # 工单排序
         try:
             ret_badcrop = self.db.query(sql1)
             print(ret_badcrop)

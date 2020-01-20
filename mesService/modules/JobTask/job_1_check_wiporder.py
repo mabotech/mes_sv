@@ -20,7 +20,7 @@ class CheckWipOrder(object):
 
     def execteDatabase(self):
         """调用存储过程"""
-        sql = "select check_wiporder();"
+        sql = "select job_check_wiporder();"
         try:
             ret = self.db.query(sql)
             print(ret)

@@ -20,7 +20,7 @@ class WipSequence(object):
 
     def execteDatabase(self):
         """调用存储过程"""
-        sql = "select wip_sequence();"
+        sql = "select job_wip_sequence();"
         try:
             ret = self.db.query(sql)
             print(ret)

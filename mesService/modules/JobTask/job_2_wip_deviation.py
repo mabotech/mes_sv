@@ -20,7 +20,7 @@ class WipDeviation(object):
 
     def execteDatabase(self):
         """调用存储过程"""
-        sql = "select wip_deviation();"
+        sql = "select job_wip_deviation();"
         try:
             ret = self.db.query(sql)
             print(ret)
