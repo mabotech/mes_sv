@@ -85,3 +85,22 @@ config_dict = {
     'development': DevelopmentConfig,
     'production': ProductionConfig,
 }
+
+INTERFACE_BASE_URL = "http://127.0.0.1:5000"
+INTERFACE_CLASS_NAME = {
+    f"{INTERFACE_BASE_URL}/api/v1/deviation": "DeviationOrder",
+    f"{INTERFACE_BASE_URL}/api/v1/item": "ItemOrder",
+    f"{INTERFACE_BASE_URL}/api/v1/bom": "BomOrder",
+    f"{INTERFACE_BASE_URL}/api/v1/wiporder": "WipOrderInterface",
+    f"{INTERFACE_BASE_URL}/api/v1/wipsequence": "SequenceInterface"
+}
+
+# 工作模式
+PRESENT_WORK_MODE = {
+    "develp": "development",
+    "test": "development",
+    "production": "production"
+}
+
+# 当前工作模式
+PRESENT_WORK_MODE = PRESENT_WORK_MODE["develp"]

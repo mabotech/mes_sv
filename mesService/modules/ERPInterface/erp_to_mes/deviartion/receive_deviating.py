@@ -4,6 +4,7 @@
 # @fileName: send_bom.py
 # @email: jiangqiao.wang@mabotech.com
 
+import os
 import json
 import traceback
 
@@ -11,23 +12,30 @@ import xmltodict
 from lxml import etree
 from flask import request
 from flask import current_app
+from mesService import create_conn
 
 from mesService.constants import ACTIONS_ENUM
+from mesService.modules.RabbitMQ import logger
 
 
 class DeviationOrder(object):
+    db = None
 
-    def parse_xml(self):
+    def __init__(self, itype):
+        self.db = create_conn(itype)
+
+    def parse_xml(self, xml_data, xml_body):
         """
         function:解析本地xml文件,返回字典型数据
         :return:
         """
         # xmlObj = etree.parse(self.xml_path)  # 解析本地xml文件
-        xml_data = request.data
+        # xml_data = request.data
+        # print(xml_data, "xml_data")
         xmlObj = etree.HTML(xml_data)  # 解析本地xml文件
         xml_str = etree.tostring(xmlObj)  # 将文件内容转换成字符串数据
 
-        xml_body = request.get_data(as_text=True)
+        # xml_body = request.get_data(as_text=True)
         # print(xml_body, ">>>")
         dict_data = self.xml_to_dict(xml_str, xml_body)
 
@@ -63,16 +71,19 @@ class DeviationOrder(object):
 
         """调用存储过程"""
         json_data = json.dumps(dict_data)
-        print(json_data)
+        # print(json_data)
         sql = "select wip_deviation_insert('{}');".format(json_data)
         # print(sql)
         try:
             # 使用execute返回存储过程返回结果，存储过程不报错则返回1
             # 使用query返回查询结果，通过结果做判断
-            ret = current_app.db.query(sql)
+            # with self.app.app_context():
+            ret = self.db.query(sql)
             return ret
         except Exception:
-            current_app.logger.error(traceback.format_exc())
+            # with self.app.app_context():
+            #     current_app.logger.error(traceback.format_exc())
+            logger.writeLog("数据库写入失败:" + sql, os.path.basename(os.path.dirname(os.getcwd())) + ".log")
 
     def get_status_type(self, data):
         """

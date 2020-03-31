@@ -4,29 +4,36 @@
 # @fileName: send_bom.py
 # @email: jiangqiao.wang@mabotech.com
 
+import os
 import json
 import xmltodict
 import traceback
 from lxml import etree
 from flask import request
 from flask import current_app
+from mesService import create_app
 
+from mesService.modules.RabbitMQ import logger
 from mesService.constants import STATUS_ENUM
 from mesService.constants import PRODUCTINVENTORYTYPE_ENUM
 
 
 class ItemOrder(object):
+    app = None
 
-    def parse_xml(self):
+    def __init__(self, itype):
+        self.app = create_app(itype)
+
+    def parse_xml(self, xml_str, xml_body):
         """
         function:xml数据解析
         :return: 返回列表数据
         """
-        xml_str = request.data
+        # xml_str = request.data
         tree = etree.HTML(xml_str)
         xml_str = etree.tostring(tree)
 
-        xml_body = request.get_data(as_text=True)
+        # xml_body = request.get_data(as_text=True)
         # print(xml_body, ">>>")
         dict_data = self.xml_to_dict(xml_str, xml_body)
 
@@ -90,9 +97,12 @@ class ItemOrder(object):
         json_data = json.dumps(dict_data)
         # print(json_data)
         sql = "select item_insert('{}');".format(json_data)
-        print(sql)
+        # print(sql)
         try:
-            ret = current_app.db.query(sql)
-            return ret
+            with self.app.app_context():
+                ret = current_app.db.query(sql)
+                return ret
         except Exception:
-            current_app.logger.error(traceback.format_exc())
+            # current_app.logger.error(traceback.format_exc())
+            logger.writeLog("数据库写入失败:" + sql, os.path.basename(__file__) + ".log")
+
