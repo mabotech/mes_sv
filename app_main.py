@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # @createTime    : 2020/03/25 22:03
 # @author  : 王江桥
-# @fileName: app_01.py
+# @fileName: app_main.py
 # @email: jiangqiao.wang@mabotech.com
 
 

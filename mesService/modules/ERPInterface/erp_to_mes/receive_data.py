@@ -80,16 +80,6 @@ class BomView(BaseUtil, views.MethodView):
             ret = obj.call(param_dict)
         self.parse_data(ret)
 
-        # retry_flag = False
-        # count = 0
-        #
-        # while count < 4:
-        #     ret = obj.call(param_dict)
-        #     retry_flag = self.parse_data(ret, count, retry_flag)
-        #     # 除ORA-08177情况
-        #     if not retry_flag:
-        #         break
-
         return jsonify(RET)
 
     def parse_data(self, ret):
@@ -110,13 +100,6 @@ class BomView(BaseUtil, views.MethodView):
         elif c_err or cup_err or pc_err or pcup_err:
             RET['status'] = 300
             RET['msg'] = "{0}/{1}/{2}/{3}错误！".format(c_err, cup_err, pc_err, pcup_err)
-            # c_err_detail = c_err.get("detail", None) if c_err else ""
-            # cup_err_detail = cup_err.get("detail", None) if cup_err else ""
-            # pc_err_detail = pc_err.get("detail", None) if pc_err else ""
-            # pcup_err_detail = pcup_err.get("detail", None) if pcup_err else ""
-            # if "ORA-08177" in c_err_detail or "ORA-08177" in pc_err_detail or "ORA-08177" in cup_err_detail or "ORA-08177" in pcup_err_detail:
-            #     retry_flag = True
-            #     count += 1
         elif lii_inv:
             RET['status'] = 300
             RET['msg'] = lii_inv
@@ -150,20 +133,9 @@ class DevView(BaseUtil, views.MethodView):
             ret = obj.call(param_dict)
         self.parse_data(ret)
 
-        # retry_flag = False
-        # count = 0
-        #
-        # while count < 4:
-        #     ret = obj.call(param_dict)
-        #     retry_flag = self.parse_data(ret, count, retry_flag)
-        #     # 除ORA-08177情况
-        #     if not retry_flag:
-        #         break
-
         return jsonify(RET)
 
     def parse_data(self, ret):
-        # retry_flag = False
         iwd_flag = ret[0]["wip_deviation_insert"].get("insert_wipdeviation", None)
         iwd_err = ret[0]["wip_deviation_insert"].get("insert_wipdeviation_e", None)
         dwd_flag = ret[0]["wip_deviation_insert"].get("update_wipdeviation", None)
@@ -180,11 +152,6 @@ class DevView(BaseUtil, views.MethodView):
         elif iwd_err or dwd_err:
             RET['status'] = 300
             RET['msg'] = "{0}或者{1}报错".format(iwd_err, dwd_err)
-            # iwd_err_detail = iwd_err.get("detail", None) if iwd_err else ""
-            # dwd_err_detail = dwd_err.get("detail", None) if dwd_err else ""
-            # if "ORA-08177" in iwd_err_detail or "ORA-08177" in dwd_err_detail:
-            #     retry_flag = True
-            #     count += 1
         elif iwd_inv:
             RET['status'] = 300
             RET['msg'] = iwd_inv
@@ -194,8 +161,6 @@ class DevView(BaseUtil, views.MethodView):
         else:
             RET['status'] = 400
             RET['msg'] = "其他错误信息！"
-
-        # return retry_flag
 
 
 class IteView(BaseUtil, views.MethodView):
@@ -215,20 +180,16 @@ class IteView(BaseUtil, views.MethodView):
         # ret = iac_obj.insertDatabase(data)
         # print(ret, "<<<")
         param_dict, obj = super().interface_obj()
-
-        retry_flag = False
-        count = 0
-
-        while count < 4:
+        try:
             ret = obj.call(param_dict)
-            retry_flag = self.parse_data(ret, count, retry_flag)
-            # 除ORA-08177情况
-            if not retry_flag:
-                break
+        except:
+            # 再次放入队列
+            ret = obj.call(param_dict)
+        self.parse_data(ret)
 
         return jsonify(RET)
 
-    def parse_data(self, ret, count, retry_flag):
+    def parse_data(self, ret):
         ip_flag = ret[0]["item_insert"].get("insert_product", None)
         up_flag = ret[0]["item_insert"].get("update_product", None)
         ip_err = ret[0]["item_insert"].get("insert_product_e", None)
@@ -243,18 +204,12 @@ class IteView(BaseUtil, views.MethodView):
         elif ip_err:
             RET['status'] = 300
             RET['msg'] = ip_err
-            ip_err_detail = ip_err.get("detail", None) if ip_err else ""
-            if "ORA-08177" in ip_err_detail:
-                retry_flag = True
-                count += 1
         elif up_err:
             RET['status'] = 300
             RET['msg'] = up_err
         else:
             RET['status'] = 400
             RET['msg'] = "未知错误！"
-
-        return retry_flag
 
 
 class IteView1(views.MethodView):

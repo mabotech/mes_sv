@@ -12,7 +12,7 @@ import xmltodict
 from lxml import etree
 from flask import request
 from flask import current_app
-from mesService import create_app
+from mesService import create_conn
 from mesService.modules.RabbitMQ import logger
 
 from mesService.constants import BOM_ENUM
@@ -20,10 +20,10 @@ from mesService.constants import STATUS_ENUM
 
 
 class BomOrder(object):
-    app = None
+    db = None
 
     def __init__(self, itype):
-        self.app = create_app(itype)
+        self.db = create_conn(itype)
 
     def parse_xml(self, xml_data, xml_body):
         """
@@ -87,12 +87,12 @@ class BomOrder(object):
         sql = "select product_component_insert('{}');".format(json_data)
         # print(sql)
         try:
-            with self.app.app_context():
-                ret = current_app.db.query(sql)
-                return ret
+            # with self.app.app_context():
+            ret = self.db.query(sql)
+            return ret
         except Exception as e:
             # current_app.logger.error(traceback.format_exc())
-            logger.writeLog("数据库写入失败:" + sql, os.path.basename(__file__) + ".log")
+            logger.writeLog("数据库写入失败:" + sql, os.path.basename(os.path.dirname(os.getcwd())) + ".log")
 
     def get_status_type(self, data):
         """
