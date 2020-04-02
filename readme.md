@@ -24,6 +24,6 @@ pip install -r requestments.txt
 - 项目启动
 
 ```shell
-python app.py
+python app_main.py
 ```
 

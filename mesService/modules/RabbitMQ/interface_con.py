@@ -12,6 +12,7 @@ from mesService.modules.ERPInterface.erp_to_mes.deviartion.receive_deviating imp
 from mesService.modules.ERPInterface.erp_to_mes.bom.reveive_bom import BomOrder
 from mesService.modules.ERPInterface.erp_to_mes.item.reveive_item import ItemOrder
 from mesService.config import PRESENT_WORK_MODE
+from mesService.config import RABBITMQ_HOST
 
 func_dict = {
     "DeviationOrder": {"parse_xml": "parse_xml", "insertDatabase": "insertDatabase"},
@@ -62,13 +63,13 @@ def on_request(ch, method, props, body):
 
 def main():
     connection = pika.BlockingConnection(pika.ConnectionParameters(
-        host='192.168.139.128'))
+        host=RABBITMQ_HOST))
     # 建立会话
     channel = connection.channel()
     # 声明RPC请求队列
     channel.queue_declare(queue='interfaceRPC', durable=True)
 
-    # 负载均衡，同一时刻发送给该服务器的请求不超过一个
+    # 负载均衡，同一时刻发送给该服务器的请求不超过20个
     channel.basic_qos(prefetch_count=20)
     channel.basic_consume(queue='interfaceRPC', on_message_callback=on_request, auto_ack=False)
     print("等待接收rpc请求...")
