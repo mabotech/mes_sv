@@ -18,7 +18,7 @@ class Config(object):
     REDIS_HOST = '192.168.97.188'
     REDIS_PORT = 6379
 
-    LOG_LEVEL = logging.DEBUG
+    LOG_LEVEL = logging.WARNING
 
     # 使用redis来保存session信息
     SESSION_TYPE = 'redis'
