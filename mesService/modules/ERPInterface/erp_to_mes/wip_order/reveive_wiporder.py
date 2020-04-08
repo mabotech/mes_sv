@@ -5,11 +5,19 @@
 
 import re
 import time
+import json
 import xmltodict
 from lxml import etree
 from flask import request
+from flask import current_app
+from mesService import create_app
+from mesService import create_conn
 
 class WipOrderInterface:
+    db = None
+
+    def __init__(self, itype):
+        self.db = create_conn(itype)
 
     # XML中的订单对象啊
     wipoderXmlObj = {
@@ -62,9 +70,9 @@ class WipOrderInterface:
 
     #将XML日期类型转为时间戳
     def xmldate2Timestamp(self,xmldate):
-        print(xmldate)
+        # print(xmldate)
         xmldate = '20' + xmldate
-        print(xmldate)
+        # print(xmldate)
         xmltimestamp = int(time.mktime(time.strptime(xmldate, '%Y%m%d')))
         restime = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(xmltimestamp))
         return restime
@@ -81,22 +89,39 @@ class WipOrderInterface:
 
 
     #从XML文件中解析数据并将其转换为数据库字段
-    def analysisFromXML(self):
+    def analysisFromXML(self,xml_data,xml_body):
         #解析XML
-        xml_str = request.data
+        # xml_str = request.data
 
-        tree = etree.HTML(xml_str)
+        tree = etree.HTML(xml_data)
         xml_str1 = etree.tostring(tree)
         list_data = xmltodict.parse(xml_str1)['html']['body']['wipjobload']['wodownload']
 
         wiporderDatabaselist=[]
         for key,val in list_data.items():
-            print(key,val)
+            # print(key,val)
             self.wipoderXmlObj[key] = val
 
         self.bindXml2Database()
 
-        self.wipoderDatabaseObj['RequestData'] = str(xml_str, 'utf-8')
+        self.wipoderDatabaseObj['RequestData'] = str(xml_data, 'utf-8')
         wiporderDatabaselist.append(self.wipoderDatabaseObj.copy())
 
         return wiporderDatabaselist
+
+
+    def insertDatabase(self,wiporderDatabaselist):
+
+        json_data = json.dumps(wiporderDatabaselist)
+        # print(json_data)
+        # 创建sql语句
+        base_sql = """select plv8_insert_wiporder('{}');"""
+        sql = base_sql.format(json_data)
+        print(sql)
+        # 调用数据库函数
+
+        result = self.db.query(sql)
+        sql_result = result[0].get('plv8_insert_wiporder')
+        print(sql_result)
+
+        return sql_result

@@ -239,7 +239,7 @@ class IteView1(views.MethodView):
         return jsonify(RET)
 
 
-class WipView(views.MethodView):
+class WipView(BaseUtil,views.MethodView):
     """
     工单(WipOrder)接口
     数据库：postgres
@@ -256,25 +256,19 @@ class WipView(views.MethodView):
 
     def post(self):
         # wiporder类
-        wiporderInterface = WipOrderInterface()
-        # 解析订单XML数据
-        insertData = wiporderInterface.analysisFromXML()
+        param_dict, obj = super().interface_obj()
 
-        json_data = json.dumps(insertData)
-        print(json_data)
-        # 创建sql语句
-        base_sql = """select plv8_insert_wiporder('{}');"""
-        sql = base_sql.format(json_data)
-        print(sql)
-        # 调用数据库函数
-        result = current_app.db.query(sql)
-        sql_result = result[0].get('plv8_insert_wiporder')
-        print(sql_result)
+        retry_flag = False
+        try:
+            ret = obj.call(param_dict)
+        except:
+            # 再次放入队列
+            ret = obj.call(param_dict)
 
-        return jsonify(sql_result)
+        return jsonify(ret)
 
 
-class SequenceView(views.MethodView):
+class SequenceView(BaseUtil,views.MethodView):
     """
     排序(Wip_Sequence)接口
     数据库：postgres
@@ -291,23 +285,16 @@ class SequenceView(views.MethodView):
 
     def post(self):
         # Sequence类
-        sequenceInterface = SequenceInterface()
-        # 解析订单XML数据
-        insertData = sequenceInterface.analysisFromXML()
+        param_dict, obj = super().interface_obj()
 
-        json_data = json.dumps(insertData)
-        print('json_data:', json_data)
+        retry_flag = False
+        try:
+            ret = obj.call(param_dict)
+        except:
+            # 再次放入队列
+            ret = obj.call(param_dict)
 
-        # 创建sql语句
-        base_sql = """select plv8_insert_sequence('{}');"""
-        sql = base_sql.format(json_data)
-        print(sql)
-        # 调用数据库函数
-        result = current_app.db.query(sql)
-        sql_result = result[0].get('plv8_insert_sequence')
-        print('result', sql_result)
-
-        return jsonify(sql_result)
+        return jsonify(ret)
 
 
 bom.add_url_rule("/bom", view_func=BomView.as_view(name="bom"))

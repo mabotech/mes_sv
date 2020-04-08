@@ -11,6 +11,8 @@ from mesService.modules.RabbitMQ import logger
 from mesService.modules.ERPInterface.erp_to_mes.deviartion.receive_deviating import DeviationOrder
 from mesService.modules.ERPInterface.erp_to_mes.bom.reveive_bom import BomOrder
 from mesService.modules.ERPInterface.erp_to_mes.item.reveive_item import ItemOrder
+from mesService.modules.ERPInterface.erp_to_mes.wip_order.reveive_wiporder import WipOrderInterface
+from mesService.modules.ERPInterface.erp_to_mes.wip_sequence.reveive_sequence import SequenceInterface
 from mesService.config import PRESENT_WORK_MODE
 from mesService.config import RABBITMQ_HOST
 
@@ -18,6 +20,8 @@ func_dict = {
     "DeviationOrder": {"parse_xml": "parse_xml", "insertDatabase": "insertDatabase"},
     "BomOrder": {"parse_xml": "parse_xml", "insertDatabase": "insertDatabase"},
     "ItemOrder": {"parse_xml": "parse_xml", "insertDatabase": "insertDatabase"},
+    "WipOrderInterface": {"parse_xml": "analysisFromXML", "insertDatabase": "insertDatabase"},
+    "SequenceInterface": {"parse_xml": "analysisFromXML", "insertDatabase": "insertDatabase"},
 }
 
 

@@ -3,11 +3,20 @@
 # @author  : 郭辉
 # @email: hui.guo@mabotech.com
 
+import json
 import xmltodict
 from lxml import etree
 from flask import request
+from flask import current_app
+from mesService import create_app
+from mesService import create_conn
 
 class SequenceInterface:
+    db = None
+
+    def __init__(self, itype):
+        self.db = create_conn(itype)
+
     # 定义XML中的排序对象
     sequenceXmlObj = {
         'transactionid': '',                        #固定值
@@ -39,22 +48,39 @@ class SequenceInterface:
         self.sequenceDatabaseObj['batchid'] = self.sequenceXmlObj['batchid']                         #批次号
 
     # 从XML文件中解析数据并将其转换为数据库字段
-    def analysisFromXML(self):
+    def analysisFromXML(self,xml_data,xml_body):
         # 解析XML
-        xml_str = request.data
-        print(xml_str)
-        tree = etree.HTML(xml_str)
+        # xml_str = request.data
+        # print(xml_str)
+
+        tree = etree.HTML(xml_data)
         xml_str1 = etree.tostring(tree)
 
         list_data = xmltodict.parse(xml_str1)['html']['body']['seqdwnload']
-        print(list_data)
+        # print(list_data)
         wiporderDatabaselist = []
         for key, val in list_data.items():
-            print(key, val)
+            # print(key, val)
             self.sequenceXmlObj[key] = val
         self.bindXmlSequenceDatabase()
-        self.sequenceDatabaseObj['RequestData'] = str(xml_str, 'utf-8')
+        self.sequenceDatabaseObj['RequestData'] = str(xml_data, 'utf-8')
         wiporderDatabaselist.append(self.sequenceDatabaseObj.copy())
-        print(wiporderDatabaselist)
+        # print(wiporderDatabaselist)
 
         return wiporderDatabaselist
+
+    def insertDatabase(self, wiporderDatabaselist):
+        json_data = json.dumps(wiporderDatabaselist)
+        # print(json_data)
+
+        # 创建sql语句
+        base_sql = """select plv8_insert_sequence('{}');"""
+        sql = base_sql.format(json_data)
+        print(sql)
+        # 调用数据库函数
+
+        result = self.db.query(sql)
+        sql_result = result[0].get('plv8_insert_sequence')
+        print(sql_result)
+
+        return sql_result
