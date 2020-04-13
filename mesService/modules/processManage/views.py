@@ -16,9 +16,8 @@ from mesService import constants
 from . import process_manage_blue
 
 
-@process_manage_blue.route('/upload', methods = ['POST'])
+@process_manage_blue.route('/upload', methods=['POST'])
 def upload():
-
     result = {
         "url": '',
         "uid": uuid.uuid4().hex,
@@ -45,8 +44,8 @@ def upload():
 
         # 图片信息存入数据库
         params = {
-            "name": filename.split('.')[0], # 去掉扩展名
-            "documenttypecode": documenttype, # 扩展名
+            "name": filename.split('.')[0],  # 去掉扩展名
+            "documenttypecode": documenttype,  # 扩展名
             "schemaurlflag": image_url,
             "username": username,
             "documentformat": file_format
@@ -67,7 +66,8 @@ def upload():
 
     return jsonify(result)
 
-@process_manage_blue.route("/get_image/<filename>" , methods = ['GET'])
+
+@process_manage_blue.route("/get_image/<filename>", methods=['GET'])
 def get_image(filename):
     path = os.path.join(os.getcwd(), 'images')
     return send_from_directory(path, filename)
