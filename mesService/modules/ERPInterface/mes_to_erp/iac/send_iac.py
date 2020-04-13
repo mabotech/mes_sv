@@ -19,12 +19,12 @@ class IacToXml(object):
     def dict_to_xml(self, dict_data):
 
         for k, v in dict_data.items():
-            node = etree.SubElement(self.root, k)
+            node = etree.SubElement(self.root, k.capitalize())
             if v:
                 node.text = str(v)
 
         tree = etree.ElementTree(self.root)
-        tree.write('text.xml', pretty_print=True, xml_declaration=True, encoding='utf-8')
+        # tree.write('text.xml', pretty_print=True, xml_declaration=True, encoding='utf-8')
         xml_str = etree.tostring(tree, encoding='utf-8', pretty_print=True)
         return xml_str
 
@@ -55,9 +55,8 @@ class IacToXml(object):
 if __name__ == '__main__':
 
     obj = IacToXml()
-    data = obj.get_iac_data()
-    res = obj.dict_to_xml(data[0])
-    print(res.decode('utf-8'))
-
-    # res = obj.get_iac_data()
-    # print(res)
+    dataset = obj.get_iac_data()
+    if dataset:
+        for data in dataset:
+            xml = obj.dict_to_xml(data)
+            # obj.set_to_erp(xml)

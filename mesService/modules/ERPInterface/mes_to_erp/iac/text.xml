@@ -1,15 +1,19 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <root>
-  <pcid>100000065</pcid>
-  <effectivedate>2019-10-30T10:09:21.000Z</effectivedate>
-  <discontinuedate>2019-10-30T10:09:21.000Z</discontinuedate>
-  <productionlineno>15</productionlineno>
-  <level1>5271866</level1>
-  <plantcode>ISF</plantcode>
-  <pcoid>100000204</pcoid>
-  <workstation>47500</workstation>
-  <pccid/>
-  <qty/>
-  <childno/>
-  <parentno/>
+  <Transactionid>POF</Transactionid>
+  <Pcid>100000152</Pcid>
+  <Pcoid>100000345</Pcoid>
+  <Pccid>411</Pccid>
+  <Level1no>5271866</Level1no>
+  <Parentno>5271868</Parentno>
+  <Childno>5272796</Childno>
+  <Qty>1</Qty>
+  <Workstation>92035</Workstation>
+  <Effectivedate>2020-01-16T08:52:14.000Z</Effectivedate>
+  <Discontinuedate>2020-01-24T08:52:18.000Z</Discontinuedate>
+  <Productionlineno>1</Productionlineno>
+  <Kittingstation/>
+  <Bulkworkstation/>
+  <Buildvar>wangjq</Buildvar>
+  <Plantcode>ISF</Plantcode>
 </root>
