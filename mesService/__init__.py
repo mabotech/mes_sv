@@ -15,6 +15,7 @@ from redis import StrictRedis
 from .modules.auth import auth_blue
 from .config import Config, config_dict
 from mesService.lib.pgwrap.db import connection
+from .modules.profileManage import avatar_manage_blue
 from .modules.systemConfig import system_config_blue
 from .modules.ERPInterface.erp_to_mes import receive_data
 
@@ -69,6 +70,7 @@ def create_app(config_name):
     app.register_blueprint(auth_blue)
     app.register_blueprint(system_config_blue)
     app.register_blueprint(process_manage_blue)
+    app.register_blueprint(avatar_manage_blue)
 
     app.register_blueprint(receive_data.bom)
     app.register_blueprint(receive_data.dev)
