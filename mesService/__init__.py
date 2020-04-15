@@ -27,6 +27,7 @@ from .modules.ERPInterface.mes_to_erp import send_data
 from .modules.AngularInterface import angular_send_data
 from .modules.processManage import process_manage_blue
 
+
 def setup_log(config_name):
     """配置日志"""
 
@@ -43,8 +44,10 @@ def setup_log(config_name):
     # 为全局的日志工具对象（flask app使用的）添加日志记录器
     logging.getLogger().addHandler(file_log_handler)
 
+
 # 实例化redis对象 decode_response=True 默认直接编码
-redis_store = StrictRedis(host=Config.REDIS_HOST,port=Config.REDIS_PORT,decode_responses=True, db=0)
+redis_store = StrictRedis(host=Config.REDIS_HOST, port=Config.REDIS_PORT, decode_responses=True, db=0)
+
 
 def create_app(config_name):
     """
@@ -79,10 +82,11 @@ def create_app(config_name):
     app.register_blueprint(receive_data.sequence)
     app.register_blueprint(send_data.wiptrx)
 
-    #前端Anguluar
+    # 前端Anguluar
     app.register_blueprint(angular_send_data.wipsortlist)
 
     return app
+
 
 def create_conn(config_name):
     db_info = config_dict[config_name].DB_INFO
