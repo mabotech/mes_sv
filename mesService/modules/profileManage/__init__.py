@@ -8,5 +8,3 @@ from flask import Blueprint
 from mesService import constants
 
 avatar_manage_blue = Blueprint('avatar_manage', __name__, url_prefix=constants.URL_PREFIX)
-
-from . import views
