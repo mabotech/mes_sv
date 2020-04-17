@@ -15,6 +15,7 @@ from flask import Blueprint
 from flask import current_app
 from flask.json import jsonify
 from mesService import constants
+from mesService.constants import RET
 from .wiptrx.send_wiptrx import WiptrxInterface
 
 
@@ -63,6 +64,7 @@ class WiptrxView(views.MethodView):
 
         #生成XML
         wiptrxXml = wiptrxInterface.genOnlineXML(dalist)
+        print("wiptrxXml",wiptrxXml)
         request_res = None
         result = {"result": "success", "message": None}
         try:
@@ -74,6 +76,7 @@ class WiptrxView(views.MethodView):
         print(request_status)
         if (request_status != 200):
             result['result'] = 'fail'
+
         return jsonify(result)
 
 wiptrx.add_url_rule("/wiptrx", view_func=WiptrxView.as_view(name="wiptrx"))
