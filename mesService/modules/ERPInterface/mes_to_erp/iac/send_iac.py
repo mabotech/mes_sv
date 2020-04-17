@@ -28,11 +28,7 @@ class Iac(object):
 					<ACCOUNT>SAP</ACCOUNT>
 					<PASSWORD>SAP1509030</PASSWORD>
 				</HEAD>
-				<LIST>
-					<ITEM>
-						{iac_xml}
-					</ITEM>
-				</LIST>
+				{iac_xml}
 			</DATA>
 		]]>
 	</sen:DATA>
@@ -42,7 +38,8 @@ class Iac(object):
     def dict_to_xml(self, dict_data):
         root = etree.Element('root')
         for k, v in dict_data.items():
-            node = etree.SubElement(root, k.capitalize())
+            # node = etree.SubElement(root, k.capitalize())
+            node = etree.SubElement(root, k.upper())
             if v:
                 node.text = str(v)
 
@@ -84,5 +81,6 @@ if __name__ == '__main__':
         for data in dataset:
             xml = iac.dict_to_xml(data)
             soa_xml = iac.format_soa_xml(xml)
+            print(soa_xml)
             # TODO
             # obj.set_to_erp(xml)
