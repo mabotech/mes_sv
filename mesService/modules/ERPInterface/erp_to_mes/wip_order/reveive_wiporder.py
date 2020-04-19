@@ -95,8 +95,7 @@ class WipOrderInterface:
 
         tree = etree.HTML(xml_data)
         xml_str1 = etree.tostring(tree)
-        list_data = xmltodict.parse(xml_str1)['html']['body']['wipjobload']['wodownload']
-
+        list_data = xmltodict.parse(xml_str1)['html']['body']['sendsuppliercurrentaccountservicebal']['data']['wipjobload']['wodownload']
         wiporderDatabaselist=[]
         for key,val in list_data.items():
             # print(key,val)
@@ -117,11 +116,11 @@ class WipOrderInterface:
         # 创建sql语句
         base_sql = """select plv8_insert_wiporder('{}');"""
         sql = base_sql.format(json_data)
-        print(sql)
+        # print(sql)
         # 调用数据库函数
 
         result = self.db.query(sql)
         sql_result = result[0].get('plv8_insert_wiporder')
-        print(sql_result)
+        # print(sql_result)
 
         return sql_result

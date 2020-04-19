@@ -46,7 +46,7 @@ class BomOrder(object):
         :param xml_str:字符串数据
         :return: 返回数据列表，列表中存放字典型数据
         """
-        list_data = xmltodict.parse(xml_str)['html']['body']['bomload']['bomload']
+        list_data = xmltodict.parse(xml_str)['html']['body']['sendsuppliercurrentaccountservicebal']['data']['bomload']['bomload']
         need_keys = ['transactionid', 'plantcode', 'header_item', 'bill_sequence_id', 'line_item',
                      'conponent_sequence_id',
                      'type', 'status', 'quantity', 'effective_date', 'disable_date']

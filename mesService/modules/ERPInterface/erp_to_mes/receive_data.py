@@ -49,7 +49,7 @@ class BaseUtil(object):
         classname = INTERFACE_CLASS_NAME[f"{url}"]
         param = {}
         param["classname"] = classname
-        param["xml_data"] = bytes.decode(xml_data)
+        param["xml_data"] = bytes.decode(xml_data,'utf-8')
         param["xml_body"] = xml_body
         param_dict = json.dumps(param)
         obj = InterfaceRpcClient()

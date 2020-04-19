@@ -46,7 +46,9 @@ class ItemOrder(object):
         :return: 返回数据列表，列表中存放字典型数据
         """
         # list_data = xmltodict.parse(xml_str)['input']['ITEMLOAD']['ITEMLoad']
-        list_data = xmltodict.parse(xml_str)['html']['body']['itemload']['itemload']
+        print("xml_str",xml_str)
+        list_data = xmltodict.parse(xml_str)['html']['body']['sendsuppliercurrentaccountservicebal']['data']['itemload']['itemload']
+        print("list_data",list_data)
         need_keys = ['transactionid', 'item_id', 'plantcode', 'partnum', 'description', 'item_type', 'status', 'uom']
 
         result = []
