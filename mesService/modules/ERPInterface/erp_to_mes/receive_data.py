@@ -47,6 +47,7 @@ class BaseUtil(object):
         xml_data = request.data
         xml_body = request.get_data(as_text=True)
         classname = INTERFACE_CLASS_NAME[f"{url}"]
+        print("classname",classname)
         param = {}
         param["classname"] = classname
         param["xml_data"] = bytes.decode(xml_data,'utf-8')
@@ -93,7 +94,7 @@ class BomView(BaseUtil, views.MethodView):
         pc_err = ret[0]["product_component_insert"].get("product_component_result_e", None)
         lii_inv = ret[0]["product_component_insert"].get("component_line_item_id_invalid", None)
         hii_inv = ret[0]["product_component_insert"].get("product_component_header_item_id_invalid", None)
-
+        mes = ret[0]["product_component_insert"].get("message", None)
         if c_flag or pc_flag or cup_flag or pcup_flag:
             RET['status'] = 200
             RET['msg'] = 'execute success'
@@ -106,6 +107,9 @@ class BomView(BaseUtil, views.MethodView):
         elif hii_inv:
             RET['status'] = 300
             RET['msg'] = hii_inv
+        elif mes:
+            RET['status'] = 300
+            RET['msg'] = mes
         else:
             RET['status'] = 400
             RET['msg'] = "未知错误！"
@@ -142,7 +146,7 @@ class DevView(BaseUtil, views.MethodView):
         dwd_err = ret[0]["wip_deviation_insert"].get("update_wipdeviation_e", None)
         iwd_inv = ret[0]["wip_deviation_insert"].get("insert_wipdeviation_invalid", None)
         plantcode = ret[0]["wip_deviation_insert"].get("plantcode", None)
-
+        mes= ret[0]["wip_deviation_insert"].get("message", None)
         if iwd_flag:
             RET['status'] = 200
             RET['msg'] = 'insert success'
@@ -158,6 +162,9 @@ class DevView(BaseUtil, views.MethodView):
         elif plantcode:
             RET['status'] = 300
             RET['msg'] = plantcode
+        elif mes:
+            RET['status'] = 300
+            RET['msg'] = mes
         else:
             RET['status'] = 400
             RET['msg'] = "其他错误信息！"
@@ -194,7 +201,7 @@ class IteView(BaseUtil, views.MethodView):
         up_flag = ret[0]["item_insert"].get("update_product", None)
         ip_err = ret[0]["item_insert"].get("insert_product_e", None)
         up_err = ret[0]["item_insert"].get("update_product_e", None)
-
+        mes= ret[0]["item_insert"].get("message", None)
         if ip_flag:
             RET['status'] = 200
             RET['msg'] = 'insert success'
@@ -207,6 +214,9 @@ class IteView(BaseUtil, views.MethodView):
         elif up_err:
             RET['status'] = 300
             RET['msg'] = up_err
+        elif mes:
+            RET['status'] = 300
+            RET['msg'] = mes
         else:
             RET['status'] = 400
             RET['msg'] = "未知错误！"
@@ -291,6 +301,7 @@ class SequenceView(BaseUtil,views.MethodView):
         try:
             ret = obj.call(param_dict)
         except:
+
             # 再次放入队列
             ret = obj.call(param_dict)
 

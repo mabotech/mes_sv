@@ -46,46 +46,53 @@ class BomOrder(object):
         :param xml_str:字符串数据
         :return: 返回数据列表，列表中存放字典型数据
         """
-        list_data = xmltodict.parse(xml_str)['html']['body']['sendsuppliercurrentaccountservicebal']['data']['bomload']['bomload']
-        need_keys = ['transactionid', 'plantcode', 'header_item', 'bill_sequence_id', 'line_item',
-                     'conponent_sequence_id',
-                     'type', 'status', 'quantity', 'effective_date', 'disable_date']
+        try:
+            list_data = xmltodict.parse(xml_str)['html']['body']['data']['bomload']['bomload']
+            need_keys = ['transactionid', 'plantcode', 'header_item', 'bill_sequence_id', 'line_item',
+                         'conponent_sequence_id',
+                         'type', 'status', 'quantity', 'effective_date', 'disable_date']
 
-        result = []
-        for p, n in dict(list_data).items():
-            new_dict = {}
-            if p in need_keys:
-                new_dict[p] = n
-            if p == "type":
-                r_type = self.get_stuff_type(n)
-                new_dict["type"] = r_type
-            if p == "status":
-                r_type = self.get_status_type(n)
-                new_dict["status"] = r_type
+            result = []
+            print(list_data)
+            for p, n in dict(list_data).items():
+                new_dict = {}
+                if p in need_keys:
+                    new_dict[p] = n
+                if p == "type":
+                    r_type = self.get_stuff_type(n)
+                    new_dict["type"] = r_type
+                if p == "status":
+                    r_type = self.get_status_type(n)
+                    new_dict["status"] = r_type
 
-            result.append(new_dict)
+                result.append(new_dict)
+            # 报文原始数据
+            body_dict = {"request_body": xml_body}
+            """
+            USAGE_TYPE:
+                BOM: 1
+                IAC工位BOM: 2
+                工单偏离: 3
+                实时偏离: 4
+            """
+            usagetype_dict = {"usagetype": 1}
+            result.append(body_dict)
+            result.append(usagetype_dict)
 
-        # 报文原始数据
-        body_dict = {"request_body": xml_body}
-        """
-        USAGE_TYPE:
-            BOM: 1
-            IAC工位BOM: 2
-            工单偏离: 3
-            实时偏离: 4
-        """
-        usagetype_dict = {"usagetype": 1}
-        result.append(body_dict)
-        result.append(usagetype_dict)
-
-        return result
+            return result
+        except:
+            result = {
+                "status": "error",
+                "message": "解析失败,报文格式不正确"
+            }
+            return json.dumps(result)
 
     def insertDatabase(self, dict_data):
         """调用存储过程"""
         json_data = json.dumps(dict_data)
         # print(json_data)
         sql = "select product_component_insert('{}');".format(json_data)
-        # print(sql)
+        print(sql)
         try:
             # with self.app.app_context():
             ret = self.db.query(sql)

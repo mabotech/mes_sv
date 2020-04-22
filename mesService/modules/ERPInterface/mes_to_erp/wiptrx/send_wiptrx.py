@@ -54,6 +54,27 @@ class WiptrxInterface:
 
         return self.wiptrxXmlObj
 
+    def format_soa_xml(self, new):
+        soa_format_xml = """<sen:SendSupplierCurrentAccountServiceBal xmlns:sen="http://www.foton.com.cn/SendSupplierCurrentAccountBal">
+        <sen:DATA>
+            <![CDATA[
+                <DATA>
+                    <HEAD>
+                        <BIZTRANSACTIONID>SAP_SYC_904_2017061010031100</BIZTRANSACTIONID>
+                        <COUNT>3</COUNT>
+                        <CONSUMER>SAP</CONSUMER>
+                        <SRVLEVEL>1</SRVLEVEL>
+                        <ACCOUNT>SAP</ACCOUNT>
+                        <PASSWORD>SAP1509030</PASSWORD>
+                    </HEAD>
+                    {new_xml}
+                </DATA>
+            ]]>
+        </sen:DATA>
+    </sen:SendSupplierCurrentAccountServiceBal>"""
+
+        return soa_format_xml.format(new_xml=new)
+
     # 生成上线的XML文件(实时回传)
     def genOnlineXML(self, wiptrxDatalist):
 
@@ -71,18 +92,21 @@ class WiptrxInterface:
         new = ET.tostring(sequenceRoot, encoding='utf-8')
 
         new_log=str(new, 'utf-8')
-        print(new_log)
+        new_xml = self.format_soa_xml(new_log)
+        print("new_xml", new_xml)
 
-        sql_wiptrxDatalist=wiptrxDatalist[0]
-        print(sql_wiptrxDatalist)
-        transactionid=sql_wiptrxDatalist['TransactionID']
+        # sql_wiptrxDatalist=wiptrxDatalist[0]
+        # print(sql_wiptrxDatalist)
+        # transactionid=sql_wiptrxDatalist['TransactionID']
 
-        message = { "wiporder": sql_wiptrxDatalist["wiporderno"],
-                    "context": new_log}
-        json_message = json.dumps(message)
-        base_sql = """select update_interface_log('{}');"""
-        sql = base_sql.format(json_message)
-        print('1',sql)
-        current_app.db.query(sql)
+        # message = { "wiporder": sql_wiptrxDatalist["wiporderno"],
+        #             "context": new_log}
+        # json_message = json.dumps(message)
+        # base_sql = """select update_interface_log('{}');"""
+        # sql = base_sql.format(json_message)
+        # print('1',sql)
+        # current_app.db.query(sql)
 
         return new
+
+

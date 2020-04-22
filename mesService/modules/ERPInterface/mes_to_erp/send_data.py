@@ -42,7 +42,7 @@ class WiptrxView(views.MethodView):
 
         #执行sql语句
         sql = base_sql.format(json_data)
-        print(sql)
+        print("执行sql语句",sql)
         result = current_app.db.query(sql)
 
         dalist = []
@@ -60,7 +60,7 @@ class WiptrxView(views.MethodView):
 
             dalist.append(offlineobj.copy())
 
-        print(dalist)
+        print("dalist",dalist)
 
         #生成XML
         wiptrxXml = wiptrxInterface.genOnlineXML(dalist)

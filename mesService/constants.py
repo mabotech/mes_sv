@@ -28,6 +28,8 @@ ERP_HOST = 'http://127.0.0.1:5001'
 BOM_ENUM = {
     'BFCEC_采购件': 1,
     'BFCEC_零件虚拟件': 2,
+    'BFCEC_é\x87\x87è´\xadä»¶': 1,
+    'BFCEC_é\x9b¶ä»¶è\x99\x9aæ\x8b\x9fä»¶': 2,
 }
 
 # 物料状态(New：预留默认为1)

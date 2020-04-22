@@ -10,7 +10,6 @@ from flask import request
 from flask import current_app
 from mesService import create_app
 from mesService import create_conn
-
 class SequenceInterface:
     db = None
 
@@ -52,22 +51,27 @@ class SequenceInterface:
         # 解析XML
         # xml_str = request.data
         # print(xml_str)
+        try:
+            tree = etree.HTML(xml_data)
+            xml_str1 = etree.tostring(tree)
 
-        tree = etree.HTML(xml_data)
-        xml_str1 = etree.tostring(tree)
-
-        list_data = xmltodict.parse(xml_str1)['html']['body']['seqdwnload']
-        # print(list_data)
-        wiporderDatabaselist = []
-        for key, val in list_data.items():
-            # print(key, val)
-            self.sequenceXmlObj[key] = val
-        self.bindXmlSequenceDatabase()
-        self.sequenceDatabaseObj['RequestData'] = str(xml_data, 'utf-8')
-        wiporderDatabaselist.append(self.sequenceDatabaseObj.copy())
-        # print(wiporderDatabaselist)
-
-        return wiporderDatabaselist
+            list_data = xmltodict.parse(xml_str1)['html']['body']['data']['seqdwnload']
+            # print(list_data)
+            wiporderDatabaselist = []
+            for key, val in list_data.items():
+                # print(key, val)
+                self.sequenceXmlObj[key] = val
+            self.bindXmlSequenceDatabase()
+            self.sequenceDatabaseObj['RequestData'] = str(xml_data, 'utf-8')
+            wiporderDatabaselist.append(self.sequenceDatabaseObj.copy())
+            # print(wiporderDatabaselist)
+            return wiporderDatabaselist
+        except:
+            result = {
+                "status": "error",
+                "message": "解析失败,报文格式不正确"
+            }
+            return json.dumps(result)
 
     def insertDatabase(self, wiporderDatabaselist):
         json_data = json.dumps(wiporderDatabaselist)

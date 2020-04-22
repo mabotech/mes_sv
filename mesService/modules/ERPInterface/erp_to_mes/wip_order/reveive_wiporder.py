@@ -92,22 +92,27 @@ class WipOrderInterface:
     def analysisFromXML(self,xml_data,xml_body):
         #解析XML
         # xml_str = request.data
+        try:
+            tree = etree.HTML(xml_data)
+            xml_str1 = etree.tostring(tree)
+            list_data = xmltodict.parse(xml_str1)['html']['body']['data']['wipjobload']['wodownload']
+            wiporderDatabaselist=[]
+            for key,val in list_data.items():
+                # print(key,val)
+                self.wipoderXmlObj[key] = val
 
-        tree = etree.HTML(xml_data)
-        xml_str1 = etree.tostring(tree)
-        list_data = xmltodict.parse(xml_str1)['html']['body']['sendsuppliercurrentaccountservicebal']['data']['wipjobload']['wodownload']
-        wiporderDatabaselist=[]
-        for key,val in list_data.items():
-            # print(key,val)
-            self.wipoderXmlObj[key] = val
+            self.bindXml2Database()
 
-        self.bindXml2Database()
+            self.wipoderDatabaseObj['RequestData'] = str(xml_data, 'utf-8')
+            wiporderDatabaselist.append(self.wipoderDatabaseObj.copy())
 
-        self.wipoderDatabaseObj['RequestData'] = str(xml_data, 'utf-8')
-        wiporderDatabaselist.append(self.wipoderDatabaseObj.copy())
-
-        return wiporderDatabaselist
-
+            return wiporderDatabaselist
+        except:
+            result = {
+                "status": "error",
+                "message": "解析失败,报文格式不正确"
+            }
+            return json.dumps(result)
 
     def insertDatabase(self,wiporderDatabaselist):
 
@@ -116,11 +121,11 @@ class WipOrderInterface:
         # 创建sql语句
         base_sql = """select plv8_insert_wiporder('{}');"""
         sql = base_sql.format(json_data)
-        # print(sql)
+        print(sql)
         # 调用数据库函数
 
         result = self.db.query(sql)
         sql_result = result[0].get('plv8_insert_wiporder')
-        # print(sql_result)
+        print(sql_result)
 
         return sql_result

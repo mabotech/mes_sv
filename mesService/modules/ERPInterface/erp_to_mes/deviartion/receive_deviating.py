@@ -47,25 +47,32 @@ class DeviationOrder(object):
         :param xml_str:
         :return:
         """
-        list_data = xmltodict.parse(xml_str)['html']['body']['erpdev']
-        need_keys = ['transactionid', 'plantcode', 'work_order_number', 'action', 'workstation', 'child_part_number',
-                     'parent_part_number', 'level_1_part', 'quantity', 'manufacturing_variation_code']
+        try:
+            list_data = xmltodict.parse(xml_str)['html']['body']['data']['erpdev']
+            need_keys = ['transactionid', 'plantcode', 'work_order_number', 'action', 'workstation', 'child_part_number',
+                         'parent_part_number', 'level_1_part', 'quantity', 'manufacturing_variation_code']
 
-        result = []
-        for p, n in dict(list_data).items():
-            new_dict = {}
-            if p in need_keys:
-                new_dict[p] = n
-            # if p == "action":
-            #     r_type = self.get_status_type(n)
-            #     new_dict["action"] = r_type
+            result = []
+            for p, n in dict(list_data).items():
+                new_dict = {}
+                if p in need_keys:
+                    new_dict[p] = n
+                # if p == "action":
+                #     r_type = self.get_status_type(n)
+                #     new_dict["action"] = r_type
 
-            result.append(new_dict)
+                result.append(new_dict)
 
-        body_dict = {"request_body": xml_body}
-        result.append(body_dict)
+            body_dict = {"request_body": xml_body}
+            result.append(body_dict)
 
-        return result
+            return result
+        except:
+            result = {
+                "status": "error",
+                "message": "解析失败,报文格式不正确"
+            }
+            return json.dumps(result)
 
     def insertDatabase(self, dict_data):
 
@@ -73,7 +80,7 @@ class DeviationOrder(object):
         json_data = json.dumps(dict_data)
         # print(json_data)
         sql = "select wip_deviation_insert('{}');".format(json_data)
-        # print(sql)
+        print(sql)
         try:
             # 使用execute返回存储过程返回结果，存储过程不报错则返回1
             # 使用query返回查询结果，通过结果做判断

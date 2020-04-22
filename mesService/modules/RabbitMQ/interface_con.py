@@ -49,7 +49,7 @@ def on_request(ch, method, props, body):
     # 调用数据处理方法
     response = callback(body)
     data_str = json.dumps(response)
-
+    print("response",response)
     if "ORA-08177" in str(response):
         ch.basic_reject(method.delivery_tag, True)
         logger.writeLog("重新放入队列:" + str(response), os.path.basename(__file__) + ".log")
@@ -66,8 +66,9 @@ def on_request(ch, method, props, body):
 
 
 def main():
+    credentials = pika.PlainCredentials('guest', 'guest')
     connection = pika.BlockingConnection(pika.ConnectionParameters(
-        host=RABBITMQ_HOST))
+        host=RABBITMQ_HOST,credentials=credentials))
     # 建立会话
     channel = connection.channel()
     # 声明RPC请求队列

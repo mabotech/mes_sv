@@ -46,31 +46,39 @@ class ItemOrder(object):
         :return: 返回数据列表，列表中存放字典型数据
         """
         # list_data = xmltodict.parse(xml_str)['input']['ITEMLOAD']['ITEMLoad']
-        print("xml_str",xml_str)
-        list_data = xmltodict.parse(xml_str)['html']['body']['sendsuppliercurrentaccountservicebal']['data']['itemload']['itemload']
-        print("list_data",list_data)
-        need_keys = ['transactionid', 'item_id', 'plantcode', 'partnum', 'description', 'item_type', 'status', 'uom']
+        try:
+            print("xml_str",xml_str)
+            list_data = xmltodict.parse(xml_str)['html']['body']['data']['itemload']['itemload']
+            print("list_data",list_data)
+            need_keys = ['transactionid', 'item_id', 'plantcode', 'partnum', 'description', 'item_type', 'status', 'uom']
 
-        result = []
-        for p, n in dict(list_data).items():
-            new_dict = {}
-            if p in need_keys:
-                new_dict[p] = n
-                if p == "item_type":
-                    r_type = self.get_stuff_type(n)
-                    new_dict["item_type_val"] = r_type
-                if p == "status":
-                    r_type = self.get_status_type(n)
-                    new_dict["status"] = r_type
+            result = []
+            for p, n in dict(list_data).items():
+                new_dict = {}
+                if p in need_keys:
+                    new_dict[p] = n
+                    if p == "item_type":
+                        r_type = self.get_stuff_type(n)
+                        new_dict["item_type_val"] = r_type
+                    if p == "status":
+                        r_type = self.get_status_type(n)
+                        new_dict["status"] = r_type
 
-            result.append(new_dict)
+                result.append(new_dict)
 
-        language_dict = {'language': 2052}
-        body_dict = {"request_body": xml_body}
-        result.append(body_dict)
-        result.append(language_dict)
+            language_dict = {'language': 2052}
+            body_dict = {"request_body": xml_body}
+            result.append(body_dict)
+            result.append(language_dict)
 
-        return result
+            return result
+        except:
+            result = {
+                "status": "error",
+                "message": "解析失败,报文格式不正确"
+            }
+            return json.dumps(result)
+
 
     def get_stuff_type(self, data):
         """
@@ -99,7 +107,7 @@ class ItemOrder(object):
         json_data = json.dumps(dict_data)
         # print(json_data)
         sql = "select item_insert('{}');".format(json_data)
-        # print(sql)
+        print(sql)
         try:
             # with self.app.app_context():
             ret = self.db.query(sql)
