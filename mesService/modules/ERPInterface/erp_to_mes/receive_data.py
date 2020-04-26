@@ -222,32 +222,6 @@ class IteView(BaseUtil, views.MethodView):
             RET['msg'] = "未知错误！"
 
 
-class IteView1(views.MethodView):
-    """
-    物料(ITEM)接口
-    数据库：product
-    """
-    method = ["GET", "POST"]
-
-    def get(self):
-        pass
-
-    def post(self):
-        iac_obj = ItemOrder()
-        data = [{'transactionid': 'ITEMLOAD'}, {'item_id': '4314314'}, {'plantcode': 'ISG'}, {'partnum': '3940123'},
-                {'description': '气阀锁块11'}, {'item_type': 'BFCEC_采购件', 'item_type_val': 100}, {'status': 1},
-                {'uom': 'EA'}, {'language': 2052}]
-        data[3]['partnum'] = str(hash(time.time())) + str(random.randint(1, 100))
-        print(data)
-        # print(data)
-        ret = iac_obj.insertDatabase(data)
-
-        if not ret:
-            RET['status'] = 300
-            RET['msg'] = 'fail'
-
-        return jsonify(RET)
-
 
 class WipView(BaseUtil,views.MethodView):
     """

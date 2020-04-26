@@ -17,10 +17,11 @@ from flask.json import jsonify
 from mesService import constants
 from mesService.constants import RET
 from .wiptrx.send_wiptrx import WiptrxInterface
+from .iac.send_iac import Iac
 
 
 wiptrx = Blueprint("wiptrx", __name__, url_prefix=constants.URL_PREFIX)
-
+iac= Blueprint("iac", __name__, url_prefix=constants.URL_PREFIX)
 
 class WiptrxView(views.MethodView):
     """
@@ -79,4 +80,37 @@ class WiptrxView(views.MethodView):
 
         return jsonify(result)
 
+
+class IACView(views.MethodView):
+    """
+        IAC接口
+        数据库：postgres
+        """
+    method = ["GET", "POST"]
+
+    def get(self):
+        pass
+
+    def post(self):
+        iac = Iac()
+        dataset = iac.get_iac_data()
+        if dataset:
+            for data in dataset:
+                xml = iac.dict_to_xml(data)
+                soa_xml = iac.format_soa_xml(xml)
+        print(soa_xml)
+        result = {"result": "success", "message": None}
+        try:
+            request_res = requests.post(constants.ERP_HOST + '/erp', soa_xml)
+        except Exception as e:
+            result['result'] = 'fail'
+            result['message'] = e.args
+        request_status = request_res.status_code
+        print(request_status)
+        if (request_status != 200):
+            result['result'] = 'fail'
+
+        return jsonify(result)
+
 wiptrx.add_url_rule("/wiptrx", view_func=WiptrxView.as_view(name="wiptrx"))
+iac.add_url_rule("/iac", view_func=IACView.as_view(name="iac"))

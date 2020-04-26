@@ -16,27 +16,41 @@ class Iac(object):
         self.url = ''
 
     def format_soa_xml(self, iac_xml):
-        soa_format_xml = """<sen:SendSupplierCurrentAccountServiceBal xmlns:sen="http://www.foton.com.cn/SendSupplierCurrentAccountBal">
-	<sen:DATA>
-		<![CDATA[
-			<DATA>
-				<HEAD>
-					<BIZTRANSACTIONID>SAP_SYC_904_2017061010031100</BIZTRANSACTIONID>
-					<COUNT>3</COUNT>
-					<CONSUMER>SAP</CONSUMER>
-					<SRVLEVEL>1</SRVLEVEL>
-					<ACCOUNT>SAP</ACCOUNT>
-					<PASSWORD>SAP1509030</PASSWORD>
-				</HEAD>
-				{iac_xml}
-			</DATA>
-		]]>
-	</sen:DATA>
-</sen:SendSupplierCurrentAccountServiceBal>"""
+        soa_format_xml = """<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" >
+   <soap:Body>
+<msfm:MSFM_BFCEC_051_SendIACInterfaceService xmlns:msfm="http://www.cummins.com/MSFM_BFCEC_051_SendIACInterface">
+    <msfm:DATA><![CDATA[<DATA>
+<IAC_IMPORT_Input xmlns="http://xmlns.oracle.com/apps/xxc/rest/SYNCIAC/iac_import/">
+	<RESTHeader xmlns="http://xmlns.oracle.com/apps/xxc/rest/SYNCIAC/header">
+		<Responsibility></Responsibility>
+		<RespApplication></RespApplication>
+		<SecurityGroup></SecurityGroup>
+		<NLSLanguage>SIMPLIFIED CHINESE</NLSLanguage>
+		<Org_Id>0</Org_Id>
+	</RESTHeader>
+	<InputParameters>
+		<HEAD>
+			<BIZTRANSACTIONID>ERP_SYC_001_2020041715031100</BIZTRANSACTIONID>
+			<COUNT>1</COUNT>
+			<CONSUMER>ERP</CONSUMER>
+			<SRVLEVEL>1</SRVLEVEL>
+			<ACCOUNT>SAP</ACCOUNT>
+			<PASSWORD>SAP1509030</PASSWORD>
+		</HEAD>
+		<ROOT>
+			{iac_xml}
+		</ROOT>
+	</InputParameters>
+</IAC_IMPORT_Input>
+</DATA>
+ ]]></msfm:DATA>
+</msfm:MSFM_BFCEC_051_SendIACInterfaceService>
+   </soap:Body>
+</soap:Envelope>"""
         return soa_format_xml.format(iac_xml = iac_xml)
 
     def dict_to_xml(self, dict_data):
-        root = etree.Element('root')
+        root = etree.Element('ROOT_ITEM')
         for k, v in dict_data.items():
             # node = etree.SubElement(root, k.capitalize())
             node = etree.SubElement(root, k.upper())
@@ -81,6 +95,6 @@ if __name__ == '__main__':
         for data in dataset:
             xml = iac.dict_to_xml(data)
             soa_xml = iac.format_soa_xml(xml)
-            print(soa_xml)
+            print("p",soa_xml)
             # TODO
             # obj.set_to_erp(xml)

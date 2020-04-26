@@ -55,23 +55,37 @@ class WiptrxInterface:
         return self.wiptrxXmlObj
 
     def format_soa_xml(self, new):
-        soa_format_xml = """<sen:SendSupplierCurrentAccountServiceBal xmlns:sen="http://www.foton.com.cn/SendSupplierCurrentAccountBal">
-        <sen:DATA>
-            <![CDATA[
-                <DATA>
-                    <HEAD>
-                        <BIZTRANSACTIONID>SAP_SYC_904_2017061010031100</BIZTRANSACTIONID>
-                        <COUNT>3</COUNT>
-                        <CONSUMER>SAP</CONSUMER>
-                        <SRVLEVEL>1</SRVLEVEL>
-                        <ACCOUNT>SAP</ACCOUNT>
-                        <PASSWORD>SAP1509030</PASSWORD>
-                    </HEAD>
-                    {new_xml}
-                </DATA>
-            ]]>
-        </sen:DATA>
-    </sen:SendSupplierCurrentAccountServiceBal>"""
+        soa_format_xml = """<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" >
+   <soap:Body>
+<msfm:MSFM_BFCEC_052_SendMachiningOrderTransService xmlns:msfm="http://www.cummins.com/MSFM_BFCEC_052_SendMachiningOrderTrans">
+    <msfm:DATA>![CDATA[<DATA>
+<IAC_IMPORT_Input xmlns="http://xmlns.oracle.com/apps/xxc/rest/SYNCIAC/iac_import/">
+	<RESTHeader xmlns="http://xmlns.oracle.com/apps/xxc/rest/SYNCIAC/header">
+		<Responsibility></Responsibility>
+		<RespApplication></RespApplication>
+		<SecurityGroup></SecurityGroup>
+		<NLSLanguage>SIMPLIFIED CHINESE</NLSLanguage>
+		<Org_Id>0</Org_Id>
+	</RESTHeader>
+	<InputParameters>
+		<HEAD>
+			<BIZTRANSACTIONID>ERP_SYC_001_2020041715031100</BIZTRANSACTIONID>
+			<COUNT>1</COUNT>
+			<CONSUMER>ERP</CONSUMER>
+			<SRVLEVEL>1</SRVLEVEL>
+			<ACCOUNT>SAP</ACCOUNT>
+			<PASSWORD>SAP1509030</PASSWORD>
+		</HEAD>
+		<ROOT>
+           {new_xml}
+		</ROOT>
+	</InputParameters>
+</IAC_IMPORT_Input>
+</DATA>
+ ]]></msfm:DATA>
+</msfm:MSFM_BFCEC_052_SendMachiningOrderTransService>
+   </soap:Body>
+</soap:Envelope>"""
 
         return soa_format_xml.format(new_xml=new)
 
@@ -83,7 +97,7 @@ class WiptrxInterface:
         print('转换后:',wiptrxXMLlist)
 
         # 创建祖节点
-        sequenceRoot = ET.Element("root")
+        sequenceRoot = ET.Element("ROOT_ITEM")
 
         # 在节点树下生成数据节点
         for item in wiptrxXMLlist:
@@ -95,18 +109,18 @@ class WiptrxInterface:
         new_xml = self.format_soa_xml(new_log)
         print("new_xml", new_xml)
 
-        # sql_wiptrxDatalist=wiptrxDatalist[0]
-        # print(sql_wiptrxDatalist)
-        # transactionid=sql_wiptrxDatalist['TransactionID']
+        sql_wiptrxDatalist=wiptrxDatalist[0]
+        print(sql_wiptrxDatalist)
+        transactionid=sql_wiptrxDatalist['TransactionID']
 
-        # message = { "wiporder": sql_wiptrxDatalist["wiporderno"],
-        #             "context": new_log}
-        # json_message = json.dumps(message)
-        # base_sql = """select update_interface_log('{}');"""
-        # sql = base_sql.format(json_message)
-        # print('1',sql)
-        # current_app.db.query(sql)
+        message = { "wiporder": sql_wiptrxDatalist["wiporderno"],
+                    "context": new_log}
+        json_message = json.dumps(message)
+        base_sql = """select update_interface_log('{}');"""
+        sql = base_sql.format(json_message)
+        print('1',sql)
+        current_app.db.query(sql)
 
-        return new
+        return new_xml
 
 

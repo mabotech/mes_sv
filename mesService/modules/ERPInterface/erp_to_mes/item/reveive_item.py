@@ -30,6 +30,7 @@ class ItemOrder(object):
         :return: 返回列表数据
         """
         # xml_str = request.data
+        xml_str=str(xml_str, encoding='utf-8')
         tree = etree.HTML(xml_str)
         xml_str = etree.tostring(tree)
 
@@ -47,7 +48,6 @@ class ItemOrder(object):
         """
         # list_data = xmltodict.parse(xml_str)['input']['ITEMLOAD']['ITEMLoad']
         try:
-            print("xml_str",xml_str)
             list_data = xmltodict.parse(xml_str)['html']['body']['data']['itemload']['itemload']
             print("list_data",list_data)
             need_keys = ['transactionid', 'item_id', 'plantcode', 'partnum', 'description', 'item_type', 'status', 'uom']
@@ -104,6 +104,7 @@ class ItemOrder(object):
     def insertDatabase(self, dict_data):
 
         """调用存储过程"""
+        print('aaaaa', dict_data)
         json_data = json.dumps(dict_data)
         # print(json_data)
         sql = "select item_insert('{}');".format(json_data)

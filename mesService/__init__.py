@@ -81,6 +81,7 @@ def create_app(config_name):
     app.register_blueprint(receive_data.wip)
     app.register_blueprint(receive_data.sequence)
     app.register_blueprint(send_data.wiptrx)
+    app.register_blueprint(send_data.iac)
 
     # 前端Anguluar
     app.register_blueprint(angular_send_data.wipsortlist)
