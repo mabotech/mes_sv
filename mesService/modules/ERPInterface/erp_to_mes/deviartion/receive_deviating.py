@@ -32,14 +32,24 @@ class DeviationOrder(object):
         # xmlObj = etree.parse(self.xml_path)  # 解析本地xml文件
         # xml_data = request.data
         # print(xml_data, "xml_data")
-        xmlObj = etree.HTML(xml_data)  # 解析本地xml文件
-        xml_str = etree.tostring(xmlObj)  # 将文件内容转换成字符串数据
+        try:
+            xml_data = str(xml_data, encoding='utf-8')
+            xmlObj = etree.HTML(xml_data)  # 解析本地xml文件
+            xml_str = etree.tostring(xmlObj)  # 将文件内容转换成字符串数据
 
-        # xml_body = request.get_data(as_text=True)
-        # print(xml_body, ">>>")
-        dict_data = self.xml_to_dict(xml_str, xml_body)
+            # xml_body = request.get_data(as_text=True)
+            # print(xml_body, ">>>")
+            dict_data = self.xml_to_dict(xml_str, xml_body)
 
-        return dict_data
+            return dict_data
+
+        except:
+            result = {
+                "status": "error",
+                "message": "解析失败,报文格式不正确"
+            }
+            return json.dumps(result)
+
 
     def xml_to_dict(self, xml_str, xml_body):
         """

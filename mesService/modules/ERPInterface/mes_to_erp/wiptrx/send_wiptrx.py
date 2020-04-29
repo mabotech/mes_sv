@@ -58,29 +58,29 @@ class WiptrxInterface:
         soa_format_xml = """<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" >
    <soap:Body>
 <msfm:MSFM_BFCEC_052_SendMachiningOrderTransService xmlns:msfm="http://www.cummins.com/MSFM_BFCEC_052_SendMachiningOrderTrans">
-    <msfm:DATA>![CDATA[<DATA>
-<IAC_IMPORT_Input xmlns="http://xmlns.oracle.com/apps/xxc/rest/SYNCIAC/iac_import/">
-	<RESTHeader xmlns="http://xmlns.oracle.com/apps/xxc/rest/SYNCIAC/header">
-		<Responsibility></Responsibility>
-		<RespApplication></RespApplication>
-		<SecurityGroup></SecurityGroup>
-		<NLSLanguage>SIMPLIFIED CHINESE</NLSLanguage>
-		<Org_Id>0</Org_Id>
-	</RESTHeader>
-	<InputParameters>
-		<HEAD>
-			<BIZTRANSACTIONID>ERP_SYC_001_2020041715031100</BIZTRANSACTIONID>
-			<COUNT>1</COUNT>
-			<CONSUMER>ERP</CONSUMER>
-			<SRVLEVEL>1</SRVLEVEL>
-			<ACCOUNT>SAP</ACCOUNT>
-			<PASSWORD>SAP1509030</PASSWORD>
-		</HEAD>
-		<ROOT>
-           {new_xml}
-		</ROOT>
-	</InputParameters>
-</IAC_IMPORT_Input>
+    <msfm:DATA><![CDATA[<DATA>
+<SYNC_TXN_Input xmlns="http://xmlns.oracle.com/apps/xxc/rest/XXCWIPTxnImpSrv/SYNC_WIP_TXN/">
+<RESTHeader xmlns="http://xmlns.oracle.com/apps/xxc/rest/XXCWIPTxnImpSrv/header">
+<Responsibility></Responsibility>
+<RespApplication></RespApplication>
+<SecurityGroup></SecurityGroup>
+<NLSLanguage>SIMPLIFIED CHINESE</NLSLanguage>
+<Org_Id>0</Org_Id>
+</RESTHeader>
+<InputParameters>
+<HEAD>
+<BIZTRANSACTIONID>MES_SYC_052_2017061010031100</BIZTRANSACTIONID>
+<COUNT>1</COUNT>
+<CONSUMER>MES</CONSUMER>
+<SRVLEVEL>1</SRVLEVEL>
+<ACCOUNT></ACCOUNT>
+<PASSWORD></PASSWORD>
+</HEAD>
+<ROOT>
+   {new_xml}
+</ROOT>
+</InputParameters>
+</SYNC_TXN_Input>
 </DATA>
  ]]></msfm:DATA>
 </msfm:MSFM_BFCEC_052_SendMachiningOrderTransService>

@@ -31,15 +31,22 @@ class BomOrder(object):
         :return: 返回列表数据
         """
         # xml_data = request.data
-        xmlObj = etree.HTML(xml_data)
-        xml_str = etree.tostring(xmlObj)
+        try:
+            xml_data = str(xml_data, encoding='utf-8')
+            xmlObj = etree.HTML(xml_data)
+            xml_str = etree.tostring(xmlObj)
 
-        # xml_body = request.get_data(as_text=True)
-        # print(xml_body, ">>>")
-        dict_data = self.xml_to_dict(xml_str, xml_body)
+            # xml_body = request.get_data(as_text=True)
+            # print(xml_body, ">>>")
+            dict_data = self.xml_to_dict(xml_str, xml_body)
 
-        return dict_data
-
+            return dict_data
+        except:
+            result = {
+                "status": "error",
+                "message": "解析失败,报文格式不正确"
+            }
+            return json.dumps(result)
     def xml_to_dict(self, xml_str, xml_body):
         """
         function:传入xml字符串类型数据，返回数据列表

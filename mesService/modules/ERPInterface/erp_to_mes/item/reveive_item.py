@@ -30,15 +30,22 @@ class ItemOrder(object):
         :return: 返回列表数据
         """
         # xml_str = request.data
-        xml_str=str(xml_str, encoding='utf-8')
-        tree = etree.HTML(xml_str)
-        xml_str = etree.tostring(tree)
+        try:
+            xml_str=str(xml_str, encoding='utf-8')
+            tree = etree.HTML(xml_str)
+            xml_str = etree.tostring(tree)
 
-        # xml_body = request.get_data(as_text=True)
-        # print(xml_body, ">>>")
-        dict_data = self.xml_to_dict(xml_str, xml_body)
+            # xml_body = request.get_data(as_text=True)
+            # print(xml_body, ">>>")
+            dict_data = self.xml_to_dict(xml_str, xml_body)
 
-        return dict_data
+            return dict_data
+        except:
+            result = {
+                "status": "error",
+                "message": "解析失败,报文格式不正确"
+            }
+            return json.dumps(result)
 
     def xml_to_dict(self, xml_str, xml_body):
         """

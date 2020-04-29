@@ -69,7 +69,7 @@ class WiptrxView(views.MethodView):
         request_res = None
         result = {"result": "success", "message": None}
         try:
-            request_res = requests.post(constants.ERP_HOST+ '/erp', wiptrxXml)
+            request_res = requests.post(constants.ERP_HOST, wiptrxXml)
         except Exception as e:
             result['result'] = 'fail'
             result['message'] = e.args
@@ -101,7 +101,7 @@ class IACView(views.MethodView):
         print(soa_xml)
         result = {"result": "success", "message": None}
         try:
-            request_res = requests.post(constants.ERP_HOST + '/erp', soa_xml)
+            request_res = requests.post(constants.IAC_HOST, soa_xml)
         except Exception as e:
             result['result'] = 'fail'
             result['message'] = e.args
