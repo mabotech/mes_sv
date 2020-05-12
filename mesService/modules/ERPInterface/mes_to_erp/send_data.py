@@ -19,9 +19,9 @@ from mesService.constants import RET
 from .wiptrx.send_wiptrx import WiptrxInterface
 from .iac.send_iac import Iac
 
-
 wiptrx = Blueprint("wiptrx", __name__, url_prefix=constants.URL_PREFIX)
-iac= Blueprint("iac", __name__, url_prefix=constants.URL_PREFIX)
+iac = Blueprint("iac", __name__, url_prefix=constants.URL_PREFIX)
+
 
 class WiptrxView(views.MethodView):
     """
@@ -29,6 +29,7 @@ class WiptrxView(views.MethodView):
     数据库：postgres
     """
     method = ["GET", "POST"]
+
     def get(self):
         pass
 
@@ -41,19 +42,19 @@ class WiptrxView(views.MethodView):
         # 创建sql语句
         base_sql = """select plv8_get_wiptrx('{}');"""
 
-        #执行sql语句
+        # 执行sql语句
         sql = base_sql.format(json_data)
-        print("执行sql语句",sql)
+        print("执行sql语句", sql)
         result = current_app.db.query(sql)
 
         dalist = []
-        sql_result=result[0].get('plv8_get_wiptrx')
+        sql_result = result[0].get('plv8_get_wiptrx')
         print(sql_result)
         for item in sql_result:
             offlineobj = wiptrxInterface.wiptrxDatabaseObj
-            offlineobj['wiporderno'] = item['wiporderno']                             # 工单编号
-            offlineobj['releasedfacility'] = item['releasedfacility']               # 工厂代码
-            offlineobj['productionlineno'] = item['productionlineno']               # 产线
+            offlineobj['wiporderno'] = item['wiporderno']  # 工单编号
+            offlineobj['releasedfacility'] = item['releasedfacility']  # 工厂代码
+            offlineobj['productionlineno'] = item['productionlineno']  # 产线
             offlineobj['transactiontype'] = item['transactiontype']
             offlineobj['transactionid'] = item['transactionid']
             offlineobj['serialno'] = item['serialno']
@@ -61,11 +62,11 @@ class WiptrxView(views.MethodView):
 
             dalist.append(offlineobj.copy())
 
-        print("dalist",dalist)
+        print("dalist", dalist)
 
-        #生成XML
+        # 生成XML
         wiptrxXml = wiptrxInterface.genOnlineXML(dalist)
-        print("wiptrxXml",wiptrxXml)
+        print("wiptrxXml", wiptrxXml)
         request_res = None
         result = {"result": "success", "message": None}
         try:
@@ -111,6 +112,7 @@ class IACView(views.MethodView):
             result['result'] = 'fail'
 
         return jsonify(result)
+
 
 wiptrx.add_url_rule("/wiptrx", view_func=WiptrxView.as_view(name="wiptrx"))
 iac.add_url_rule("/iac", view_func=IACView.as_view(name="iac"))
