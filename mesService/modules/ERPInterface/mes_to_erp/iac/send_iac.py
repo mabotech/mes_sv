@@ -5,16 +5,20 @@
 # @email: jiangqiao.wang@mabotech.com
 import requests
 from lxml import etree
+import sys
+import json
+
+sys.path.append(r'/home/test01/messervice')
 
 from mesService import config_dict
 from mesService.lib.pgwrap.db import connection
-from mesService import constants
+from mesService.constants import IAC_HOST
 
 
 class Iac(object):
     def __init__(self):
         self.db = self.create_conn('development')
-        self.url = constants.IAC_HOST
+        self.url = IAC_HOST
 
     def format_soa_xml(self, iac_xml):
         soa_format_xml = """<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" >
@@ -70,6 +74,16 @@ class Iac(object):
         result = self.db.query(sql_str)
         return result[0]['get_iac']
 
+    def data_to_log(self, data):
+        """
+        function:iac回冲失败时，插入interfacelog日志
+        :return:
+        """
+        sql_str = "select job_iac_to_interfacelog('{0}');".format(json.dumps(data))
+        result = self.db.query(sql_str)
+        # return result[0]['job_iac_to_interfacelog']
+        print("result>>", result)
+
     def create_conn(self, config_name):
         db_info = config_dict[config_name].DB_INFO
         db = connection(db_info)
@@ -96,14 +110,19 @@ if __name__ == '__main__':
     dataset = iac.get_iac_data()
     if dataset:
         for data in dataset:
+            print("data>>", data)
             xml = iac.dict_to_xml(data)
             soa_xml = iac.format_soa_xml(xml)
-            # print("p", soa_xml)
+            print("p", soa_xml)
             response = iac.set_to_erp(xml)
 
             # 获取状态码
             request_status = response.status_code
             print(request_status)
+            # request_status = 2002
+            if request_status != 200:
+                dat = {"productno": data["parentno"], "xml": xml}
+                iac.data_to_log(dat)
 
     else:
         print("当前无IAC回冲！")
