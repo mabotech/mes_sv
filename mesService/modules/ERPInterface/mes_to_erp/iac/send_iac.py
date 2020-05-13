@@ -91,7 +91,9 @@ class Iac(object):
 
     def set_to_erp(self, xml):
         try:
-            response = requests.post(
+            reqobj = requests.Session()
+            reqobj.auth = ('MSFM', 'MSFM202004210945')
+            response = reqobj.post(
                 url=self.url,
                 data=xml,
                 headers={
@@ -110,10 +112,9 @@ if __name__ == '__main__':
     dataset = iac.get_iac_data()
     if dataset:
         for data in dataset:
-            print("data>>", data)
             xml = iac.dict_to_xml(data)
             soa_xml = iac.format_soa_xml(xml)
-            print("p", soa_xml)
+            # print("p", soa_xml)
             response = iac.set_to_erp(xml)
 
             # 获取状态码
