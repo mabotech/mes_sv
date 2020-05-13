@@ -50,8 +50,9 @@ class WiptrxView(views.MethodView):
 
         dalist = []
         sql_result = result[0].get('plv8_get_wiptrx')
-        print(sql_result)
-
+        print("返回结果：",sql_result)
+        if 'error' in sql_result:
+            return jsonify(sql_result)
         for item in sql_result:
             offlineobj = wiptrxInterface.wiptrxDatabaseObj
             offlineobj['wiporderno'] = item['wiporderno']  # 工单编号

@@ -66,7 +66,7 @@ def on_request(ch, method, props, body):
 
 
 def main():
-    credentials = pika.PlainCredentials('guest', 'guest')
+    credentials = pika.PlainCredentials('admin', 'admin')
     connection = pika.BlockingConnection(pika.ConnectionParameters(
         host=RABBITMQ_HOST,credentials=credentials))
     # 建立会话
