@@ -121,8 +121,11 @@ if __name__ == '__main__':
             request_status = response.status_code
             print(request_status)
             # request_status = 2002
+
+            # iac回冲错误
             if request_status != 200:
                 dat = {"productno": data["parentno"], "xml": xml}
+                # 写入错误日志信息
                 iac.data_to_log(dat)
 
     else:
