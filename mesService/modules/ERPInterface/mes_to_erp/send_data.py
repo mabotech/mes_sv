@@ -8,6 +8,7 @@ import re
 import time
 import json
 import requests
+import xmltodict
 from lxml import etree
 from flask import views
 from flask import request
@@ -49,7 +50,9 @@ class WiptrxView(views.MethodView):
 
         dalist = []
         sql_result = result[0].get('plv8_get_wiptrx')
-        print(sql_result)
+        print("返回结果：",sql_result)
+        if 'error' in sql_result:
+            return jsonify(sql_result)
         for item in sql_result:
             offlineobj = wiptrxInterface.wiptrxDatabaseObj
             offlineobj['wiporderno'] = item['wiporderno']  # 工单编号
@@ -62,15 +65,16 @@ class WiptrxView(views.MethodView):
 
             dalist.append(offlineobj.copy())
 
-        print("dalist", dalist)
-
         # 生成XML
         wiptrxXml = wiptrxInterface.genOnlineXML(dalist)
-        print("wiptrxXml", wiptrxXml)
         request_res = None
         result = {"result": "success", "message": None}
+        reqobj = requests.Session()
+        reqobj.auth = ('MSFM', 'MSFM202004210945')
+
         try:
-            request_res = requests.post(constants.ERP_HOST, wiptrxXml)
+            request_res = reqobj.post(constants.ERP_HOST, wiptrxXml)
+            result['message'] = request_res.text
         except Exception as e:
             result['result'] = 'fail'
             result['message'] = e.args
@@ -78,41 +82,9 @@ class WiptrxView(views.MethodView):
         print(request_status)
         if (request_status != 200):
             result['result'] = 'fail'
-
-        return jsonify(result)
-
-
-class IACView(views.MethodView):
-    """
-        IAC接口
-        数据库：postgres
-        """
-    method = ["GET", "POST"]
-
-    def get(self):
-        pass
-
-    def post(self):
-        iac = Iac()
-        dataset = iac.get_iac_data()
-        if dataset:
-            for data in dataset:
-                xml = iac.dict_to_xml(data)
-                soa_xml = iac.format_soa_xml(xml)
-        print(soa_xml)
-        result = {"result": "success", "message": None}
-        try:
-            request_res = requests.post(constants.IAC_HOST, soa_xml)
-        except Exception as e:
-            result['result'] = 'fail'
-            result['message'] = e.args
-        request_status = request_res.status_code
-        print(request_status)
-        if (request_status != 200):
-            result['result'] = 'fail'
-
+            result['message'] = '传输失败，网络不通'
         return jsonify(result)
 
 
 wiptrx.add_url_rule("/wiptrx", view_func=WiptrxView.as_view(name="wiptrx"))
-iac.add_url_rule("/iac", view_func=IACView.as_view(name="iac"))
+

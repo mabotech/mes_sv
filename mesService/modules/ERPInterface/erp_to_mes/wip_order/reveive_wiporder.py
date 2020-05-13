@@ -79,8 +79,8 @@ class WipOrderInterface:
 
     #将订单类型由文字转换为整形
     def xmltype2Inttype(self, orderxmltype):
-        wipordertype = 1
-        if orderxmltype == 'NORMAL':
+        wipordertype = 100
+        if orderxmltype == 'A':
             wipordertype = 1
         elif orderxmltype == 'O':
             wipordertype = 2

@@ -9,21 +9,7 @@ from xml.etree import ElementTree as ET
 
 class WiptrxInterface:
     # 定义XML中的完工对象
-    wiptrxXmlObj = {
-        'TransactionID': '',                    # 固定值，接口
-        'TransactionType':'',                   #区分具体返回
-        'CSN':' ',                                #半成品序列号
-        'WIPJobNo': '',                         # 工单号
-        'WorkOrderStatus':'',                   #订单状态
-        'PlantCode': '',                        # 工厂代码
-        'ProductionLineNo':'',                  #产线
-        'ActualMSBM':'',
-        'LastCompletedStation':' ',              #上一个完工工位
-        'Dummy1':'',
-        'Dummy2':'',
-        'Dummy3':'',
-    }
-
+    wiptrxXmlObj = { }
     # 定义数据库中的完工字段，由WIP_ORDER查询
     wiptrxDatabaseObj = {
         'TransactionID':'',                    #固定值
@@ -34,23 +20,33 @@ class WiptrxInterface:
 
     # 将Database字段与XML数据对应绑定  数据流向 数据库--->XML
     def bindDatabase2Xml(self, datalist):
+
+        print('datalist',datalist)
         for obj in datalist:
-            self.wiptrxXmlObj['TransactionID'] = obj['transactionid']                    # 固定值
-            self.wiptrxXmlObj['TransactionType'] = obj['transactiontype']
+            self.wiptrxXmlObj['PLANTCODE'] = obj['releasedfacility']                      # 工厂代码
+            self.wiptrxXmlObj['TRANSACTIONID'] = obj['transactionid']                    # 固定值
+            self.wiptrxXmlObj['TRANSACTIONTYPE'] = obj['transactiontype']
             self.wiptrxXmlObj['CSN'] = obj['serialno']                                    #二维码
-            self.wiptrxXmlObj['WIPJobNo'] = obj['wiporderno']                            # 工单编号
-            self.wiptrxXmlObj['WorkOrderStatus'] = ' '
-            self.wiptrxXmlObj['PlantCode'] = obj['releasedfacility']                    # 工厂代码
-            self.wiptrxXmlObj['ProductionLineNo'] = obj['productionlineno']            #产线
-            self.wiptrxXmlObj['ActualMSBM'] = ' '
-            self.wiptrxXmlObj['LastCompletedStation'] = obj['currentworkcenter']        #最后完成工位
+            self.wiptrxXmlObj['WIPJOBNO'] = obj['wiporderno']                            # 工单编号
+            self.wiptrxXmlObj['WORKORDERSTATUS'] = ' '
+            self.wiptrxXmlObj['PRODUCTIONLINENO'] = obj['productionlineno']            #产线
+            self.wiptrxXmlObj['LASTCOMPLETEDSTATION'] = obj['currentworkcenter']        #最后完成工位
+            self.wiptrxXmlObj['ACTUALMSBM'] = ' '
+
             if not obj['currentworkcenter']:
-                self.wiptrxXmlObj['LastCompletedStation'] = ' '
+                self.wiptrxXmlObj['LASTCOMPLETEDSTATION'] = ' '
             if not obj['serialno']:
                 self.wiptrxXmlObj['CSN'] = ' '
-            self.wiptrxXmlObj['Dummy1'] = ' '
-            self.wiptrxXmlObj['Dummy2'] = ' '
-            self.wiptrxXmlObj['Dummy3'] = ' '
+            self.wiptrxXmlObj['ATTRIBUTE1'] = ' '
+            self.wiptrxXmlObj['ATTRIBUTE2'] = ' '
+            self.wiptrxXmlObj['ATTRIBUTE3'] = ' '
+            self.wiptrxXmlObj['ATTRIBUTE4'] = ' '
+            self.wiptrxXmlObj['ATTRIBUTE5'] = ' '
+            self.wiptrxXmlObj['ATTRIBUTE6'] = ' '
+            self.wiptrxXmlObj['ATTRIBUTE7'] = ' '
+            self.wiptrxXmlObj['ATTRIBUTE8'] = ' '
+            self.wiptrxXmlObj['ATTRIBUTE9'] = ' '
+            self.wiptrxXmlObj['ATTRIBUTE10'] = ' '
 
         return self.wiptrxXmlObj
 
@@ -94,8 +90,8 @@ class WiptrxInterface:
 
         # 将字段转换为对应的XML字段
         wiptrxXMLlist = self.bindDatabase2Xml(wiptrxDatalist)
-        print('转换后:',wiptrxXMLlist)
 
+        print('wiptrxXMLlist',wiptrxXMLlist)
         # 创建祖节点
         sequenceRoot = ET.Element("ROOT_ITEM")
 
@@ -107,18 +103,15 @@ class WiptrxInterface:
 
         new_log=str(new, 'utf-8')
         new_xml = self.format_soa_xml(new_log)
-        print("new_xml", new_xml)
+
 
         sql_wiptrxDatalist=wiptrxDatalist[0]
-        print(sql_wiptrxDatalist)
-        transactionid=sql_wiptrxDatalist['TransactionID']
-
         message = { "wiporder": sql_wiptrxDatalist["wiporderno"],
-                    "context": new_log}
+                    "context": new_xml}
         json_message = json.dumps(message)
         base_sql = """select update_interface_log('{}');"""
         sql = base_sql.format(json_message)
-        print('1',sql)
+
         current_app.db.query(sql)
 
         return new_xml
