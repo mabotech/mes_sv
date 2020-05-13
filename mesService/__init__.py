@@ -26,6 +26,7 @@ from .modules.AngularInterface import angular_send_data
 from .modules.ERPInterface.mes_to_erp import send_data
 from .modules.AngularInterface import angular_send_data
 from .modules.processManage import process_manage_blue
+# from .constants import IAC_HOST
 
 
 def setup_log(config_name):
