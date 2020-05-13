@@ -8,12 +8,13 @@ from lxml import etree
 
 from mesService import config_dict
 from mesService.lib.pgwrap.db import connection
+from mesService import constants
 
 
 class Iac(object):
     def __init__(self):
         self.db = self.create_conn('development')
-        self.url = ''
+        self.url = constants.IAC_HOST
 
     def format_soa_xml(self, iac_xml):
         soa_format_xml = """<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" >
@@ -47,7 +48,7 @@ class Iac(object):
 </msfm:MSFM_BFCEC_051_SendIACInterfaceService>
    </soap:Body>
 </soap:Envelope>"""
-        return soa_format_xml.format(iac_xml = iac_xml)
+        return soa_format_xml.format(iac_xml=iac_xml)
 
     def dict_to_xml(self, dict_data):
         root = etree.Element('ROOT_ITEM')
@@ -76,25 +77,33 @@ class Iac(object):
 
     def set_to_erp(self, xml):
         try:
-            requests.post(
-                url = self.url,
-                data = xml,
-                headers = {
-                          'Content-Type': 'text/xml;charset=UTF-8',
-              },
+            response = requests.post(
+                url=self.url,
+                data=xml,
+                headers={
+                    'Content-Type': 'text/xml;charset=UTF-8',
+                },
             )
+
+            return response
+
         except Exception:
             pass
 
 
 if __name__ == '__main__':
-
     iac = Iac()
     dataset = iac.get_iac_data()
     if dataset:
         for data in dataset:
             xml = iac.dict_to_xml(data)
             soa_xml = iac.format_soa_xml(xml)
-            print("p",soa_xml)
-            # TODO
-            # obj.set_to_erp(xml)
+            # print("p", soa_xml)
+            response = iac.set_to_erp(xml)
+
+            # 获取状态码
+            request_status = response.status_code
+            print(request_status)
+
+    else:
+        print("当前无IAC回冲！")
