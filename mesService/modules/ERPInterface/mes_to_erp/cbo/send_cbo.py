@@ -33,7 +33,8 @@ class CboToXml(object):
         print(etree.tostring(self.root, pretty_print=True))
 
         tree = etree.ElementTree(self.root)
-        tree.write('text.xml', pretty_print=True, xml_declaration=True, encoding='utf-8')
+        # tree.write('text.xml', pretty_print=True, xml_declaration=True, encoding='utf-8')
+        print(tree)
 
     def queryDatanase(self):
         """
