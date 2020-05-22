@@ -29,6 +29,7 @@ IAC_HOST = r'http://192.168.158.159/WP_BFCEC_SOA/APP_MSFM_SERVICES/Proxy_Service
 BOM_ENUM = {
     'BFCEC_采购件': 1,
     'BFCEC_零件虚拟件': 2,
+    'BFCEC_半成品': 3,
     'BFCEC_é\x87\x87è´\xadä»¶': 1,
     'BFCEC_é\x9b¶ä»¶è\x99\x9aæ\x8b\x9fä»¶': 2,
 }
@@ -38,8 +39,8 @@ STATUS_ENUM = {
     "Active": 1,
     "New": 1,
     "Inactive": 0,
-    "OBSOLETE":1,
-    "KIT":1
+    "OBSOLETE": 1,
+    "KIT": 1
 }
 
 # 偏离类型(A:增加或者D:删除)
@@ -47,5 +48,3 @@ ACTIONS_ENUM = {
     "A": 1,
     "D": 0
 }
-
-
