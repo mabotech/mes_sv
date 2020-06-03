@@ -9,11 +9,13 @@ import sys
 # sys.path.append(r'C:\Users\mabot\Desktop\BFCEC\foton\mesService')
 sys.path.append(r'/home/test01/mesService')
 
+import os
 import json
 import hashlib
 from mesService import config_dict
 from mesService.lib.pgwrap.db import connection
 from mesService.lib.redisLib.RedisHelper import RedisHelper
+from mesService.modules.JobTask import mail_alarm
 
 
 class WipDeviation(object):
@@ -24,6 +26,12 @@ class WipDeviation(object):
 
     def execteDatabase(self):
         """调用存储过程"""
+
+        # 获取接收邮箱列表
+        mail_list = self.query()
+        # 文件名称
+        # basename = os.path.basename(__file__)
+
         sql = "select job_wip_deviation();"
         try:
             ret = self.db.query(sql)
@@ -52,7 +60,7 @@ class WipDeviation(object):
                 # 写入日志
                 self.insert_log(check_data_info)
 
-            # 其他工单状态日志
+            # 其他工单状态(除110，120)日志
             other_order_err_log_value = self.red.get_hash("job_2_wip_deviation", "other_order_err_log")
             other_order_err_log_md5_value = self.data_md5(str(other_order_err_log))
             if other_order_err_log_value == other_order_err_log_md5_value:
@@ -60,6 +68,10 @@ class WipDeviation(object):
             else:
                 self.red.set_hash("job_2_wip_deviation", "other_order_err_log", other_order_err_log_md5_value)
                 self.insert_log(other_order_err_log)
+                # 邮件标题
+                basename = "机加MES执行JOB错误-" + other_order_err_log.get("message", None)
+                # 发送邮件
+                mail_alarm.send_data(mail_list, basename, other_order_err_log)
 
             # 查询对应工单不存在日志
             order_nonexistent_err_log_value = self.red.get_hash("job_2_wip_deviation",
@@ -71,6 +83,10 @@ class WipDeviation(object):
                 self.red.set_hash("job_2_wip_deviation", "order_nonexistent_err_log",
                                   order_nonexistent_err_log_md5_value)
                 self.insert_log(order_nonexistent_err_log)
+                # 邮件标题
+                basename = "机加MES执行JOB错误-" + order_nonexistent_err_log.get("message", None)
+                # 发送邮件
+                mail_alarm.send_data(mail_list, basename, order_nonexistent_err_log)
 
         except Exception as e:
             # current_app.logger.error(traceback.format_exc())
@@ -99,6 +115,17 @@ class WipDeviation(object):
             ret = self.db.query(sql)
             print("ret>>", ret)
             pass
+
+        except Exception as e:
+            print(e)
+
+    def query(self):
+        """mail query"""
+        sql = """select mail from mail_log where active=1"""
+        try:
+            mail_list = self.db.query(sql)
+            # print("ret>>", ret)
+            return mail_list
 
         except Exception as e:
             print(e)
