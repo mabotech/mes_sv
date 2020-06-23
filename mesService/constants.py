@@ -40,8 +40,8 @@ STATUS_ENUM = {
     "Active": 1,
     "New": 1,
     "Inactive": 0,
-    "OBSOLETE":1,
-    "KIT":1
+    "OBSOLETE": 1,
+    "KIT": 1
 }
 
 # 偏离类型(A:增加或者D:删除)
@@ -49,5 +49,3 @@ ACTIONS_ENUM = {
     "A": 1,
     "D": 0
 }
-
-

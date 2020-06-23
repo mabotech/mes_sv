@@ -127,6 +127,6 @@ class BomOrder(object):
         :return:
         """
         try:
-            return BOM_ENUM[data]
+            return BOM_ENUM.get(data, 0)   # 其他类型返回0
         except Exception as e:
             current_app.logger.error(traceback.format_exc())

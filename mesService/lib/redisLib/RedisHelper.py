@@ -8,7 +8,7 @@ from mesService import redis_store
 
 class RedisHelper:
 
-    def __init__(self, sub_channel = None, pub_channel = None):
+    def __init__(self, sub_channel=None, pub_channel=None):
         self.__conn = redis_store
         self.sub_channel = sub_channel
         self.pub_channel = pub_channel
@@ -22,3 +22,22 @@ class RedisHelper:
         pub.subscribe(self.sub_channel)
         pub.parse_response()
         return pub
+
+    def set_hash(self, name, k, v):
+        """
+        function:set hash value
+        :param name:job name
+        :param k:
+        :param v:
+        :return:
+        """
+        self.__conn.hset(name, k, v)
+
+    def get_hash(self, name, k):
+        """
+        function:get hash value
+        :param name:job name
+        :param k:
+        :return:
+        """
+        return self.__conn.hget(name, k)
