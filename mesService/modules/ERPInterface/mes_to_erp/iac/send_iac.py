@@ -66,6 +66,7 @@ class Iac(object):
         # tree.write('text.xml', pretty_print=True, xml_declaration=True, encoding='utf-8')
         xml_str = etree.tostring(tree, encoding='utf-8', pretty_print=True).decode()
         # xml_str = etree.tostring(tree, encoding='utf-8').decode()
+
         return xml_str
 
     def get_iac_data(self):
@@ -79,10 +80,11 @@ class Iac(object):
         function:iac回冲失败时，插入interfacelog日志
         :return:
         """
-        sql_str = "select job_iac_to_interfacelog('{0}');".format(json.dumps(data))
-        result = self.db.query(sql_str)
-        # return result[0]['job_iac_to_interfacelog']
-        print("result>>", result)
+        # sql_str = "select job_iac_to_interfacelog('{0}');".format(json.dumps(data))
+        # result = self.db.query(sql_str)
+        # # return result[0]['job_iac_to_interfacelog']
+        # print("result>>", result)
+        pass
 
     def create_conn(self, config_name):
         db_info = config_dict[config_name].DB_INFO
@@ -110,23 +112,25 @@ class Iac(object):
 if __name__ == '__main__':
     iac = Iac()
     dataset = iac.get_iac_data()
+    s=[]
     if dataset:
         for data in dataset:
             xml = iac.dict_to_xml(data)
-            soa_xml = iac.format_soa_xml(xml)
-            # print("p", soa_xml)
-            response = iac.set_to_erp(xml)
+            s.append(xml)
+        tempres = "".join(s)
+        soa_xml = iac.format_soa_xml(tempres)
+        print("p", soa_xml)
+        response = iac.set_to_erp(soa_xml)
+        # 获取状态码
+        request_status = response.status_code
+        print(request_status)
+        request_status = 2002
 
-            # 获取状态码
-            request_status = response.status_code
-            print(request_status)
-            # request_status = 2002
-
-            # iac回冲错误
-            if request_status != 200:
-                dat = {"productno": data["parentno"], "xml": xml}
-                # 写入错误日志信息
-                iac.data_to_log(dat)
+        # iac回冲错误
+        # if request_status != 200:
+            # dat = {"productno": data["parentno"], "xml": xml}
+            # 写入错误日志信息
+            # iac.data_to_log(dat)
 
     else:
         print("当前无IAC回冲！")

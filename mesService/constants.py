@@ -24,11 +24,13 @@ PRODUCTINVENTORYTYPE_ENUM = {
 # 传输给ERP的地址
 ERP_HOST = r'http://192.168.158.159/WP_BFCEC_SOA/APP_MSFM_SERVICES/Proxy_Services/TA_EBS/MSFM_BFCEC_052_SendMachiningOrderTrans_PS?wsdl'
 IAC_HOST = r'http://192.168.158.159/WP_BFCEC_SOA/APP_MSFM_SERVICES/Proxy_Services/TA_EBS/MSFM_BFCEC_051_SendIACInterface_PS?wsdl'
+CBO_HOST = r'http://192.168.158.237:8010/webservices/rest/WOSORTBACK/wo_sort_import/'
 
 # BOM物料类型
 BOM_ENUM = {
     'BFCEC_采购件': 1,
     'BFCEC_零件虚拟件': 2,
+    'BFCEC_半成品': 3,
     'BFCEC_é\x87\x87è´\xadä»¶': 1,
     'BFCEC_é\x9b¶ä»¶è\x99\x9aæ\x8b\x9fä»¶': 2,
 }

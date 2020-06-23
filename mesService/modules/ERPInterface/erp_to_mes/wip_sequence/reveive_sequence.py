@@ -56,7 +56,7 @@ class SequenceInterface:
             xml_str1 = etree.tostring(tree)
 
             list_data = xmltodict.parse(xml_str1)['html']['body']['data']['seqdwnload']
-            # print(list_data)
+            print(list_data)
             wiporderDatabaselist = []
             for key, val in list_data.items():
                 # print(key, val)

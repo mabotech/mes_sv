@@ -55,12 +55,10 @@ class BomOrder(object):
         """
         try:
             list_data = xmltodict.parse(xml_str)['html']['body']['data']['bomload']['bomload']
-            need_keys = ['transactionid', 'plantcode', 'header_item', 'bill_sequence_id', 'line_item',
-                         'conponent_sequence_id',
-                         'type', 'status', 'quantity', 'effective_date', 'disable_date']
+            need_keys = ['transactionid', 'plantcode', 'header_item', 'bill_sequence_id','line_item',
+                         'conponent_sequence_id','type', 'status', 'quantity', 'effective_date', 'disable_date']
 
             result = []
-            print(list_data)
             for p, n in dict(list_data).items():
                 new_dict = {}
                 if p in need_keys:
@@ -71,7 +69,10 @@ class BomOrder(object):
                 if p == "status":
                     r_type = self.get_status_type(n)
                     new_dict["status"] = r_type
-
+                # if p == "parent_item_id":
+                #     new_dict["bill_sequence_id"] = n
+                # if p == "child_item_id":
+                #     new_dict["conponent_sequence_id"] = n
                 result.append(new_dict)
             # 报文原始数据
             body_dict = {"request_body": xml_body}

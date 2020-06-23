@@ -17,11 +17,12 @@ from flask import current_app
 from flask.json import jsonify
 from mesService import constants
 from mesService.constants import RET
+from mesService.modules.ERPInterface.mes_to_erp.cbo.send_cbo import CboToXml
 from .wiptrx.send_wiptrx import WiptrxInterface
-from .iac.send_iac import Iac
+
 
 wiptrx = Blueprint("wiptrx", __name__, url_prefix=constants.URL_PREFIX)
-iac = Blueprint("iac", __name__, url_prefix=constants.URL_PREFIX)
+cbo = Blueprint("cbo", __name__, url_prefix=constants.URL_PREFIX)
 
 
 class WiptrxView(views.MethodView):
@@ -39,6 +40,7 @@ class WiptrxView(views.MethodView):
         wiptrxInterface = WiptrxInterface()
 
         json_data = str(request.data, 'utf-8')
+        print(json_data)
 
         # 创建sql语句
         base_sql = """select plv8_get_wiptrx('{}');"""
@@ -85,6 +87,68 @@ class WiptrxView(views.MethodView):
             result['message'] = '传输失败，网络不通'
         return jsonify(result)
 
+class CBOView(views.MethodView):
+    """
+    CBO接口
+    数据库：postgres
+    """
+    method = ["GET", "POST"]
+
+    def get(self):
+        pass
+
+    def post(self):
+        try:
+            # 实例化offline类
+            cbo = CboToXml()
+
+            json_data = str(request.data, 'utf-8')
+
+            # 创建sql语句
+            base_sql = """select get_cbo('{}');"""
+
+            # 执行sql语句
+            sql = base_sql.format(json_data)
+            print("执行sql语句", sql)
+            ret = current_app.db.query(sql)
+            dataset = ret[0]['get_cbo'].get("rec_data", None)
+            s = []
+            for data in dataset:
+                # 将字段转换为对应的XML字段
+                bindDatabase = cbo.bindDatabase2Xml(data)
+                # 将XML字段转化为树形结构
+                new = cbo.genOnlineXML(bindDatabase)
+                #将所有数据存入一个列表
+                s.append(new)
+            tempres = "".join(s)
+            #将列表放入发送报文中
+            new_xml = cbo.format_soa_xml(tempres)
+
+            print("new_xml",new_xml)
+            request_res = None
+            result = {"result": "success", "message": None}
+            reqobj = requests.Session()
+            reqobj.auth = ('SOACONNECT', 'Bfcec@Soa')
+            reqobj.headers = {'Content-Type':'application/xml'}
+            try:
+                request_res = reqobj.post(constants.CBO_HOST, new_xml)
+                print(request_res)
+                result['message'] = request_res.text
+
+            except Exception as e:
+                result['result'] = 'fail'
+                result['message'] = e.args
+            request_status = request_res.status_code
+            print(request_status)
+            if (request_status != 200):
+                result['result'] = 'fail'
+                result['message'] = '传输失败，网络不通'
+
+            return jsonify(result)
+
+        except Exception as e:
+            return jsonify(e)
 
 wiptrx.add_url_rule("/wiptrx", view_func=WiptrxView.as_view(name="wiptrx"))
+cbo.add_url_rule("/cbo", view_func=CBOView.as_view(name="cbo"))
 

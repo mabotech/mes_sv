@@ -47,7 +47,6 @@ class BaseUtil(object):
         xml_data = request.data
         xml_body = request.get_data(as_text=True)
         classname = INTERFACE_CLASS_NAME[f"{url}"]
-        print("classname",classname)
         param = {}
         param["classname"] = classname
         param["xml_data"] = bytes.decode(xml_data,'utf-8')

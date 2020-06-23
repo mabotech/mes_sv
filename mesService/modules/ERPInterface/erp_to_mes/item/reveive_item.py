@@ -112,7 +112,7 @@ class ItemOrder(object):
         """调用存储过程"""
         json_data = json.dumps(dict_data)
         sql = "select item_insert('{}');".format(json_data)
-        print(sql)
+        print("sql",sql)
         try:
             # with self.app.app_context():
             ret = self.db.query(sql)

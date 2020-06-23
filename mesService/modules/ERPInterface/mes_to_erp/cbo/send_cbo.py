@@ -4,76 +4,90 @@
 # @fileName: send_cbo.py
 # @email: jiangqiao.wang@mabotech.com
 
-import traceback
-from lxml import etree
+import json
 from flask import current_app
-from mesService.config import config_dict
-from mesService.lib.pgwrap.db import connection
-
+from xml.etree import ElementTree as ET
 
 class CboToXml(object):
-    def __init__(self):
-        self.root = etree.Element('root')
-        # self.db = self.create_conn('development')
+    # 定义XML中的完工对象
+    cboXmlObj = {}
 
-    def dict_to_xml(self, dict_data):
-        """
-        function:字典型数据转换成XML数据
-        :param dict_data: {k1:v1, k2:v2...}
-        :return: XML文件
-        """
-        for k, v in dict_data.items():
-            item = etree.SubElement(self.root, 'item')
-            try:
-                item.set('name', k)
-                item.set('value', v)
-            except Exception as e:
-                current_app.logger.error(traceback.format_exc())
+    # 将Database字段与XML数据对应绑定  数据流向 数据库--->XML
+    def bindDatabase2Xml(self, datalist):
 
-        print(etree.tostring(self.root, pretty_print=True))
+        self.cboXmlObj['TRANSACTIONID'] = str(datalist['transactionid'])                   # id值
+        self.cboXmlObj['WIPJOBNO'] =  str(datalist['wipjobno'])                       # 工单编号
+        self.cboXmlObj['SEQUENCENUMBER'] =  str(datalist['sequencenumber'])                # 排序号
+        self.cboXmlObj['PLANTCODE'] =  str(datalist['plantcode'])                           # 工厂
+        self.cboXmlObj['PRODUCTIONLINENO'] =  str(datalist['productionlineno'])             # 工厂
+        self.cboXmlObj['BATCHID'] =  str(datalist['BATCHID'])                                 # 批次号
 
-        tree = etree.ElementTree(self.root)
-        # tree.write('text.xml', pretty_print=True, xml_declaration=True, encoding='utf-8')
-        print(tree)
+        self.cboXmlObj['DUMMY1'] = ' '
+        self.cboXmlObj['DUMMY2'] = ' '
+        self.cboXmlObj['DUMMY3'] = ' '
+        self.cboXmlObj['DUMMY4'] = ' '
+        self.cboXmlObj['DUMMY5'] = ' '
+        self.cboXmlObj['DUMMY6'] = ' '
+        self.cboXmlObj['DUMMY7'] = ' '
+        self.cboXmlObj['DUMMY8'] = ' '
+        self.cboXmlObj['DUMMY9'] = ' '
+        self.cboXmlObj['DUMMY10'] = ' '
 
-    def queryDatanase(self):
-        """
-        function:执行sql获取查询数据
-        :return: [{k1:v1},{k2:v2}...]
-        """
-        sql = "select get_cbo()"
-        # print(sql)
-        try:
-            # ret = self.db.query(sql)
-            ret = current_app.db.query(sql)
-            return ret[0]['get_cbo'].get("rec_data", None)
-        except Exception as e:
-            current_app.logger.error(traceback.format_exc())
+        return self.cboXmlObj
 
-    def parse_data(self, re_data):
-        """
-        function:循环获取单条数据，每条数据调用dict_to_xml生成XML文件
-        :param re_data:
-        :return:
-        """
-        if re_data:
-            for data in re_data:
-                self.dict_to_xml(data)
-        else:
-            current_app.logger.info("当前记录不存在")
+    def format_soa_xml(self, new):
+        soa_format_xml = """<?xml version="1.0" encoding="UTF-8" ?>
+<WO_SORT_IMPORT_Input xmlns="http://xmlns.oracle.com/apps/xxc/rest/WOSORTBACK/wo_sort_import/">
+    <RESTHeader xmlns="http://xmlns.oracle.com/apps/xxc/rest/WOSORTBACK/header">
+        <Responsibility></Responsibility>
+        <RespApplication></RespApplication>
+        <SecurityGroup></SecurityGroup>
+        <NLSLanguage>SIMPLIFIED CHINESE</NLSLanguage>
+        <Org_Id>0</Org_Id>
+    </RESTHeader>
+    <InputParameters>
+        <HEAD>
+            <BIZTRANSACTIONID>234</BIZTRANSACTIONID>
+            <COUNT></COUNT>
+            <CONSUMER></CONSUMER>
+            <SRVLEVEL></SRVLEVEL>
+            <ACCOUNT></ACCOUNT>
+            <PASSWORD></PASSWORD>
+        </HEAD>
+        <ROOT>
+            {new_xml}
+        </ROOT>
+    </InputParameters>
+</WO_SORT_IMPORT_Input>"""
 
-    def create_conn(self, config_name):
-        """
-        function:创建db测试连接
-        :param config_name:
-        :return:
-        """
-        conn = config_dict[config_name].DB_INFO
-        db = connection(conn)
-        return db
+        return soa_format_xml.format(new_xml=new)
+
+    # 生成上线的XML文件(实时回传)
+    def genOnlineXML(self, cboDatalist):
+
+        # 将字段转换为对应的XML字段
+        # cboXmllist = self.bindDatabase2Xml(cboDatalist)
+
+        # print('cboXmllist', cboXmllist)
+        # 创建祖节点
+        sequenceRoot = ET.Element("ROOT_ITEM")
+
+        # 在节点树下生成数据节点
+        for item in cboDatalist:
+            ET.SubElement(sequenceRoot, item).text = cboDatalist[item]
+
+        new = ET.tostring(sequenceRoot, encoding='utf-8')
+
+        new_log = str(new, 'utf-8')
 
 
-if __name__ == '__main__':
-    obj = CboToXml()
-    data = obj.queryDatanase()
-    obj.parse_data(data)
+        # sql_wiptrxDatalist = wiptrxDatalist[0]
+        # message = {"wiporder": sql_wiptrxDatalist["wiporderno"],
+        #            "context": new_xml}
+        # json_message = json.dumps(message)
+        # base_sql = """select update_interface_log('{}');"""
+        # sql = base_sql.format(json_message)
+
+        # current_app.db.query(sql)
+
+        return new_log
