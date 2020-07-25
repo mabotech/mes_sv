@@ -29,8 +29,8 @@ class Config(object):
     # 指定session的过期时间1天
     PERMANENT_SESSION_LIFETIME = 86400
     RABBITMQ_HOST = '192.168.97.188'
-    RABBITMQ_USER = 'guest'
-    RABBITMQ_PASSWORD = 'guest'
+    RABBITMQ_USER = 'admin'
+    RABBITMQ_PASSWORD = 'admin'
 
     APPLICATION_TITLE = "Flask JWT Example"
     JWT_TOKEN_LOCATION = "headers"
