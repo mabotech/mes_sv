@@ -16,6 +16,9 @@ from mesService.modules.ERPInterface.erp_to_mes.wip_sequence.reveive_sequence im
 from mesService.config import PRESENT_WORK_MODE
 from mesService.config import RABBITMQ_HOST
 
+
+
+
 func_dict = {
     "DeviationOrder": {"parse_xml": "parse_xml", "insertDatabase": "insertDatabase"},
     "BomOrder": {"parse_xml": "parse_xml", "insertDatabase": "insertDatabase"},
@@ -69,7 +72,7 @@ def on_request(ch, method, props, body):
 
 
 def main():
-    credentials = pika.PlainCredentials('guest', 'guest')
+    credentials = pika.PlainCredentials('guest','guest')
     connection = pika.BlockingConnection(pika.ConnectionParameters(
         host=RABBITMQ_HOST,credentials=credentials))
     # 建立会话
