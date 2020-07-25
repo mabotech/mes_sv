@@ -12,7 +12,7 @@ from mesService.modules.RabbitMQ import interface_con
 
 def app_app():
     print(app.app.url_map)
-    app.app.run(debug=True, host='0.0.0.0')
+    app.app.run(host='0.0.0.0')
 
 
 def app_interface():

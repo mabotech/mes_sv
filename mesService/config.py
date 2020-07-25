@@ -28,6 +28,9 @@ class Config(object):
     SESSION_REDIS = StrictRedis(host=REDIS_HOST, port=REDIS_PORT)
     # 指定session的过期时间1天
     PERMANENT_SESSION_LIFETIME = 86400
+    RABBITMQ_HOST = '192.168.97.188'
+    RABBITMQ_USER = 'guest'
+    RABBITMQ_PASSWORD = 'guest'
 
     APPLICATION_TITLE = "Flask JWT Example"
     JWT_TOKEN_LOCATION = "headers"
@@ -42,35 +45,6 @@ class Config(object):
         'port': 5432,
     }
 
-    # 测试
-    # DB_INFO = {
-    #     'database': 'flxuser',
-    #     'user': 'postgres',
-    #     'password': 'postgres',
-    #     'host': 'huanglg.top',
-    #     'port': 5432,
-    # }
-
-    # 定时任务
-    JOBS = [
-        # {  # 第一个任务
-        #     'id': 'job1',
-        #     'func': '__main__:job_1',
-        #     'args': (1, 2),
-        #     'trigger': 'cron', # cron表示定时任务
-        #     'hour': 19,
-        #     'minute': 27
-        # },
-        # 第二个任务，每隔5分钟执行一次
-        # {
-        #     'id': 'job2',
-        #     'func': 'config:job_2',  # 方法名
-        #     # 'args': (1, 2),  # 入参
-        #     'trigger': 'interval',  # interval表示循环任务
-        #     'seconds': 5,
-        # }
-    ]
-
 
 class DevelopmentConfig(Config):
     DEBUG = True
@@ -78,13 +52,29 @@ class DevelopmentConfig(Config):
 
 class ProductionConfig(Config):
     DEBUG = False
+    DB_INFO = {
+        'database': 'BFCEC',
+        'user': 'postgres',
+        'password': 'Mabotech123',
+        'host': '192.168.220.65',
+        'port': 5432,
+    }
+    REDIS_HOST = '192.168.220.65'
+    JWT_ACCESS_TOKEN_EXPIRES = 86400
+    JWT_REFRESH_TOKEN_EXPIRES = 86400
     LOG_LEVEL = logging.ERROR
+    RABBITMQ_HOST = '192.168.220.65'
+    RABBITMQ_USER = 'admin'
+    RABBITMQ_PASSWORD = 'python03$'
+
 
 
 config_dict = {
     'development': DevelopmentConfig,
     'production': ProductionConfig,
 }
+
+CURRENT_ENV = 'development'
 
 INTERFACE_BASE_URL = "http://127.0.0.1:5000"
 INTERFACE_CLASS_NAME = {
