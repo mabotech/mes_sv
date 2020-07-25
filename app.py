@@ -7,6 +7,7 @@ import json
 
 from mesService import create_app
 from flask_jsonrpc import JSONRPC
+from mesService import config
 # from flask_uwsgi_websocket import GeventWebSocket
 # from flask_uwsgi_websocket import WebSocket
 from flask import request
@@ -14,7 +15,7 @@ from flask import request
 from mesService.lib.redisLib.RedisHelper import RedisHelper
 from mesService.modules.AngularInterface.websocket_service import ws_blue
 
-app = create_app('development')
+app = create_app(config.CURRENT_ENV)
 # ws = WebSocket(app)
 # ws.register_blueprint(ws_blue)
 

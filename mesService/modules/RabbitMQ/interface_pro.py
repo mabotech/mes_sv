@@ -9,14 +9,17 @@ import pika
 import uuid
 import os
 from mesService.modules.RabbitMQ import logger
-from mesService.config import RABBITMQ_HOST
+from mesService.config import CURRENT_ENV, config_dict
 
 
 class InterfaceRpcClient(object):
     def __init__(self):
-        credentials = pika.PlainCredentials('guest', 'guest')
+        self.RABBITMQ_HOST = config_dict[CURRENT_ENV].RABBITMQ_HOST
+        self.user = config_dict[CURRENT_ENV].RABBITMQ_USER
+        self.password = config_dict[CURRENT_ENV].RABBITMQ_PASSWORD
+        credentials = pika.PlainCredentials(self.user, self.password)
         self.connection = pika.BlockingConnection(pika.ConnectionParameters(
-            host=RABBITMQ_HOST,credentials=credentials))
+            host=self.RABBITMQ_HOST,credentials=credentials))
         self.channel = self.connection.channel()
 
         # durable = True队列持久化

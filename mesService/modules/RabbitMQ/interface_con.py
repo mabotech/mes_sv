@@ -14,7 +14,7 @@ from mesService.modules.ERPInterface.erp_to_mes.item.reveive_item import ItemOrd
 from mesService.modules.ERPInterface.erp_to_mes.wip_order.reveive_wiporder import WipOrderInterface
 from mesService.modules.ERPInterface.erp_to_mes.wip_sequence.reveive_sequence import SequenceInterface
 from mesService.config import PRESENT_WORK_MODE
-from mesService.config import RABBITMQ_HOST
+from mesService.config import CURRENT_ENV, config_dict
 
 func_dict = {
     "DeviationOrder": {"parse_xml": "parse_xml", "insertDatabase": "insertDatabase"},
@@ -69,9 +69,12 @@ def on_request(ch, method, props, body):
 
 
 def main():
-    credentials = pika.PlainCredentials('guest', 'guest')
+    rabbitmq_host = config_dict[CURRENT_ENV].RABBITMQ_HOST
+    user = config_dict[CURRENT_ENV].RABBITMQ_USER
+    password = config_dict[CURRENT_ENV].RABBITMQ_PASSWORD
+    credentials = pika.PlainCredentials(user, password)
     connection = pika.BlockingConnection(pika.ConnectionParameters(
-        host=RABBITMQ_HOST,credentials=credentials))
+        host=rabbitmq_host,credentials=credentials))
     # 建立会话
     channel = connection.channel()
     # 声明RPC请求队列
