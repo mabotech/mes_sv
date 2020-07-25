@@ -12,4 +12,4 @@ EXPOSE 5000
 #CMD ["uwsgi", "--ini", "uwsgi.ini"]
 CMD ["python", "app_main.py"]
 
-# docker run -d --name messervice -v /home/test01/messervice:/messervice -p 5000:5000  messervice
+# docker run -d --name messervice -v /opt/messervice:/messervice -p 5000:5000  messervice
