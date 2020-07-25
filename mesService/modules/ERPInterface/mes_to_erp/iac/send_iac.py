@@ -4,6 +4,7 @@
 # @fileName: send_bom.py
 # @email: jiangqiao.wang@mabotech.com
 import requests
+import xmltodict
 from lxml import etree
 import sys
 import json
@@ -103,7 +104,50 @@ class Iac(object):
                 },
             )
 
-            return response
+            # 捕获ERP回馈信息
+            s = response.content
+            tree = etree.HTML(s)
+            xml_str1 = etree.tostring(tree)
+            print('xml_str1',xml_str1)
+            list_data = xmltodict.parse(xml_str1)['html']['body']['envelope']['body'][
+                'getmsfm_bfcec_051_sendiacinterfaceresponse']['message']['outputparameters']['x_return_status']
+            print('list_data', list_data)
+            if list_data == 'S':
+                print('进来了')
+                message = {'application': 'MES',
+                           'transactionid': 'IAC',
+                           'transactiontype': 'IAC回冲',
+                           'message': 'IAC待回冲',
+                           'actionstatus': '插入',
+                           'wiporder': '',
+                           'result': 0,
+                           'context': xml,
+                           'createdby': ''
+                           }
+                print(message)
+                json_message = json.dumps(message)
+                print(json_message)
+                base_sql = """select insert_outflow_log('{}');"""
+                sql = base_sql.format(json_message)
+                print('S', sql)
+                result = self.db.query(sql)
+            else:
+                message = {'application': 'MES',
+                           'transactionid': 'IAC',
+                           'transactiontype': 'IAC回冲',
+                           'message': 'IAC回冲失败',
+                           'actionstatus': '插入',
+                           'wiporder': '',
+                           'result': 0,
+                           'context': xml,
+                           'createdby': ''
+                           }
+                json_message = json.dumps(message)
+                base_sql = """select insert_outflow_log('{}');"""
+                sql = base_sql.format(json_message)
+                result = self.db.query(sql)
+
+            # return response
 
         except Exception:
             pass
@@ -119,12 +163,11 @@ if __name__ == '__main__':
             s.append(xml)
         tempres = "".join(s)
         soa_xml = iac.format_soa_xml(tempres)
-        print("p", soa_xml)
         response = iac.set_to_erp(soa_xml)
         # 获取状态码
-        request_status = response.status_code
-        print(request_status)
-        request_status = 2002
+        # request_status = response.status_code
+        # print(request_status)
+        # request_status = 2002
 
         # iac回冲错误
         # if request_status != 200:

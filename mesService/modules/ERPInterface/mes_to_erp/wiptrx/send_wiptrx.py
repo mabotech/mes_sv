@@ -28,12 +28,12 @@ class WiptrxInterface:
             self.wiptrxXmlObj['TRANSACTIONTYPE'] = obj['transactiontype']
             self.wiptrxXmlObj['CSN'] = obj['serialno']                                    #二维码
             self.wiptrxXmlObj['WIPJOBNO'] = obj['wiporderno']                            # 工单编号
-            self.wiptrxXmlObj['WORKORDERSTATUS'] = ' '
+            self.wiptrxXmlObj['WORKORDERSTATUS'] = obj['workorderstatus']
             self.wiptrxXmlObj['PRODUCTIONLINENO'] = obj['productionlineno']            #产线
-            self.wiptrxXmlObj['LASTCOMPLETEDSTATION'] = obj['currentworkcenter']        #最后完成工位
+            self.wiptrxXmlObj['LASTCOMPLETEDSTATION'] = obj['workcenter']        #最后完成工位
             self.wiptrxXmlObj['ACTUALMSBM'] = ' '
 
-            if not obj['currentworkcenter']:
+            if not obj['workcenter']:
                 self.wiptrxXmlObj['LASTCOMPLETEDSTATION'] = ' '
             if not obj['serialno']:
                 self.wiptrxXmlObj['CSN'] = ' '
@@ -105,15 +105,15 @@ class WiptrxInterface:
         new_xml = self.format_soa_xml(new_log)
 
 
-        sql_wiptrxDatalist=wiptrxDatalist[0]
-        message = { "wiporder": sql_wiptrxDatalist["wiporderno"],
-                    "context": new_xml}
-        json_message = json.dumps(message)
-        base_sql = """select update_interface_log('{}');"""
-        sql = base_sql.format(json_message)
+        # sql_wiptrxDatalist=wiptrxDatalist[0]
+        # message = { "wiporder": sql_wiptrxDatalist["wiporderno"],
+        #             "context": new_xml}
+        # json_message = json.dumps(message)
+        # base_sql = """select update_interface_log('{}');"""
+        # sql = base_sql.format(json_message)
 
-        current_app.db.query(sql)
+        # current_app.db.query(sql)
 
-        return new_xml
+        return new_xml,wiptrxXMLlist
 
 

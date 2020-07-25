@@ -64,27 +64,56 @@ class WiptrxView(views.MethodView):
             offlineobj['transactionid'] = item['transactionid']
             offlineobj['serialno'] = item['serialno']
             offlineobj['currentworkcenter'] = item['currentworkcenter']
+            offlineobj['workorderstatus'] = item['workorderstatus']
+            offlineobj['workcenter'] = item['workcenter']
 
             dalist.append(offlineobj.copy())
 
         # 生成XML
-        wiptrxXml = wiptrxInterface.genOnlineXML(dalist)
-        request_res = None
-        result = {"result": "success", "message": None}
-        reqobj = requests.Session()
-        reqobj.auth = ('MSFM', 'MSFM202004210945')
+        wiptrxXml,data = wiptrxInterface.genOnlineXML(dalist)
+        request_res = 'success'
+        # result = {"result": "success", "message": None}
+        # reqobj = requests.Session()
+        # reqobj.auth = ('MSFM', 'MSFM202004210945')
 
         try:
-            request_res = reqobj.post(constants.ERP_HOST, wiptrxXml)
-            result['message'] = request_res.text
+            # request_res = reqobj.post(constants.ERP_HOST, wiptrxXml)
+            # result['message'] = request_res.text
+
+            #捕获ERP回馈信息
+            # s = request_res.content
+            # tree = etree.HTML(s)
+            # xml_str1 = etree.tostring(tree)
+            # list_data = xmltodict.parse(xml_str1)['html']['body']['envelope']['body'][
+            #     'getmsfm_bfcec_052_sendmachiningordertransresponse']['sign'][1]['outputparameters']['x_status_code']
+            # print('list_data', list_data)
+            # if list_data == 'S':
+            message = {'application': 'MES',
+                       'transactionid': data['TRANSACTIONID'],
+                       'transactiontype': data['TRANSACTIONTYPE'],
+                       'message': '待回冲',
+                       'actionstatus': '插入',
+                       'wiporder': data['WIPJOBNO'],
+                       'result': 0,
+                       'context': wiptrxXml,
+                       'createdby': ''
+                       }
+            json_message = json.dumps(message)
+            base_sql = """select insert_outflow_log('{}');"""
+            sql = base_sql.format(json_message)
+            print('S',sql)
+            result = current_app.db.query(sql)
+
         except Exception as e:
             result['result'] = 'fail'
             result['message'] = e.args
-        request_status = request_res.status_code
-        print(request_status)
-        if (request_status != 200):
-            result['result'] = 'fail'
-            result['message'] = '传输失败，网络不通'
+
+        # request_status = request_res.status_code
+        # print(request_status)
+
+        # if (request_status != 200):
+        #     result['result'] = 'fail'
+        #     result['message'] = '传输失败，网络不通'
         return jsonify(result)
 
 class CBOView(views.MethodView):
@@ -128,7 +157,7 @@ class CBOView(views.MethodView):
             request_res = None
             result = {"result": "success", "message": None}
             reqobj = requests.Session()
-            reqobj.auth = ('SOACONNECT', 'Bfcec@Soa')
+            reqobj.auth = ('MSFM', 'MSFM202004210945')
             reqobj.headers = {'Content-Type':'application/xml'}
             try:
                 request_res = reqobj.post(constants.CBO_HOST, new_xml)

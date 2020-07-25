@@ -18,10 +18,9 @@ class CboToXml(object):
         self.cboXmlObj['TRANSACTIONID'] = str(datalist['transactionid'])                   # id值
         self.cboXmlObj['WIPJOBNO'] =  str(datalist['wipjobno'])                       # 工单编号
         self.cboXmlObj['SEQUENCENUMBER'] =  str(datalist['sequencenumber'])                # 排序号
+        self.cboXmlObj['PRODUCTIONLINENO'] = str(datalist['productionlineno'])  # 产线
         self.cboXmlObj['PLANTCODE'] =  str(datalist['plantcode'])                           # 工厂
-        self.cboXmlObj['PRODUCTIONLINENO'] =  str(datalist['productionlineno'])             # 工厂
-        self.cboXmlObj['BATCHID'] =  str(datalist['BATCHID'])                                 # 批次号
-
+        self.cboXmlObj['BATCH_ID'] = str(datalist['BATCHID'])                                    # 批次号
         self.cboXmlObj['DUMMY1'] = ' '
         self.cboXmlObj['DUMMY2'] = ' '
         self.cboXmlObj['DUMMY3'] = ' '
@@ -36,7 +35,10 @@ class CboToXml(object):
         return self.cboXmlObj
 
     def format_soa_xml(self, new):
-        soa_format_xml = """<?xml version="1.0" encoding="UTF-8" ?>
+        soa_format_xml = """<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" >
+   <soap:Body>
+      <msfm:MSFM_BFCEC_054_SendCBOSegmentDisService xmlns:msfm="http://www.cummins.com/MSFM_BFCEC_054_SendCBOSegmentDis">
+    <msfm:DATA><![CDATA[<?xml version="1.0" encoding="UTF-8" ?>
 <WO_SORT_IMPORT_Input xmlns="http://xmlns.oracle.com/apps/xxc/rest/WOSORTBACK/wo_sort_import/">
     <RESTHeader xmlns="http://xmlns.oracle.com/apps/xxc/rest/WOSORTBACK/header">
         <Responsibility></Responsibility>
@@ -58,7 +60,10 @@ class CboToXml(object):
             {new_xml}
         </ROOT>
     </InputParameters>
-</WO_SORT_IMPORT_Input>"""
+</WO_SORT_IMPORT_Input>]]></msfm:DATA>
+</msfm:MSFM_BFCEC_054_SendCBOSegmentDisService>
+   </soap:Body>
+</soap:Envelope>"""
 
         return soa_format_xml.format(new_xml=new)
 

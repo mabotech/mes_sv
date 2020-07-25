@@ -24,7 +24,7 @@ PRODUCTINVENTORYTYPE_ENUM = {
 # 传输给ERP的地址
 ERP_HOST = r'http://192.168.158.159/WP_BFCEC_SOA/APP_MSFM_SERVICES/Proxy_Services/TA_EBS/MSFM_BFCEC_052_SendMachiningOrderTrans_PS?wsdl'
 IAC_HOST = r'http://192.168.158.159/WP_BFCEC_SOA/APP_MSFM_SERVICES/Proxy_Services/TA_EBS/MSFM_BFCEC_051_SendIACInterface_PS?wsdl'
-CBO_HOST = r'http://192.168.158.237:8010/webservices/rest/WOSORTBACK/wo_sort_import/'
+CBO_HOST = r'http://192.168.158.159/WP_BFCEC_SOA/APP_MSFM_SERVICES/Proxy_Services/TA_EBS/MSFM_BFCEC_054_SendCBOSegmentDis_PS?wsdl'
 
 # BOM物料类型
 BOM_ENUM = {
@@ -40,7 +40,7 @@ STATUS_ENUM = {
     "Active": 1,
     "New": 1,
     "Inactive": 0,
-    "OBSOLETE": 1,
+    "OBSOLETE": 0,
     "KIT": 1
 }
 

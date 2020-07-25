@@ -53,6 +53,9 @@ def on_request(ch, method, props, body):
     if "ORA-08177" in str(response):
         ch.basic_reject(method.delivery_tag, True)
         logger.writeLog("重新放入队列:" + str(response), os.path.basename(__file__) + ".log")
+    elif "error executing" in str(response):
+        ch.basic_reject(method.delivery_tag, True)
+        logger.writeLog("重新放入队列:" + str(response), os.path.basename(__file__) + ".log")
     else:
         ch.basic_ack(delivery_tag=method.delivery_tag)
         # 将处理结果(响应)发送到回调队列
