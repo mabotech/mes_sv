@@ -31,6 +31,8 @@ class Config(object):
     RABBITMQ_HOST = '192.168.97.188'
     RABBITMQ_USER = 'admin'
     RABBITMQ_PASSWORD = 'admin'
+    RABBITMQ_VHOST = '/'
+
 
     APPLICATION_TITLE = "Flask JWT Example"
     JWT_TOKEN_LOCATION = "headers"
@@ -56,16 +58,17 @@ class ProductionConfig(Config):
         'database': 'BFCEC',
         'user': 'postgres',
         'password': 'Mabotech123',
-        'host': '192.168.220.65',
+        'host': '192.168.220.57',
         'port': 5432,
     }
-    REDIS_HOST = '192.168.220.65'
+    REDIS_HOST = '192.168.220.57'
     JWT_ACCESS_TOKEN_EXPIRES = 86400
     JWT_REFRESH_TOKEN_EXPIRES = 86400
     LOG_LEVEL = logging.ERROR
-    RABBITMQ_HOST = '192.168.220.65'
+    RABBITMQ_HOST = '192.168.220.57'
     RABBITMQ_USER = 'admin'
     RABBITMQ_PASSWORD = 'python03$'
+    RABBITMQ_VHOST = 'machining'
 
 
 

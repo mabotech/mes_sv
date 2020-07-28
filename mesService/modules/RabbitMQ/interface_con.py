@@ -73,8 +73,9 @@ def main():
     user = config_dict[CURRENT_ENV].RABBITMQ_USER
     password = config_dict[CURRENT_ENV].RABBITMQ_PASSWORD
     credentials = pika.PlainCredentials(user, password)
+    virtual_host = config_dict[CURRENT_ENV].RABBITMQ_VHOST
     connection = pika.BlockingConnection(pika.ConnectionParameters(
-        host=rabbitmq_host,credentials=credentials))
+        host=rabbitmq_host,credentials=credentials, virtual_host=virtual_host))
     # 建立会话
     channel = connection.channel()
     # 声明RPC请求队列
