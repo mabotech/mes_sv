@@ -16,9 +16,6 @@ from mesService.modules.ERPInterface.erp_to_mes.wip_sequence.reveive_sequence im
 from mesService.config import PRESENT_WORK_MODE
 from mesService.config import CURRENT_ENV, config_dict
 
-
-
-
 func_dict = {
     "DeviationOrder": {"parse_xml": "parse_xml", "insertDatabase": "insertDatabase"},
     "BomOrder": {"parse_xml": "parse_xml", "insertDatabase": "insertDatabase"},
@@ -72,6 +69,10 @@ def on_request(ch, method, props, body):
 
 
 def main():
+    rabbitmq_host = config_dict[CURRENT_ENV].RABBITMQ_HOST
+    user = config_dict[CURRENT_ENV].RABBITMQ_USER
+    password = config_dict[CURRENT_ENV].RABBITMQ_PASSWORD
+    credentials = pika.PlainCredentials(user, password)
     connection = pika.BlockingConnection(pika.ConnectionParameters(
         host=rabbitmq_host,credentials=credentials))
     # 建立会话

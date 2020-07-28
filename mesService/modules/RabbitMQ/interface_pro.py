@@ -14,6 +14,10 @@ from mesService.config import CURRENT_ENV, config_dict
 
 class InterfaceRpcClient(object):
     def __init__(self):
+        self.RABBITMQ_HOST = config_dict[CURRENT_ENV].RABBITMQ_HOST
+        self.user = config_dict[CURRENT_ENV].RABBITMQ_USER
+        self.password = config_dict[CURRENT_ENV].RABBITMQ_PASSWORD
+        credentials = pika.PlainCredentials(self.user, self.password)
         self.connection = pika.BlockingConnection(pika.ConnectionParameters(
             host=self.RABBITMQ_HOST,credentials=credentials))
         self.channel = self.connection.channel()

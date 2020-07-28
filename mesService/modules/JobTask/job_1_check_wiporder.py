@@ -7,7 +7,7 @@
 import sys
 
 # sys.path.append(r'C:\Users\mabot\Desktop\BFCEC\foton\mesService')
-sys.path.append(r'/home/test01/mesService')
+# sys.path.append(r'/home/test01/mesService')
 
 import os
 import json
@@ -154,3 +154,6 @@ class CheckWipOrder(object):
 if __name__ == '__main__':
     cw = CheckWipOrder()
     cw.execteDatabase()
+
+
+
