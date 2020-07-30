@@ -162,7 +162,7 @@ class Outflow(object):
                             break
 
             except Exception:
-                pass
+                break
 
 if __name__ == '__main__':
     wd = Outflow()
@@ -175,3 +175,7 @@ if __name__ == '__main__':
 
     else:
         print("无需要发送数据")
+
+
+
+
