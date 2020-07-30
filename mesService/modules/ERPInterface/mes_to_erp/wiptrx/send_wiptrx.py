@@ -55,8 +55,8 @@ class WiptrxInterface:
    <soap:Body>
 <msfm:MSFM_BFCEC_052_SendMachiningOrderTransService xmlns:msfm="http://www.cummins.com/MSFM_BFCEC_052_SendMachiningOrderTrans">
     <msfm:DATA><![CDATA[<DATA>
-<SYNC_TXN_Input xmlns="http://xmlns.oracle.com/apps/xxc/rest/XXCWIPTxnImpSrv/SYNC_WIP_TXN/">
-<RESTHeader xmlns="http://xmlns.oracle.com/apps/xxc/rest/XXCWIPTxnImpSrv/header">
+<SYNC_TXN_Input xmlns="http://xmlns.oracle.com/apps/xxc/rest/XXCWIPTxnImpSrv2/SYNC_WIP_TXN/">
+<RESTHeader xmlns="http://xmlns.oracle.com/apps/xxc/rest/XXCWIPTxnImpSrv2/header">
 <Responsibility></Responsibility>
 <RespApplication></RespApplication>
 <SecurityGroup></SecurityGroup>

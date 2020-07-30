@@ -97,7 +97,3 @@ PRESENT_WORK_MODE = {
 
 # 当前工作模式
 PRESENT_WORK_MODE = PRESENT_WORK_MODE["develp"]
-
-# RabbitMQ主机地址
-RABBITMQ_HOST = "127.0.0.1"
-
