@@ -14,11 +14,13 @@ from flask import current_app, request, make_response, abort
 from .auth import (authenticate_user, AuthenticationError, auth_required, get_authenticated_user)
 
 
-@auth_blue.route('/test')
-def test_auth():
-    sql = "select name, employeeno, loginname, password, employeevaliddate, resourceid from employee"
-    res = current_app.db.query(sql)
-    return jsonify(res)
+@auth_blue.route('/getip')
+def getip():
+    try:
+        ip = request.remote_addr
+        return make_response(jsonify({"clientip":ip}))
+    except:
+        abort(404)
 
 
 @auth_blue.route('/auth/login', methods=['POST'])
