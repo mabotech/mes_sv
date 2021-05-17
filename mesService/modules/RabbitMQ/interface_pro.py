@@ -20,7 +20,7 @@ class InterfaceRpcClient(object):
         self.virtual_host = config_dict[CURRENT_ENV].RABBITMQ_VHOST
         credentials = pika.PlainCredentials(self.user, self.password)
         self.connection = pika.BlockingConnection(pika.ConnectionParameters(
-            host=self.RABBITMQ_HOST,credentials=credentials, virtual_host='machining'))
+            host=self.RABBITMQ_HOST,credentials=credentials, virtual_host=self.virtual_host))
         self.channel = self.connection.channel()
 
         # durable = True队列持久化

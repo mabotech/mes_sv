@@ -94,15 +94,15 @@ class Iac(object):
 
     def set_to_erp(self, xml):
 
-            # reqobj = requests.Session()
-            # reqobj.auth = ('MSFM', 'MSFM202004210945')
-            # response = reqobj.post(
-            #     url=self.url,
-            #     data=xml,
-            #     headers={
-            #         'Content-Type': 'text/xml;charset=UTF-8',
-            #     },
-            # )
+            reqobj = requests.Session()
+            reqobj.auth = ('MSFM', 'MSFM202004210945')
+            response = reqobj.post(
+                url=self.url,
+                data=xml,
+                headers={
+                    'Content-Type': 'text/xml;charset=UTF-8',
+                },
+            )
 
             # 捕获ERP回馈信息
             # s = response.content
@@ -148,7 +148,8 @@ if __name__ == '__main__':
             s.append(xml)
         tempres = "".join(s)
         soa_xml = iac.format_soa_xml(tempres)
-        response = iac.set_to_erp(soa_xml)
+        print('soa_xml',soa_xml)
+        # response = iac.set_to_erp(soa_xml)
         # 获取状态码
         # request_status = response.status_code
         # print(request_status)

@@ -108,11 +108,10 @@ class ItemOrder(object):
             current_app.logger.error(traceback.format_exc())
 
     def insertDatabase(self, dict_data):
-
         """调用存储过程"""
         json_data = json.dumps(dict_data)
         sql = "select item_insert('{}');".format(json_data)
-        print("sql",sql)
+        print(sql)
         try:
             # with self.app.app_context():
             ret = self.db.query(sql)

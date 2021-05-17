@@ -7,7 +7,7 @@
 import sys
 
 # sys.path.append(r'C:\Users\mabot\Desktop\BFCEC\foton\mesService')
-# sys.path.append(r'/home/test01/mesService')
+sys.path.append(r'/home/test01/mesService')
 
 import os
 import json
@@ -107,8 +107,9 @@ class CheckWipOrder(object):
                 basename = "机加MES执行JOB错误-" + bom_data_inconformity_err_log.get("message", None)
                 # 发送邮件
                 mail_alarm.send_data(mail_list, basename, bom_data_inconformity_err_log)
-
+            self.db.shutdown()
         except Exception as e:
+            self.db.shutdown()
             # current_app.logger.error(traceback.format_exc())
             print(e)
 

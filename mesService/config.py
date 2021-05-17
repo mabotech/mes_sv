@@ -28,9 +28,9 @@ class Config(object):
     SESSION_REDIS = StrictRedis(host=REDIS_HOST, port=REDIS_PORT)
     # 指定session的过期时间1天
     PERMANENT_SESSION_LIFETIME = 86400
-    RABBITMQ_HOST = '192.168.97.188'
-    RABBITMQ_USER = 'admin'
-    RABBITMQ_PASSWORD = 'admin'
+    RABBITMQ_HOST = '127.0.0.1'
+    RABBITMQ_USER = 'guest'
+    RABBITMQ_PASSWORD = 'guest'
     RABBITMQ_VHOST = '/'
 
 

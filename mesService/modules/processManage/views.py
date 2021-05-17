@@ -71,3 +71,9 @@ def upload():
 def get_image(filename):
     path = os.path.join(os.getcwd(), 'images')
     return send_from_directory(path, filename)
+
+
+
+
+
+
