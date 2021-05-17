@@ -45,7 +45,7 @@ class ItemOrder(object):
                 "status": "error",
                 "message": "解析失败,报文格式不正确"
             }
-            return json.dumps(result)
+            return result
 
     def xml_to_dict(self, xml_str, xml_body):
         """
@@ -83,7 +83,7 @@ class ItemOrder(object):
                 "status": "error",
                 "message": "解析失败,报文格式不正确"
             }
-            return json.dumps(result)
+            return result
 
 
     def get_stuff_type(self, data):
