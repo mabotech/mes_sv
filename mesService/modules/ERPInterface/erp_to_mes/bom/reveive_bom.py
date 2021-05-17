@@ -46,7 +46,7 @@ class BomOrder(object):
                 "status": "error",
                 "message": "解析失败,报文格式不正确"
             }
-            return json.dumps(result)
+            return result
     def xml_to_dict(self, xml_str, xml_body):
         """
         function:传入xml字符串类型数据，返回数据列表
@@ -93,7 +93,7 @@ class BomOrder(object):
                 "status": "error",
                 "message": "解析失败,报文格式不正确"
             }
-            return json.dumps(result)
+            return result
 
     def insertDatabase(self, dict_data):
         """调用存储过程"""
