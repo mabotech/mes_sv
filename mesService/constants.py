@@ -16,9 +16,12 @@ RET = {
 # 物料类型
 PRODUCTINVENTORYTYPE_ENUM = {
     'BFCEC_半成品': 110,
+    'Subassembly': 110,
     'BFCEC_采购件': 120,
+    'Purchased item': 120,
     'BFCEC_零件虚拟件': 130,
-    'BFCEC_通用类型': 100
+    'Phantom item': 130,
+    'BFCEC_通用类型': 100,
 }
 
 # 传输给ERP的地址
@@ -29,8 +32,11 @@ CBO_HOST = r'http://192.168.158.159/WP_BFCEC_SOA/APP_MSFM_SERVICES/Proxy_Service
 # BOM物料类型
 BOM_ENUM = {
     'BFCEC_采购件': 1,
+    'Purchased item': 1,
     'BFCEC_零件虚拟件': 2,
+    'Phantom item': 2,
     'BFCEC_半成品': 3,
+    'Subassembly': 3,
     'BFCEC_é\x87\x87è´\xadä»¶': 1,
     'BFCEC_é\x9b¶ä»¶è\x99\x9aæ\x8b\x9fä»¶': 2,
 }

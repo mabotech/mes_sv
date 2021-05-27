@@ -34,6 +34,27 @@ class Ces(object):
         db = connection(db_info)
         return db
 
+    def ces(self,path):
+
+        # with open(path, 'r+', encoding='utf-8') as f:
+        #     for line in f.readlines():
+        #         print(line.split(';')[1])
+        #         # print(line)
+
+
+        # 查找出重复的
+        d = {}
+        with open(path,'r+', encoding='utf-8') as f:
+            for line in f.readlines():
+                d[line] = d.get(line, 0) + 1
+
+        for k, v in d.items():
+            if v > 1:
+                print(k)
+
+
+
 if __name__ == '__main__':
     c = Ces()
-    c.execteDatabase('C:\\Users\\sunho\\Desktop\\27\\27')
+    # c.execteDatabase('C:\\Users\\sunho\\Desktop\\27\\27')
+    c.ces('C:\\Users\\sunho\\Desktop\\27\\27.txt')
