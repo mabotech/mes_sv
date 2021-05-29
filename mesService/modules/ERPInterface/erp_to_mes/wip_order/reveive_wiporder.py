@@ -112,7 +112,7 @@ class WipOrderInterface:
                 "status": "error",
                 "message": "解析失败,报文格式不正确"
             }
-            return json.dumps(result)
+            return result
 
     def insertDatabase(self,wiporderDatabaselist):
 
