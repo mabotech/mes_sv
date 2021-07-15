@@ -55,6 +55,31 @@ class Iac(object):
 </soap:Envelope>"""
         return soa_format_xml.format(iac_xml=iac_xml)
 
+    # def format_soa_xml(self, iac_xml):
+    #     soa_format_xml = """<IAC_IMPORT_Input xmlns="http://xmlns.oracle.com/apps/xxc/rest/SYNCIAC/iac_import/">
+    # 	<RESTHeader xmlns="http://xmlns.oracle.com/apps/xxc/rest/SYNCIAC/header">
+    # 		<Responsibility></Responsibility>
+    # 		<RespApplication></RespApplication>
+    # 		<SecurityGroup></SecurityGroup>
+    # 		<NLSLanguage>SIMPLIFIED CHINESE</NLSLanguage>
+    # 		<Org_Id>0</Org_Id>
+    # 	</RESTHeader>
+    # 	<InputParameters>
+    # 		<HEAD>
+    # 			<BIZTRANSACTIONID>ERP_SYC_001_2020041715031100</BIZTRANSACTIONID>
+    # 			<COUNT>1</COUNT>
+    # 			<CONSUMER>ERP</CONSUMER>
+    # 			<SRVLEVEL>1</SRVLEVEL>
+    # 			<ACCOUNT>SAP</ACCOUNT>
+    # 			<PASSWORD>SAP1509030</PASSWORD>
+    # 		</HEAD>
+    # 		<ROOT>
+    # 			{iac_xml}
+    # 		</ROOT>
+    # 	</InputParameters>
+    # </IAC_IMPORT_Input>"""
+    #     return soa_format_xml.format(iac_xml=iac_xml)
+
     def dict_to_xml(self, dict_data):
         root = etree.Element('ROOT_ITEM')
         for k, v in dict_data.items():
@@ -137,7 +162,6 @@ class Iac(object):
             except Exception:
                 pass
 
-
 if __name__ == '__main__':
     iac = Iac()
     dataset = iac.get_iac_data()
@@ -149,7 +173,7 @@ if __name__ == '__main__':
         tempres = "".join(s)
         soa_xml = iac.format_soa_xml(tempres)
         print('soa_xml',soa_xml)
-        # response = iac.set_to_erp(soa_xml)
+        response = iac.set_to_erp(soa_xml)
         # 获取状态码
         # request_status = response.status_code
         # print(request_status)

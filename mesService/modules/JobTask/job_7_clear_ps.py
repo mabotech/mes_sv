@@ -13,7 +13,7 @@ class Clear(object):
 
     def execteDatabase(self):
         """调用存储过程"""
-        sql = "select update_ps();"     # 清除PS
+        sql = "select job_check_wiporder_170();"     # 校验失败工单
         try:
             ret_badcrop = self.db.query(sql)
             print(ret_badcrop)

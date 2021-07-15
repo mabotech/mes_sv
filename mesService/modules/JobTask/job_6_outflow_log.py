@@ -18,8 +18,9 @@ class Outflow(object):
     def __init__(self):
         self.db = self.create_conn('development')
         self.url = r'http://soa.bfcec.com/WP_BFCEC_SOA/APP_MSFM_SERVICES/Proxy_Services/TA_EBS/MSFM_BFCEC_052_SendMachiningOrderTrans_PS?wsdl'
+        # self.url2 = r'http://fcsld1s.bfcec.com:8010/webservices/rest/SYNCIAC/IAC_IMPORT/?WADL'
+        # self.url2 = r'http://192.168.158.159/WP_BFCEC_SOA/APP_MSFM_SERVICES/Proxy_Services/TA_EBS/MSFM_BFCEC_051_SendIACInterface_PS?wsdl'
         self.url2 = r'http://soa.bfcec.com/WP_BFCEC_SOA/APP_MSFM_SERVICES/Proxy_Services/TA_EBS/MSFM_BFCEC_051_SendIACInterface_PS?wsdl'
-
     def create_conn(self, config_name):
         db_info = config_dict[config_name].DB_INFO
         db = connection(db_info)
@@ -43,7 +44,7 @@ class Outflow(object):
                 if datas['transactionid'] =='IAC':
                     # print('IAC123',xml)
                     reqobj = requests.Session()
-                    reqobj.auth = ('MSFM', 'MSFM202004210945')
+                    reqobj.auth = ('SOACONNECT', 'Bfcec@Soa')
                     response = reqobj.post(
                         url=self.url2,
                         data=xml,
@@ -55,9 +56,11 @@ class Outflow(object):
                     backxml = response.content
                     tree = etree.HTML(backxml)
                     xml_str1 = etree.tostring(tree)
-                    # print('backxml', xml_str1)
+                    print('backxml', xml_str1)
                     list_data = xmltodict.parse(xml_str1)['html']['body']['envelope']['body'][
                         'getmsfm_bfcec_051_sendiacinterfaceresponse']['message']['outputparameters']['x_return_status']
+                    # list_data = xmltodict.parse(xml_str1)['html']['body']['outputparameters']['x_return_status']
+
                     print('list_data', list_data)
 
                     if list_data == 'S':
